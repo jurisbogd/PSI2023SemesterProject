@@ -24,8 +24,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-string filePath = "ReadFile.txt";
-string fileContent = File.ReadAllText(filePath);
-Console.WriteLine(fileContent);
-
 app.Run();

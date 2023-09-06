@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Stream.Models;
+using System.IO;
 
 namespace Stream.Controllers;
 
@@ -15,6 +16,9 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        string filePath = "ReadFile.txt";
+        string fileContent = System.IO.File.ReadAllText(filePath);
+        ViewBag.Message = fileContent;
         return View();
     }
 
@@ -22,6 +26,7 @@ public class HomeController : Controller
     {
         return View();
     }
+    
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
