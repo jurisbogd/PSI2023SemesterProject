@@ -1,3 +1,3 @@
 # PSI2023SemesterProject
 
-PSI 2023 3 semestro projektinis darbas
+Programų sistemų bakalauro 3 semestro projektas programų sistemų inžinerijos dalykui.
