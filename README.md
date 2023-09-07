@@ -1,23 +1,32 @@
 # PSI2023SemesterProject
 
-Programų sistemų bakalauro 3 semestro projektas programų sistemų inžinerijos dalykui.
+* [Core idea](#core-idea)
+* [Flashcards and flashcard packs](#flashcards-and-flashcard-packs)
+* [Flashcard creation and editing](#flashcard-creation-and-editing)
+* [User created flashcard pack sharing](#user-created-flashcard-pack-sharing)
+* [Spaced repetition](#spaced-repetition)
 
-## Program idea
-Make the program that contains packages of flash cards.
-You can access every card one by one. There is a couple types of the cards: 
-- Test type cards
-- Open answer type cards
+## Core idea
+A web service that enables users to easily create and share flashcards with some sort of spaced repetition functionality.
 
----
-### Test type cards
-You get one card and have to pick an answer from a to c. If you get it right, this card will disappear, if you did not get it right, this card will go back to the deck.
+## Flashcards and flashcard packs
+Flashcards are used as a memorization tool, usually following the format of a question on one side of the card and an answer on the other.
 
----
-### Open answer type cards
-Idea is the same as with **test type cards** just you will not get the answers from a to c. You can answer the question in your mind and see the answer after on the screen.
+Our web service will be able to load and display groups of flashcards (hereafter known as packs) as well as allow users to show/hide the answer and select whether they answered correctly or incorrectly, allowing the user to keep track of score and gauge improvement more effectively.
 
----
-### More functionality
-We can also add more functionality to this program.
-- Everyone can create their own flash cards.
-- If you did not get the answer right or you do not feel like you know it well, you can mark that card down and come back to it after.
+## Flashcard creation and editing
+Users will be able to create and publish their own flashcard packs.
+
+We might add support for mathematical symbols, code snippets, special formatting and images in flashcards.
+
+## User created flashcard pack sharing
+Flashcard packs will be shareable with a single web link.
+
+Users may be able to grant other users permission to edit flashcard packs, to allow groups of people to work on one pack.
+
+## Spaced repetition
+We plan to allow users to subscribe to flashcard packs for the purpose of [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetition).
+
+Instead of selecting a specific pack, a user will be able to do a sort of 'general repetition' which will include all the packs that they are subscribed to.
+
+During the general repetition, the spaced repetition system will show the user several new cards per some time interval (amount of new cards and length of the time interval could be editable). Occasionally the system will show some older cards as well. Older cards will be shown more frequently if the user struggles with them, and likewise will be shown less frequently if the user is able to recall correctly, taking advantage of the [spacing effect](https://en.wikipedia.org/wiki/Spacing_effect).
