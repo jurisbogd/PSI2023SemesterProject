@@ -9,7 +9,7 @@ Team name: Komanda asdasdas
 * [Spaced repetition](#spaced-repetition)
 
 ## Core idea
-A web service that enables users to easily create and share flashcards with some sort of spaced repetition functionality.
+A program that enables users to easily create and share flashcards with some sort of spaced repetition functionality.
 
 ## Flashcards and flashcard packs
 Flashcards are used as a memorization tool, usually following the format of a question on one side of the card and an answer on the other.
