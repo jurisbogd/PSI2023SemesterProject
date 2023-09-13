@@ -1,5 +1,7 @@
 # PSI2023SemesterProject
 
+Team name: Komanda asdasdas
+
 * [Core idea](#core-idea)
 * [Flashcards and flashcard packs](#flashcards-and-flashcard-packs)
 * [Flashcard creation and editing](#flashcard-creation-and-editing)
