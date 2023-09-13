@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/dominykas.cernovas/Desktop/PSI2023 Project/SEProject/SEProject/SEProject.csproj",
+      "projectUniqueName": "/Users/dominykas.cernovas/Desktop/PSI2023SemesterProject/SEProject/SEProject.csproj",
       "projectName": "SEProject",
-      "projectPath": "/Users/dominykas.cernovas/Desktop/PSI2023 Project/SEProject/SEProject/SEProject.csproj",
+      "projectPath": "/Users/dominykas.cernovas/Desktop/PSI2023SemesterProject/SEProject/SEProject.csproj",
       "packagesPath": "/Users/dominykas.cernovas/.nuget/packages/",
-      "outputPath": "/Users/dominykas.cernovas/Desktop/PSI2023 Project/SEProject/SEProject/obj/",
+      "outputPath": "/Users/dominykas.cernovas/Desktop/PSI2023SemesterProject/SEProject/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/dominykas.cernovas/.nuget/NuGet/NuGet.Config"
