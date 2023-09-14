@@ -3,9 +3,9 @@ namespace SEProject.Models
 {
 	public class Flashcard
 	{
-		private string _question;
-		private string _answer;
-		private bool _isFavorite;
+		private string _question { get; set; }
+		private string _answer { get; set; }
+		private bool _isFavorite { get; set; } = false;
 		private DateTime _creationDate = DateTime.Today;
 
 		// Constructor for creating a flashcard
@@ -27,18 +27,6 @@ namespace SEProject.Models
 		{
 			_isFavorite = !_isFavorite;
 		}
-
-        public string Question
-        {
-            get { return _question; }
-            set { _question = value; }
-        }
-
-        public string Answer
-        {
-            get { return _answer; }
-            set { _answer = value; }
-        }
 
         public override string ToString()
         {
