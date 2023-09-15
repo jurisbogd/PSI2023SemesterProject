@@ -1,0 +1,21 @@
+@model List<Flashcard>
+
+<h1>Sample Flashcards</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Question</th>
+        <th>Answer</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var flashcard in Model)
+    {
+        <tr>
+            <td>@flashcard.question</td>
+            <td>@flashcard.answer</td>
+        </tr>
+    }
+    </tbody>
+</table>
