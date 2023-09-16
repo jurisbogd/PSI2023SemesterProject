@@ -1,36 +1,42 @@
-﻿using System;
+﻿
 namespace SEProject.Models
 {
 	public class Flashcard
 	{
-		private string _question { get; set; }
-		private string _answer { get; set; }
-		private bool _isFavorite { get; set; } = false;
-		private DateTime _creationDate = DateTime.Today;
+		public string question { get; set; }
+		public string answer { get; set; }
+		private bool IsFavorite { get; set; }
+		private DateTime _creationDate;
 
-		// Constructor for creating a flashcard
+		public Flashcard()
+		{
+			IsFavorite = false;
+			_creationDate = DateTime.Today;
+		}
 		public Flashcard(string question, string answer)
 		{
-			_question = question;
-			_answer = answer;
+			this.question = question;
+			this.answer = answer;
+			IsFavorite = false;
+			_creationDate = DateTime.Today;
 		}
 
 		// Edit flashcard method
 		public void EditFlashcard(string newQuestion, string newAnswer)
 		{
-			_question = newQuestion;
-			_answer = newAnswer;
+			question = newQuestion;
+			answer = newAnswer;
 		}
 
 		// Switch favorite to opposite
 		public void ToggleFavorite()
 		{
-			_isFavorite = !_isFavorite;
+			IsFavorite = IsFavorite;
 		}
 
         public override string ToString()
         {
-			return $"{_question} - {_answer}";
+			return $"{question} - {answer}";
         }
     }
 }
