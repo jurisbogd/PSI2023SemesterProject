@@ -20,13 +20,14 @@ public class FlashcardController : Controller
         // To add all flashcards from json file to Allflashcards:
         LoadFlashcards("flashcards.json");
 
-        // To add and remove(by object reference or id) flashcards from the list
-        // remove later
-        Flashcard newflashcard1 = new Flashcard(FindNextHighestID(Allflashcards), "Is this a test question?", "Yes", Flashcard.DifficultyLevel.Easy);
-        Flashcard newflashcard2 = new Flashcard(FindNextHighestID(Allflashcards), "Is this an another test question?", "Yes", Flashcard.DifficultyLevel.Easy);
-        AddFlashcard(newflashcard1);
-        AddFlashcard(newflashcard2);
-        RemoveFlashcard(newflashcard2);
+        //Example on how to add and remove(by object reference or id) flashcards from the list
+        /*
+            Flashcard newflashcard1 = new Flashcard(FindNextHighestID(Allflashcards), "Is this a test question?", "Yes", Flashcard.DifficultyLevel.Easy);
+            Flashcard newflashcard2 = new Flashcard(FindNextHighestID(Allflashcards), "Is this an another test question?", "Yes", Flashcard.DifficultyLevel.Easy);
+            AddFlashcard(newflashcard1);
+            AddFlashcard(newflashcard2);
+            RemoveFlashcard(newflashcard2);
+        */
 
         // To save Allflashcards to a json file. It will overwrite an already existing file.
         SaveFlashcards("flashcards.json");
