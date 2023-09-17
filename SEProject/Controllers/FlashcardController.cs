@@ -15,14 +15,15 @@ public class FlashcardController : Controller
         _env = env;
     }
 
-    public IActionResult CreateSampleFlashcard()
+    public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
     {
         // To add all flashcards from json file to Allflashcards:
         LoadFlashcards("flashcards.json");
 
         // To add and remove(by object reference or id) flashcards from the list
-        Flashcard newflashcard1 = new Flashcard(69, "Is this a test question?", "Yes");
-        Flashcard newflashcard2 = new Flashcard(420, "Is this an another test question?", "Yes");
+        // remove later
+        Flashcard newflashcard1 = new Flashcard(FindNextHighestID(Allflashcards), "Is this a test question?", "Yes", Flashcard.DifficultyLevel.Easy);
+        Flashcard newflashcard2 = new Flashcard(FindNextHighestID(Allflashcards), "Is this an another test question?", "Yes", Flashcard.DifficultyLevel.Easy);
         AddFlashcard(newflashcard1);
         AddFlashcard(newflashcard2);
         RemoveFlashcard(newflashcard2);
@@ -53,5 +54,10 @@ public class FlashcardController : Controller
     }
     public void AddFlashcard(Flashcard flashcard){
         Allflashcards.Add(flashcard);
+    }
+    static int FindNextHighestID(List<Flashcard> flashcards)
+    {
+        int maxID = flashcards.Max(flashcard => flashcard.ID);
+        return maxID + 1;
     }
 }
