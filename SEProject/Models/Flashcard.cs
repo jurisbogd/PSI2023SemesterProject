@@ -14,8 +14,9 @@ namespace SEProject.Models
 			IsFavorite = false;
 			_creationDate = DateTime.Today;
 		}
-		public Flashcard(string question, string answer)
+		public Flashcard(int ID, string question, string answer)
 		{
+			this.ID = ID;
 			this.question = question;
 			this.answer = answer;
 			IsFavorite = false;
