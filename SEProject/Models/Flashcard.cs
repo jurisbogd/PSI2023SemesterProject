@@ -3,6 +3,7 @@ namespace SEProject.Models
 {
 	public class Flashcard
 	{
+		public int ID { get; set; }
 		public string question { get; set; }
 		public string answer { get; set; }
 		private bool IsFavorite { get; set; }
