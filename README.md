@@ -14,7 +14,7 @@ A program that enables users to easily create and share flashcards with some sor
 ## Flashcards and flashcard packs
 Flashcards are used as a memorization tool, usually following the format of a question on one side of the card and an answer on the other.
 
-Our web service will be able to load and display groups of flashcards (hereafter known as packs) as well as allow users to show/hide the answer and select whether they answered correctly or incorrectly, allowing the user to keep track of score and gauge improvement more effectively.
+Our program will be able to load and display groups of flashcards (hereafter known as packs) as well as allow users to show/hide the answer and select whether they answered correctly or incorrectly, allowing the user to keep track of score and gauge improvement more effectively.
 
 ## Flashcard creation and editing
 Users will be able to create and publish their own flashcard packs.
