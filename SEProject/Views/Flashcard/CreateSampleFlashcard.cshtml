@@ -8,6 +8,7 @@
         <th>Question</th>
         <th>Answer</th>
         <th>Difficulty level</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -15,9 +16,16 @@
     {
         <tr>
             <td>@flashcard.question</td>
-            <td>@flashcard.answer</td>
+            <td>
+                <div style="display: none;" class="answer">@flashcard.answer</div>
+                <button class="reveal-button">Reveal Answer</button>
+            </td>
             <td>@flashcard.difficultyLevel</td>
+            <td></td>
         </tr>
     }
     </tbody>
 </table>
+
+<script src="~/js/flashcard.js"></script>
+
