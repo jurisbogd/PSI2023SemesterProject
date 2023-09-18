@@ -1,31 +1,41 @@
 @model List<Flashcard>
 
-<h1>Sample Flashcards</h1>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sample Flashcards</title>
 
-<table>
-    <thead>
-    <tr>
-        <th>Question</th>
-        <th>Answer</th>
-        <th>Difficulty level</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var flashcard in Model)
-    {
-        <tr>
-            <td>@flashcard.question</td>
-            <td>
-                <div style="display: none;" class="answer">@flashcard.answer</div>
-                <button class="reveal-button">Reveal Answer</button>
-            </td>
-            <td>@flashcard.difficultyLevel</td>
-            <td></td>
-        </tr>
-    }
-    </tbody>
-</table>
+        <!-- Link to the CSS file -->
+        <link rel="stylesheet" href="~/css/flashcard.css">
+    </head>
+    <body>
+        <h1>Sample Flashcards</h1>
 
-<script src="~/js/flashcard.js"></script>
+        <table>
+            <thead>
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Difficulty level</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var flashcard in Model)
+            {
+                <tr>
+                    <td>@flashcard.question</td>
+                    <td>
+                        <div style="display: none;" class="answer">@flashcard.answer</div>
+                        <button class="reveal-button">Reveal Answer</button>
+                    </td>
+                    <td>@flashcard.difficultyLevel</td>
+                </tr>
+            }
+            </tbody>
+        </table>
 
+        <script src="~/js/flashcard.js"></script>
+    </body>
+</html>

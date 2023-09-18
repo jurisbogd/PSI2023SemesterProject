@@ -1,0 +1,72 @@
+/* Reset some default styles */
+.flashcard-container body,
+.flashcard-container h1,
+.flashcard-container table {
+    margin: 0;
+    padding: 0;
+}
+
+/* Body styles for the flashcard container */
+.flashcard-container body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Background color for the flashcard container */
+    padding: 20px;
+}
+
+/* Header (h1) styles for the flashcard container */
+.flashcard-container h1 {
+    text-align: center;
+    color: #333; /* Header text color for the flashcard container */
+    margin-bottom: 20px;
+}
+
+/* Table styles for the flashcard container */
+.flashcard-container table {
+    width: 100%;
+    background-color: #fff; /* Table background color for the flashcard container */
+    border-collapse: collapse;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Table box shadow for the flashcard container */
+}
+
+/* Table header row styles for the flashcard container */
+.flashcard-container thead tr {
+    background-color: #007bff; /* Header row background color for the flashcard container */
+    color: #fff; /* Header row text color for the flashcard container */
+    font-weight: bold;
+}
+
+/* Table cell styles for the flashcard container */
+.flashcard-container td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+/* Flashcard Answer (initially hidden) styles */
+.answer {
+    display: none;
+    font-size: 16px;
+    color: #007bff; /* Answer text color */
+}
+
+/* Reveal Answer Button */
+.reveal-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+/* Hover effect for the button */
+.reveal-button:hover {
+    background-color: #0056b3;
+}
+
+/* Flashcard Difficulty Level */
+.difficulty-level {
+    font-size: 14px;
+    color: #888; /* Difficulty level text color */
+}
