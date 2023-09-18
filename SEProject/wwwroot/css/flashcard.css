@@ -1,46 +1,3 @@
-/* Reset some default styles */
-.flashcard-container body,
-.flashcard-container h1,
-.flashcard-container table {
-    margin: 0;
-    padding: 0;
-}
-
-/* Body styles for the flashcard container */
-.flashcard-container body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0; /* Background color for the flashcard container */
-    padding: 20px;
-}
-
-/* Header (h1) styles for the flashcard container */
-.flashcard-container h1 {
-    text-align: center;
-    color: #333; /* Header text color for the flashcard container */
-    margin-bottom: 20px;
-}
-
-/* Table styles for the flashcard container */
-.flashcard-container table {
-    width: 100%;
-    background-color: #fff; /* Table background color for the flashcard container */
-    border-collapse: collapse;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Table box shadow for the flashcard container */
-}
-
-/* Table header row styles for the flashcard container */
-.flashcard-container thead tr {
-    background-color: #007bff; /* Header row background color for the flashcard container */
-    color: #fff; /* Header row text color for the flashcard container */
-    font-weight: bold;
-}
-
-/* Table cell styles for the flashcard container */
-.flashcard-container td {
-    padding: 10px;
-    border: 1px solid #ccc;
-}
-
 /* Flashcard Answer (initially hidden) styles */
 .answer {
     display: none;
@@ -58,6 +15,7 @@
     transition: background-color 0.3s;
     font-weight: bold;
     border-radius: 5px;
+    margin-top: 15px;
 }
 
 /* Hover effect for the button */
@@ -69,4 +27,30 @@
 .difficulty-level {
     font-size: 14px;
     color: #888; /* Difficulty level text color */
+}
+
+.flashcard {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
+    margin-right: 7px;
+    margin-left: 7px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 220px; /* Adjust the width to make the flashcards wider */
+    height: 300px; /* Adjust the height to make the flashcards taller */
+    text-align: center;
+}
+
+/* Add CSS styles for flashcards */
+.flashcard-container {
+    display: flex; /* Use flexbox to arrange the flashcards in a row */
+    flex-wrap: wrap; /* Allow the cards to wrap to a new row if the container width is limited */
+}
+
+/* Flashcard Difficulty Level */
+.difficulty {
+    font-size: 14px;
+    color: #888; /* Difficulty level text color */
+    margin-top: auto; /* Push the difficulty level to the bottom */
 }
