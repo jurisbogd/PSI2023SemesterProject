@@ -3,6 +3,7 @@ namespace SEProject.Models
 {
 	public class Flashcard
 	{
+		public int ID { get; set; }
 		public string question { get; set; }
 		public string answer { get; set; }
 		public DifficultyLevel difficultyLevel { get; set; }
@@ -20,10 +21,11 @@ namespace SEProject.Models
 		{
 			IsFavorite = false;
 			_creationDate = DateTime.Today;
-
-        }
-		public Flashcard(string question, string answer, DifficultyLevel difficultyLevel)
+		}
+    
+		public Flashcard(int ID, string question, string answer, DifficultyLevel difficultyLevel)
 		{
+			this.ID = ID;
 			this.question = question;
 			this.answer = answer;
 			this.difficultyLevel = difficultyLevel;
