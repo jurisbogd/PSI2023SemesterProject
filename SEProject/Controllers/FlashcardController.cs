@@ -39,7 +39,6 @@ public class FlashcardController : Controller
             
             // Add the new flashcard to the list
             allFlashcards.Add(newFlashcard);
-            Console.WriteLine(allFlashcards.Count);
 
             // Save the updated list of flashcards to the JSON file
             _flashcards.SaveFlashcards("flashcards.json", allFlashcards);
