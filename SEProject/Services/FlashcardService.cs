@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System;
 using SEProject.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -8,7 +9,8 @@ namespace SEProject.Services;
 
 public class FlashcardService
 {
-    public List<Flashcard> LoadFlashcards(String Filename, IWebHostEnvironment _env){
+    public List<Flashcard> LoadFlashcards(String Filename, IWebHostEnvironment _env)
+    {
         // Json must be located in project root folder
         string jsonFilePath = System.IO.Path.Combine(_env.ContentRootPath, "flashcards.json");
 
@@ -26,6 +28,7 @@ public class FlashcardService
                 WriteIndented = true,
             };
             string newFlashcardJson = JsonSerializer.Serialize(newFlashcard, jsonOptions);
+
             using (FileStream fileStream = new FileStream(Filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 fileStream.Seek(0, SeekOrigin.End);
@@ -47,14 +50,17 @@ public class FlashcardService
                     // Move back one more position to be before the ']'
                     fileStream.Seek(-1, SeekOrigin.Current);
                 }
-               
+
                 // Write a comma ',' if file is not empty
                 if (!isEmpty)
                 {
                     fileStream.WriteByte((byte)',');
                 }
 
-                byte[] jsonBytes = Encoding.UTF8.GetBytes(newFlashcardJson);
+                // Replace the 'ID' property in the JSON with the correct 'ID'
+                string correctedJson = newFlashcardJson.Replace("\"ID\": 0,", $"\"ID\": \"{Guid.NewGuid()}\",");
+                
+                byte[] jsonBytes = Encoding.UTF8.GetBytes(correctedJson);
                 fileStream.Write(jsonBytes, 0, jsonBytes.Length);
 
                 fileStream.WriteByte((byte)']');
@@ -62,27 +68,26 @@ public class FlashcardService
         }
         catch (Exception exception)
         {
-            
+            // Handle exceptions appropriately
         }
     }
+
 
     public void SaveFlashcards(String Filename, List<Flashcard> Allflashcards)
     {
         string jsonString = JsonSerializer.Serialize(Allflashcards);
         System.IO.File.WriteAllText(Filename, jsonString);
     }
-    public void RemoveFlashcard(int idToRemove, List<Flashcard> Allflashcards){
+    public void RemoveFlashcard(Guid idToRemove, List<Flashcard> Allflashcards)
+    {
         Allflashcards = Allflashcards.Where(flashcard => flashcard.ID != idToRemove).ToList();
     }
-    public void RemoveFlashcard(Flashcard flashcardToRemove, List<Flashcard> Allflashcards){
+    public void RemoveFlashcard(Flashcard flashcardToRemove, List<Flashcard> Allflashcards)
+    {
         Allflashcards.Remove(flashcardToRemove);
     }
-    public void AddFlashcard(Flashcard flashcard, List<Flashcard> Allflashcards){
-        Allflashcards.Add(flashcard);
-    }
-    static int FindNextHighestID(List<Flashcard> flashcards)
+    public void AddFlashcard(Flashcard flashcard, List<Flashcard> Allflashcards)
     {
-        int maxID = flashcards.Max(flashcard => flashcard.ID);
-        return maxID + 1;
+        Allflashcards.Add(flashcard);
     }
 }
