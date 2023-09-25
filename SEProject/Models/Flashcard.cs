@@ -1,9 +1,10 @@
-﻿
+﻿using System;
+
 namespace SEProject.Models
 {
 	public class Flashcard
 	{
-		public int ID { get; set; }
+		public Guid ID { get; set; }
 		public string question { get; set; }
 		public string answer { get; set; }
 		public DifficultyLevel difficultyLevel { get; set; }
@@ -23,7 +24,7 @@ namespace SEProject.Models
 			_creationDate = DateTime.Today;
 		}
     
-		public Flashcard(int ID, string question, string answer, DifficultyLevel difficultyLevel)
+		public Flashcard(Guid ID, string question, string answer, DifficultyLevel difficultyLevel)
 		{
 			this.ID = ID;
 			this.question = question;

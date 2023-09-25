@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
 using SEProject.Models;
 using SEProject.Services;
 
@@ -32,6 +33,7 @@ public class FlashcardController : Controller
             // Create a new Flashcard object from the form data
             var newFlashcard = new Flashcard
             {
+                ID = Guid.NewGuid(),
                 question = viewModel.question,
                 answer = viewModel.answer,
                 difficultyLevel = viewModel.difficultyLevel
