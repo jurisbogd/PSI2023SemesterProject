@@ -12,10 +12,10 @@ public class FlashcardService
     public List<Flashcard> LoadFlashcards(String Filename, IWebHostEnvironment _env)
     {
         // Json must be located in project root folder
-        string jsonFilePath = System.IO.Path.Combine(_env.ContentRootPath, "flashcards.json");
+        string jsonFilePath = Path.Combine(_env.ContentRootPath, "flashcards.json");
 
         // Read the JSON file
-        string jsonData = System.IO.File.ReadAllText(jsonFilePath);
+        string jsonData = File.ReadAllText(jsonFilePath);
         return JsonSerializer.Deserialize<List<Flashcard>>(jsonData);
     }
 
