@@ -19,6 +19,8 @@
         <button id="addFlashcardButton" class="reveal-button">Add Flashcard</button>
     </div>
     
+
+
     @using (Html.BeginForm("CreateSampleFlashcard", "Flashcard", FormMethod.Post))
     {
         <!-- Pop-up form for adding flashcards (hidden by default) -->
@@ -60,6 +62,13 @@
                     <div class="answer" style="display: none;">@flashcard.answer</div>
                     <button class="reveal-button">Reveal Answer</button>
                     <div class="difficulty">@flashcard.difficultyLevel</div>
+
+                    @using (Html.BeginForm("CreateSampleFlashcard", "Flashcard", FormMethod.Post))
+                    {
+                            <form>
+                                <button class="remove-button" data-flashcard-id="@flashcard.ID">X</button>
+                            </form>
+                    }
                 </div>
             }
         </div>
