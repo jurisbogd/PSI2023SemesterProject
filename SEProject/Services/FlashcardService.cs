@@ -19,7 +19,7 @@ public class FlashcardService
         return JsonSerializer.Deserialize<List<Flashcard>>(jsonData);
     }
 
-    public void saveFlashcard(string Filename, Flashcard newFlashcard)
+    public void SaveFlashcard(string filename, Flashcard newFlashcard)
     {
         try
         {
@@ -29,7 +29,7 @@ public class FlashcardService
             };
             string newFlashcardJson = JsonSerializer.Serialize(newFlashcard, jsonOptions);
 
-            using (FileStream fileStream = new FileStream(Filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            using (FileStream fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 fileStream.Seek(0, SeekOrigin.End);
                 bool isEmpty = (fileStream.Length == 0);
