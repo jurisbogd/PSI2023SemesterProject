@@ -43,7 +43,7 @@ public class FlashcardController : Controller
             allFlashcards.Add(newFlashcard);
 
             // Save the updated list of flashcards to the JSON file
-            _flashcardService.saveFlashcard("flashcards.json", newFlashcard);
+            _flashcardService.SaveFlashcard("flashcards.json", newFlashcard);
         
             // Redirect to the view that displays the flashcards
             return RedirectToAction("CreateSampleFlashcard");
