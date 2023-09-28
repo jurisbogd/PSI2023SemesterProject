@@ -9,7 +9,7 @@ namespace SEProject.Services;
 
 public class FlashcardService
 {
-    public List<Flashcard> LoadFlashcards(String Filename, IWebHostEnvironment _env)
+    public List<Flashcard> LoadFlashcards(IWebHostEnvironment _env)
     {
         // Json must be located in project root folder
         string jsonFilePath = Path.Combine(_env.ContentRootPath, "flashcards.json");

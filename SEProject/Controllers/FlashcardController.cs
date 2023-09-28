@@ -18,7 +18,7 @@ public class FlashcardController : Controller
 
     public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
     {
-        List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
+        List<Flashcard> allFlashcards = _flashcards.LoadFlashcards(_env);
         
         return View(allFlashcards);
     }
@@ -27,7 +27,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult CreateSampleFlashcard(Flashcard viewModel)
     {
-        List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
+        List<Flashcard> allFlashcards = _flashcards.LoadFlashcards(_env);
         if (ModelState.IsValid)
         {
             // Create a new Flashcard object from the form data
