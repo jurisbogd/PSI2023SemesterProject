@@ -23,10 +23,7 @@ public class FlashcardService
     {
         try
         {
-            var jsonOptions = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-            };
+            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
             string newFlashcardJson = JsonSerializer.Serialize(newFlashcard, jsonOptions);
 
             using (FileStream fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
