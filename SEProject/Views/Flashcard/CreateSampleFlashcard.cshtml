@@ -63,10 +63,10 @@
                     <button class="reveal-button">Reveal Answer</button>
                     <div class="difficulty">@flashcard.difficultyLevel</div>
 
-                    @using (Html.BeginForm("CreateSampleFlashcard", "Flashcard", FormMethod.Post))
+                    @using (Html.BeginForm("RemoveSampleFlashcard", "Flashcard", FormMethod.Post))
                     {
                             <form>
-                                <button class="remove-button" data-flashcard-id="@flashcard.ID">X</button>
+                                <button class="remove-button" data-flashcard-id="@flashcard.ID" id="removeFlashcardButton">X</button>
                             </form>
                     }
                 </div>
@@ -75,5 +75,6 @@
 
         <script src="~/js/flashcard.js"></script>
         <script src="~/js/addFlashcardButton.js"></script>
+        <script src="~/js/removeFlashcardButton.js"></script>
     </body>
 </html>

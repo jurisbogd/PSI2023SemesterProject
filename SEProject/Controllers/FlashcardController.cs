@@ -19,7 +19,6 @@ public class FlashcardController : Controller
     public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
     {
         List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
-        
         return View(allFlashcards);
     }
     
@@ -51,5 +50,21 @@ public class FlashcardController : Controller
 
         // If the model is not valid, return to the form view
         return View(allFlashcards);
+    }
+
+    public IActionResult RemoveSampleFlashcard(Guid idToRemove)
+    {
+        System.Console.WriteLine("ID kuri gauna action: "+idToRemove);
+        List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
+
+        // Remove flashcard from the list
+        _flashcards.RemoveFlashcard(idToRemove, allFlashcards);
+
+        // Save the updaed JSON
+        _flashcards.SaveFlashcards("flashcards.json", allFlashcards);
+
+        
+        // Redirect to the view that displays the flashcards
+        return RedirectToAction("CreateSampleFlashcard");
     }
 }

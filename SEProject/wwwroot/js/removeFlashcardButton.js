@@ -1,14 +1,16 @@
-// Add a click event listener to all "Remove" buttons
-var removeButtons = document.querySelectorAll('.remove-button');
-removeButtons.forEach(function (button) {
-    button.addEventListener('click', function () {
-        // Get the ID of the flashcard to remove from the data attribute
-        var flashcardId = button.getAttribute('data-flashcard-id');
-        
-        // Find and remove the flashcard element with the matching ID
-        var flashcardToRemove = document.querySelector('.flashcard[data-flashcard-id="' + flashcardId + '"]');
-        if (flashcardToRemove) {
-            flashcardToRemove.remove();
-        }
+document.addEventListener("DOMContentLoaded", function () {
+    var removeButtons = document.querySelectorAll(".remove-button");
+
+    removeButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            // Get the flashcard ID from the data attribute
+            var flashcardId = button.getAttribute("data-flashcard-id");
+
+            // Construct the URL with the flashcard ID as a route parameter
+            var url = "/Flashcard/RemoveSampleFlashcard/" + flashcardId;
+            console.log('url kuri issiuncia javascript:' + url);
+            // Navigate to the URL
+            window.location.href = url;
+        });
     });
 });
