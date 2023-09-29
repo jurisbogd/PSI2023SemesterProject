@@ -58,11 +58,16 @@ public class FlashcardController : Controller
         System.Console.WriteLine("ID kuri gauna action: "+id);
         List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
 
+        allFlashcards.ForEach(Console.WriteLine);
+        System.Console.WriteLine("Before: ");
+
         // Remove flashcard from the list
         _flashcards.RemoveFlashcard(id, allFlashcards);
+        System.Console.WriteLine("after: ");
 
+        allFlashcards.ForEach(Console.WriteLine);
         // Save the updaed JSON
-        // _flashcards.SaveFlashcards("flashcards.json", allFlashcards);
+        _flashcards.SaveFlashcards("flashcards.json", allFlashcards);
 
         
         // Redirect to the view that displays the flashcards
