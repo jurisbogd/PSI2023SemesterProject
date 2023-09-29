@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Construct the URL with the flashcard ID as a route parameter
             var url = "/Flashcard/RemoveSampleFlashcard/" + flashcardId;
-            console.log('url kuri issiuncia javascript:' + url);
             // Navigate to the URL
             // window.location.href = url;
         });

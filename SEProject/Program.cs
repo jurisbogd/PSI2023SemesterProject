@@ -20,7 +20,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
+app.MapControllerRoute( // not sure if this route does anything
     name: "removeFlashcardRoute",
     pattern: "{controller=flashcard}/{action=RemoveSampleFlashcard}/{id}");
 app.MapControllerRoute(

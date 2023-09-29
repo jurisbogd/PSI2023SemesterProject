@@ -65,13 +65,8 @@
 
                     @using (Html.BeginForm("RemoveSampleFlashcard", "Flashcard", FormMethod.Post))
                     {
-                            /*
-                            <form>
-                                <button class="remove-button" data-flashcard-id="@flashcard.ID" id="removeFlashcardButton">X</button>
-                            </form>
-                            */
                             <button class="remove-button" data-flashcard-id="@flashcard.ID" name="id" value="@flashcard.ID">X</button>
-                            // (name) should be set to the same thing its set in the action. I think.
+                            // (name) should be set to the same thing its set in the action arguments. I think.
                     }
                 </div>
             }
