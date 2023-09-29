@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var url = "/Flashcard/RemoveSampleFlashcard/" + flashcardId;
             console.log('url kuri issiuncia javascript:' + url);
             // Navigate to the URL
-            window.location.href = url;
+            // window.location.href = url;
         });
     });
 });

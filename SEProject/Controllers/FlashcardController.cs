@@ -51,17 +51,18 @@ public class FlashcardController : Controller
         // If the model is not valid, return to the form view
         return View(allFlashcards);
     }
-
-    public IActionResult RemoveSampleFlashcard(Guid idToRemove)
+    
+    [HttpPost]
+    public IActionResult RemoveSampleFlashcard(Guid id)
     {
-        System.Console.WriteLine("ID kuri gauna action: "+idToRemove);
+        System.Console.WriteLine("ID kuri gauna action: "+id);
         List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
 
         // Remove flashcard from the list
-        _flashcards.RemoveFlashcard(idToRemove, allFlashcards);
+        _flashcards.RemoveFlashcard(id, allFlashcards);
 
         // Save the updaed JSON
-        _flashcards.SaveFlashcards("flashcards.json", allFlashcards);
+        // _flashcards.SaveFlashcards("flashcards.json", allFlashcards);
 
         
         // Redirect to the view that displays the flashcards
