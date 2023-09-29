@@ -57,14 +57,13 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult RemoveSampleFlashcard(Guid id)
     {
-        List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
 
         // Remove flashcard from the list
-        _flashcards.RemoveFlashcard(id, allFlashcards);
-
+        _flashcardService.RemoveFlashcard(id, allFlashcards);
         // Save the updaed JSON
-        _flashcards.SaveFlashcards("flashcards.json", allFlashcards);
-
+        _flashcardService.SaveFlashcards("flashcards.json", allFlashcards);
+        
         // Redirect to the view that displays the flashcards
         return RedirectToAction("CreateSampleFlashcard");
     }
