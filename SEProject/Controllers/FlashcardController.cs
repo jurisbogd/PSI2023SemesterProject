@@ -8,17 +8,19 @@ namespace SEProject.Controllers;
 public class FlashcardController : Controller
 {
     private readonly IWebHostEnvironment _env;
-    private FlashcardService _flashcards;
+    private FlashcardService _flashcardService;
 
     public FlashcardController(IWebHostEnvironment env)
     {
         _env = env;
-        _flashcards = new FlashcardService();
+        _flashcardService = new FlashcardService();
     }
 
     public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
     {
-        List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
+
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+
         return View(allFlashcards);
     }
     
@@ -26,7 +28,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult CreateSampleFlashcard(Flashcard viewModel)
     {
-        List<Flashcard> allFlashcards = _flashcards.LoadFlashcards("flashcards.json", _env);
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
         if (ModelState.IsValid)
         {
             // Create a new Flashcard object from the form data
@@ -42,7 +44,7 @@ public class FlashcardController : Controller
             allFlashcards.Add(newFlashcard);
 
             // Save the updated list of flashcards to the JSON file
-            _flashcards.saveFlashcard("flashcards.json", newFlashcard);
+            _flashcardService.SaveFlashcard("flashcards.json", newFlashcard);
         
             // Redirect to the view that displays the flashcards
             return RedirectToAction("CreateSampleFlashcard");

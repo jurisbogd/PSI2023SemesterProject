@@ -9,27 +9,24 @@ namespace SEProject.Services;
 
 public class FlashcardService
 {
-    public List<Flashcard> LoadFlashcards(String Filename, IWebHostEnvironment _env)
+    public List<Flashcard> LoadFlashcards(IWebHostEnvironment _env)
     {
         // Json must be located in project root folder
-        string jsonFilePath = System.IO.Path.Combine(_env.ContentRootPath, "flashcards.json");
+        string jsonFilePath = Path.Combine(_env.ContentRootPath, "flashcards.json");
 
         // Read the JSON file
-        string jsonData = System.IO.File.ReadAllText(jsonFilePath);
+        string jsonData = File.ReadAllText(jsonFilePath);
         return JsonSerializer.Deserialize<List<Flashcard>>(jsonData);
     }
 
-    public void saveFlashcard(string Filename, Flashcard newFlashcard)
+    public void SaveFlashcard(string filename, Flashcard newFlashcard)
     {
         try
         {
-            var jsonOptions = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-            };
+            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
             string newFlashcardJson = JsonSerializer.Serialize(newFlashcard, jsonOptions);
 
-            using (FileStream fileStream = new FileStream(Filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            using (FileStream fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 fileStream.Seek(0, SeekOrigin.End);
                 bool isEmpty = (fileStream.Length == 0);
