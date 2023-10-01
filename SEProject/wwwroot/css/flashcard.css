@@ -5,6 +5,10 @@
     color: #007bff; /* Answer text color */
 }
 
+.question {
+    padding-right: 20px; /* For the remove button*/
+}
+
 /* Reveal Answer Button */
 .reveal-button {
     background-color: #007bff;
@@ -16,6 +20,26 @@
     font-weight: bold;
     border-radius: 5px;
     margin-top: 15px;
+}
+
+.remove-button {
+    background-color: #efefef;
+    color: #d2d2d2;
+    border: none;
+    /*padding: 5px 10px;*/
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border-radius: 5px;
+    /*margin-top: 5px;*/
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}
+
+.remove-button:hover {
+    background-color: #ff0000;
+    color: #ffffff;
 }
 
 /* Hover effect for the button */
@@ -40,6 +64,7 @@
     width: 220px; /* Adjust the width to make the flashcards wider */
     height: 300px; /* Adjust the height to make the flashcards taller */
     text-align: center;
+    position: relative; /* Add relative positioning to create a positioning context */
 }
 
 /* Add CSS styles for flashcards */

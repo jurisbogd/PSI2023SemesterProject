@@ -77,7 +77,15 @@ public class FlashcardService
     }
     public void RemoveFlashcard(Guid idToRemove, List<Flashcard> Allflashcards)
     {
-        Allflashcards = Allflashcards.Where(flashcard => flashcard.ID != idToRemove).ToList();
+        // Find the index of the flashcard with the specified ID
+        int indexToRemove = Allflashcards.FindIndex(flashcard => flashcard.ID == idToRemove);
+
+        // If the flashcard is found (index >= 0), remove it from the list
+        if (indexToRemove >= 0)
+        {
+            Allflashcards.RemoveAt(indexToRemove);
+        }
+
     }
     public void RemoveFlashcard(Flashcard flashcardToRemove, List<Flashcard> Allflashcards)
     {
