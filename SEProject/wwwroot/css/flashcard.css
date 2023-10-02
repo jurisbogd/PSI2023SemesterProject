@@ -91,3 +91,22 @@
     padding: 20px;
     z-index: 1000; /* Ensure it appears above other content */
 }
+
+/* CSS for positioning the edit button */
+.edit-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #007bff; /* Edit button background color */
+    color: #fff; /* Edit button text color */
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: italic;
+    border-radius: 5px;
+}
+
+.edit-button:hover {
+    background-color: #0056b3; /* Hover color for the edit button */
+}
