@@ -68,6 +68,7 @@
                             <button class="remove-button" data-flashcard-id="@flashcard.ID" name="id" value="@flashcard.ID">X</button>
                             // (name) should be set to the same thing its set in the action arguments. I think.
                     }
+                    @* Button for editing flashcard *@
                     <button class="edit-button" data-flashcard-id="@flashcard.ID">Edit</button>
 
                 </div>
@@ -77,14 +78,6 @@
         <script src="~/js/flashcard.js"></script>
         <script src="~/js/addFlashcardButton.js"></script>
         <script src="~/js/removeFlashcardButton.js"></script>
-        <script>
-            // Add event listeners to the Edit buttons
-            document.querySelectorAll(".edit-button").forEach(function(button) {
-                button.addEventListener("click", function() {
-                    var flashcardId = button.getAttribute("data-flashcard-id");
-                    window.location.href = "/Flashcard/EditFlashcard?id=" + flashcardId;
-                });
-            });
-        </script>
+        <script src="~/js/editFlashcard.js"></script>
     </body>
 </html>
