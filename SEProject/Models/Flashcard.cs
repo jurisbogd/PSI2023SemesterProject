@@ -18,6 +18,11 @@ namespace SEProject.Models
 			Hard
 		}
 
+		public DateTime CreationDate
+		{
+			get { return _creationDate; }
+		}
+
 		public Flashcard()
 		{
 			IsFavorite = false;
