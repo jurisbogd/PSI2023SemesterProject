@@ -70,11 +70,26 @@ public class FlashcardService
     }
 
 
-    public void SaveFlashcards(String Filename, List<Flashcard> Allflashcards)
+    public void SaveFlashcards(string Filename, List<Flashcard> Allflashcards)
     {
-        string jsonString = JsonSerializer.Serialize(Allflashcards);
-        System.IO.File.WriteAllText(Filename, jsonString);
+        try
+        {
+            var jsonOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+            };
+
+            // Serialize the flashcards with proper formatting
+            string jsonString = JsonSerializer.Serialize(Allflashcards, jsonOptions);
+
+            System.IO.File.WriteAllText(Filename, jsonString);
+        }
+        catch (Exception exception)
+        {
+            // Handle exceptions appropriately
+        }
     }
+
     public void RemoveFlashcard(Guid idToRemove, List<Flashcard> Allflashcards)
     {
         // Find the index of the flashcard with the specified ID
