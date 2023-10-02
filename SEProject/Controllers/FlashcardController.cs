@@ -67,4 +67,41 @@ public class FlashcardController : Controller
         // Redirect to the view that displays the flashcards
         return RedirectToAction("CreateSampleFlashcard");
     }
+
+    [HttpGet]
+    public IActionResult EditFlashcard(Guid id)
+    {
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+        Flashcard flashcardToEdit = allFlashcards.FirstOrDefault(flashcard => flashcard.ID == id);
+
+        if (flashcardToEdit == null)
+        {
+            return NotFound();
+        }
+
+        return View(flashcardToEdit);
+    }
+
+    [HttpPost]
+    public IActionResult EditFlashcard(Flashcard editedFlashcard)
+    {
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+
+        // Find the index of the flashcard to be edited
+        int indexToEdit = allFlashcards.FindIndex(flashcard => flashcard.ID == editedFlashcard.ID);
+
+        if (indexToEdit >= 0)
+        {
+            // Update the flashcard with the edited data
+            allFlashcards[indexToEdit] = editedFlashcard;
+
+            // Save the updated list of flashcards to the JSON file
+            _flashcardService.SaveFlashcards("flashcards.json", allFlashcards);
+
+            // Redirect to the view that displays the flashcards
+            return RedirectToAction("CreateSampleFlashcard");
+        }
+
+        return NotFound(); // Flashcard not found, return a 404 response
+    }
 }

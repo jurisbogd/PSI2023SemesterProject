@@ -1,0 +1,32 @@
+@model SEProject.Models.Flashcard
+
+@{
+    ViewData["Title"] = "Edit Flashcard";
+}
+
+<h2>Edit Flashcard</h2>
+
+<form asp-action="EditFlashcard" method="post">
+    <input type="hidden" asp-for="ID" />
+    
+    <div class="form-group">
+        <label asp-for="question">Question:</label>
+        <input asp-for="question" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="answer">Answer:</label>
+        <input asp-for="answer" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="difficultyLevel">Difficulty:</label>
+        <select asp-for="difficultyLevel" class="form-control">
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
