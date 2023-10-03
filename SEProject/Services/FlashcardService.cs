@@ -5,31 +5,33 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text;
 using Microsoft.VisualBasic;
+using System.ComponentModel.Design;
 
 namespace SEProject.Services;
 
 public class FlashcardService
 {
-    private const string _flashcardPath = @"Data\Flashcards\";
+    private readonly string _flashcardPath = @"Data\Flashcards\";
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true }; 
+
+    private static Flashcard LoadFlashcard(string filepath)
+    {
+        var flashcardJson = File.ReadAllText(filepath);
+        var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson);
+        return flashcard;
+    }
 
     public List<Flashcard> LoadFlashcards(IWebHostEnvironment _env)
     {
-        // Json must be located in project root folder
-        string jsonFilePath = Path.Combine(_env.ContentRootPath, "flashcards.json");
-
-        // Read the JSON file
-        string jsonData = File.ReadAllText(jsonFilePath);
-        return JsonSerializer.Deserialize<List<Flashcard>>(jsonData);
+        var flashcardFilepaths = Directory.GetFiles(_flashcardPath);
+        var flashcards = flashcardFilepaths.Select(LoadFlashcard).ToList();
+        return flashcards;
     }
 
     public void SaveFlashcard(Flashcard flashcard)
     {
         var filepath = _flashcardPath + flashcard.ID.ToString() + ".json";
-
-        var flashcardJson = JsonSerializer.Serialize(
-            flashcard,
-            new JsonSerializerOptions { WriteIndented = true }
-        );
+        var flashcardJson = JsonSerializer.Serialize(flashcard, _jsonSerializerOptions);
 
         try {
             File.WriteAllText(filepath, flashcardJson);
