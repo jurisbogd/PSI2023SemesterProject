@@ -8,8 +8,8 @@ namespace SEProject.Models
 		public string question { get; set; }
 		public string answer { get; set; }
 		public DifficultyLevel difficultyLevel { get; set; }
-		private bool IsFavorite { get; set; }
-		private DateTime _creationDate;
+		public bool IsFavorite { get; set; }
+		public DateTime _creationDate { get; set; }
 		
 		public enum DifficultyLevel
 		{
