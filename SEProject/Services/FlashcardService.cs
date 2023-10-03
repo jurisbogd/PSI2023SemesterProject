@@ -102,10 +102,12 @@ public class FlashcardService
         }
 
     }
+
     public void RemoveFlashcard(Flashcard flashcardToRemove, List<Flashcard> Allflashcards)
     {
         Allflashcards.Remove(flashcardToRemove);
     }
+
     public void AddFlashcard(Flashcard flashcard, List<Flashcard> Allflashcards)
     {
         Allflashcards.Add(flashcard);
