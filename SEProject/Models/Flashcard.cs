@@ -9,7 +9,7 @@ namespace SEProject.Models
 		public string answer { get; set; }
 		public DifficultyLevel difficultyLevel { get; set; }
 		public bool IsFavorite { get; set; }
-		public DateTime _creationDate { get; set; }
+		public DateTime CreationDate { get; set; }
 		
 		public enum DifficultyLevel
 		{
@@ -21,7 +21,7 @@ namespace SEProject.Models
 		public Flashcard()
 		{
 			IsFavorite = false;
-			_creationDate = DateTime.Today;
+			CreationDate = DateTime.Today;
 		}
     
 		public Flashcard(Guid ID, string question, string answer, DifficultyLevel difficultyLevel)
@@ -31,7 +31,7 @@ namespace SEProject.Models
 			this.answer = answer;
 			this.difficultyLevel = difficultyLevel;
 			IsFavorite = false;
-			_creationDate = DateTime.Today;
+			CreationDate = DateTime.Today;
 		}
 
 		// Edit flashcard method
