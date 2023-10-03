@@ -4,11 +4,14 @@ using SEProject.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text;
+using Microsoft.VisualBasic;
 
 namespace SEProject.Services;
 
 public class FlashcardService
 {
+    private const string _flashcardPath = @"Data\Flashcards\";
+
     public List<Flashcard> LoadFlashcards(IWebHostEnvironment _env)
     {
         // Json must be located in project root folder
@@ -19,74 +22,27 @@ public class FlashcardService
         return JsonSerializer.Deserialize<List<Flashcard>>(jsonData);
     }
 
-    public void SaveFlashcard(string filename, Flashcard newFlashcard)
+    public void SaveFlashcard(Flashcard flashcard)
     {
-        try
-        {
-            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
-            string newFlashcardJson = JsonSerializer.Serialize(newFlashcard, jsonOptions);
+        var filepath = _flashcardPath + flashcard.ID.ToString() + ".json";
 
-            using (FileStream fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            {
-                fileStream.Seek(0, SeekOrigin.End);
-                bool isEmpty = (fileStream.Length == 0);
+        var flashcardJson = JsonSerializer.Serialize(
+            flashcard,
+            new JsonSerializerOptions { WriteIndented = true }
+        );
 
-                if (!isEmpty)
-                {
-                    // Find the closing curly brace ']'
-                    long position = fileStream.Position;
-                    byte[] buffer = new byte[1];
-                    char lastChar = '\0';
-
-                    while (fileStream.Position > 0 && lastChar != ']')
-                    {
-                        fileStream.Seek(-1, SeekOrigin.Current);
-                        fileStream.Read(buffer, 0, 1);
-                        lastChar = (char)buffer[0];
-                    }
-                    // Move back one more position to be before the ']'
-                    fileStream.Seek(-1, SeekOrigin.Current);
-                }
-
-                // Write a comma ',' if file is not empty
-                if (!isEmpty)
-                {
-                    fileStream.WriteByte((byte)',');
-                }
-
-                // Replace the 'ID' property in the JSON with the correct 'ID'
-                string correctedJson = newFlashcardJson.Replace("\"ID\": 0,", $"\"ID\": \"{Guid.NewGuid()}\",");
-                
-                byte[] jsonBytes = Encoding.UTF8.GetBytes(correctedJson);
-                fileStream.Write(jsonBytes, 0, jsonBytes.Length);
-
-                fileStream.WriteByte((byte)']');
-            }
+        try {
+            File.WriteAllText(filepath, flashcardJson);
         }
-        catch (Exception exception)
-        {
-            // Handle exceptions appropriately
+        catch (Exception exception) {
+            // Handle exception
         }
     }
 
-
-    public void SaveFlashcards(string Filename, List<Flashcard> Allflashcards)
+    public void SaveFlashcards(List<Flashcard> flashcards)
     {
-        try
-        {
-            var jsonOptions = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-            };
-
-            // Serialize the flashcards with proper formatting
-            string jsonString = JsonSerializer.Serialize(Allflashcards, jsonOptions);
-
-            System.IO.File.WriteAllText(Filename, jsonString);
-        }
-        catch (Exception exception)
-        {
-            // Handle exceptions appropriately
+        foreach (Flashcard flashcard in flashcards) {
+            SaveFlashcard(flashcard);
         }
     }
 
