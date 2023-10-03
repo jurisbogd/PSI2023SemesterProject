@@ -5,7 +5,7 @@ namespace SEProject.Services;
 
 public class FlashcardService
 {
-    private readonly string _flashcardPath = @"Data\Flashcards\";
+    private readonly string _flashcardPath = @"Data/Flashcards/";
     private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true }; 
 
     private static Flashcard LoadFlashcard(string filepath)
