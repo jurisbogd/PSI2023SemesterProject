@@ -1,107 +1,48 @@
 using System.Text.Json;
-using System;
 using SEProject.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text;
 
 namespace SEProject.Services;
 
 public class FlashcardService
 {
-    public List<Flashcard> LoadFlashcards(IWebHostEnvironment _env)
-    {
-        // Json must be located in project root folder
-        string jsonFilePath = Path.Combine(_env.ContentRootPath, "flashcards.json");
+    private readonly string _flashcardPath = @"Data/Flashcards/";
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true }; 
 
-        // Read the JSON file
-        string jsonData = File.ReadAllText(jsonFilePath);
-        return JsonSerializer.Deserialize<List<Flashcard>>(jsonData);
+    private static Flashcard LoadFlashcard(string filepath)
+    {
+        var flashcardJson = File.ReadAllText(filepath);
+        var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson);
+        return flashcard;
     }
 
-    public void SaveFlashcard(string filename, Flashcard newFlashcard)
+    public List<Flashcard> LoadFlashcards()
     {
-        try
-        {
-            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
-            string newFlashcardJson = JsonSerializer.Serialize(newFlashcard, jsonOptions);
+        var flashcardFilepaths = Directory.GetFiles(_flashcardPath);
+        var flashcards = flashcardFilepaths.Select(LoadFlashcard).ToList();
+        return flashcards;
+    }
 
-            using (FileStream fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            {
-                fileStream.Seek(0, SeekOrigin.End);
-                bool isEmpty = (fileStream.Length == 0);
+    public void SaveFlashcard(Flashcard flashcard)
+    {
+        var filepath = _flashcardPath + flashcard.ID.ToString() + ".json";
+        var flashcardJson = JsonSerializer.Serialize(flashcard, _jsonSerializerOptions);
 
-                if (!isEmpty)
-                {
-                    // Find the closing curly brace ']'
-                    long position = fileStream.Position;
-                    byte[] buffer = new byte[1];
-                    char lastChar = '\0';
+        File.WriteAllText(filepath, flashcardJson);
+    }
 
-                    while (fileStream.Position > 0 && lastChar != ']')
-                    {
-                        fileStream.Seek(-1, SeekOrigin.Current);
-                        fileStream.Read(buffer, 0, 1);
-                        lastChar = (char)buffer[0];
-                    }
-                    // Move back one more position to be before the ']'
-                    fileStream.Seek(-1, SeekOrigin.Current);
-                }
-
-                // Write a comma ',' if file is not empty
-                if (!isEmpty)
-                {
-                    fileStream.WriteByte((byte)',');
-                }
-
-                // Replace the 'ID' property in the JSON with the correct 'ID'
-                string correctedJson = newFlashcardJson.Replace("\"ID\": 0,", $"\"ID\": \"{Guid.NewGuid()}\",");
-                
-                byte[] jsonBytes = Encoding.UTF8.GetBytes(correctedJson);
-                fileStream.Write(jsonBytes, 0, jsonBytes.Length);
-
-                fileStream.WriteByte((byte)']');
-            }
-        }
-        catch (Exception exception)
-        {
-            // Handle exceptions appropriately
+    public void SaveFlashcards(List<Flashcard> flashcards)
+    {
+        foreach (Flashcard flashcard in flashcards) {
+            SaveFlashcard(flashcard);
         }
     }
 
-
-    public void SaveFlashcards(string Filename, List<Flashcard> Allflashcards)
+    public void RemoveFlashcard(Guid IDToRemove)
     {
-        try
-        {
-            var jsonOptions = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-            };
-
-            // Serialize the flashcards with proper formatting
-            string jsonString = JsonSerializer.Serialize(Allflashcards, jsonOptions);
-
-            System.IO.File.WriteAllText(Filename, jsonString);
-        }
-        catch (Exception exception)
-        {
-            // Handle exceptions appropriately
-        }
+        var filepath = _flashcardPath + IDToRemove.ToString() + ".json";
+        File.Delete(filepath);
     }
 
-    public void RemoveFlashcard(Guid idToRemove, List<Flashcard> Allflashcards)
-    {
-        // Find the index of the flashcard with the specified ID
-        int indexToRemove = Allflashcards.FindIndex(flashcard => flashcard.ID == idToRemove);
-
-        // If the flashcard is found (index >= 0), remove it from the list
-        if (indexToRemove >= 0)
-        {
-            Allflashcards.RemoveAt(indexToRemove);
-        }
-
-    }
     public void RemoveFlashcard(Flashcard flashcardToRemove, List<Flashcard> Allflashcards)
     {
         Allflashcards.Remove(flashcardToRemove);

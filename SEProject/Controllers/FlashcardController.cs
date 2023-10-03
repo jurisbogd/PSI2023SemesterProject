@@ -19,7 +19,7 @@ public class FlashcardController : Controller
     public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
     {
 
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards();
 
         return View(allFlashcards);
     }
@@ -28,7 +28,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult CreateSampleFlashcard(Flashcard viewModel)
     {
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards();
         if (ModelState.IsValid)
         {
             // Create a new Flashcard object from the form data
@@ -44,7 +44,7 @@ public class FlashcardController : Controller
             allFlashcards.Add(newFlashcard);
 
             // Save the updated list of flashcards to the JSON file
-            _flashcardService.SaveFlashcard("flashcards.json", newFlashcard);
+            _flashcardService.SaveFlashcard(newFlashcard);
         
             // Redirect to the view that displays the flashcards
             return RedirectToAction("CreateSampleFlashcard");
@@ -55,14 +55,9 @@ public class FlashcardController : Controller
     }
     
     [HttpPost]
-    public IActionResult RemoveSampleFlashcard(Guid id)
+    public IActionResult RemoveSampleFlashcard(Guid ID)
     {
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
-
-        // Remove flashcard from the list
-        _flashcardService.RemoveFlashcard(id, allFlashcards);
-        // Save the updaed JSON
-        _flashcardService.SaveFlashcards("flashcards.json", allFlashcards);
+        _flashcardService.RemoveFlashcard(ID);
         
         // Redirect to the view that displays the flashcards
         return RedirectToAction("CreateSampleFlashcard");
@@ -71,7 +66,7 @@ public class FlashcardController : Controller
     [HttpGet]
     public IActionResult EditFlashcard(Guid id)
     {
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards();
         Flashcard flashcardToEdit = allFlashcards.FirstOrDefault(flashcard => flashcard.ID == id);
 
         if (flashcardToEdit == null)
@@ -85,7 +80,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult EditFlashcard(Flashcard editedFlashcard)
     {
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards();
 
         // Find the index of the flashcard to be edited
         int indexToEdit = allFlashcards.FindIndex(flashcard => flashcard.ID == editedFlashcard.ID);
@@ -96,7 +91,7 @@ public class FlashcardController : Controller
             allFlashcards[indexToEdit] = editedFlashcard;
 
             // Save the updated list of flashcards to the JSON file
-            _flashcardService.SaveFlashcards("flashcards.json", allFlashcards);
+            _flashcardService.SaveFlashcards(allFlashcards);
 
             // Redirect to the view that displays the flashcards
             return RedirectToAction("CreateSampleFlashcard");
