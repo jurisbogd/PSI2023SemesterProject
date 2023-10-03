@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using System.Text;
 using Microsoft.VisualBasic;
 using System.ComponentModel.Design;
+using System.Runtime.CompilerServices;
 
 namespace SEProject.Services;
 
@@ -21,7 +22,7 @@ public class FlashcardService
         return flashcard;
     }
 
-    public List<Flashcard> LoadFlashcards(IWebHostEnvironment _env)
+    public List<Flashcard> LoadFlashcards()
     {
         var flashcardFilepaths = Directory.GetFiles(_flashcardPath);
         var flashcards = flashcardFilepaths.Select(LoadFlashcard).ToList();
@@ -33,12 +34,7 @@ public class FlashcardService
         var filepath = _flashcardPath + flashcard.ID.ToString() + ".json";
         var flashcardJson = JsonSerializer.Serialize(flashcard, _jsonSerializerOptions);
 
-        try {
-            File.WriteAllText(filepath, flashcardJson);
-        }
-        catch (Exception exception) {
-            // Handle exception
-        }
+        File.WriteAllText(filepath, flashcardJson);
     }
 
     public void SaveFlashcards(List<Flashcard> flashcards)
@@ -48,18 +44,12 @@ public class FlashcardService
         }
     }
 
-    public void RemoveFlashcard(Guid idToRemove, List<Flashcard> Allflashcards)
+    public void RemoveFlashcard(Guid IDToRemove)
     {
-        // Find the index of the flashcard with the specified ID
-        int indexToRemove = Allflashcards.FindIndex(flashcard => flashcard.ID == idToRemove);
-
-        // If the flashcard is found (index >= 0), remove it from the list
-        if (indexToRemove >= 0)
-        {
-            Allflashcards.RemoveAt(indexToRemove);
-        }
-
+        var filepath = _flashcardPath + IDToRemove.ToString() + ".json";
+        File.Delete(filepath);
     }
+
     public void RemoveFlashcard(Flashcard flashcardToRemove, List<Flashcard> Allflashcards)
     {
         Allflashcards.Remove(flashcardToRemove);
