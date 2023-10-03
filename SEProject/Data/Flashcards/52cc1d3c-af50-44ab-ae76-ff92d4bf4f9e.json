@@ -2,5 +2,7 @@
   "ID": "52cc1d3c-af50-44ab-ae76-ff92d4bf4f9e",
   "question": "What is ASP.NET?",
   "answer": "A web framework",
-  "difficultyLevel": 0
+  "difficultyLevel": 0,
+  "IsFavorite": false,
+  "CreationDate": "2023-10-03T00:00:00+03:00"
 }

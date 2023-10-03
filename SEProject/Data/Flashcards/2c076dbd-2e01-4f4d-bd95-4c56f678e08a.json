@@ -2,5 +2,7 @@
   "ID": "2c076dbd-2e01-4f4d-bd95-4c56f678e08a",
   "question": "What is C#?",
   "answer": "A programming language",
-  "difficultyLevel": 1
+  "difficultyLevel": 1,
+  "IsFavorite": false,
+  "CreationDate": "2023-10-03T00:00:00+03:00"
 }

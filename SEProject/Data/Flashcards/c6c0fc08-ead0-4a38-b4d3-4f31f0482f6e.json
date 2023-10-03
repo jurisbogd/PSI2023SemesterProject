@@ -2,5 +2,7 @@
   "ID": "c6c0fc08-ead0-4a38-b4d3-4f31f0482f6e",
   "question": "Whaaaaat is MVC?????",
   "answer": "A design pattern????",
-  "difficultyLevel": 1
+  "difficultyLevel": 1,
+  "IsFavorite": false,
+  "CreationDate": "2023-10-03T00:00:00+03:00"
 }
