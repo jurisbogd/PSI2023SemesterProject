@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Flashcard Pack 1",
+    "ID": "e7473c26-dc5f-4b21-8e48-9267f051fd10",
+    "flaschard": [
+      {
+        "ID": "c8a52e20-8f85-4651-9f53-837754827c15",
+        "question": "What is the capital of France?",
+        "answer": "Paris",
+        "difficultyLevel": 1
+      },
+      {
+        "ID": "5dbf7a9e-5372-49b2-88b3-fbc07c5ffdbd",
+        "question": "What is the largest planet in our solar system?",
+        "answer": "Jupiter",
+        "difficultyLevel": 0
+      }
+    ]
+  },
+  {
+    "name": "Flashcard Pack 2",
+    "ID": "ae1f36f3-8c91-4e70-a43f-06ecb31a48e3",
+    "flaschard": [
+      {
+        "ID": "c11f7f65-e77c-4377-8a63-24f71592c8f0",
+        "question": "What is 2 + 2?",
+        "answer": "4",
+        "difficultyLevel": 0
+      },
+      {
+        "ID": "2a3c1db0-5085-4420-b1f5-3969859ff6f7",
+        "question": "Who wrote the play 'Romeo and Juliet'?",
+        "answer": "William Shakespeare",
+        "difficultyLevel": 1
+      }
+    ]
+  }
+]

@@ -1,8 +1,36 @@
-@{
-    ViewData["Title"] = "Test flashcard pack";
-}
+@model List<FlashcardPack>
 
-<div class="text-center">
-    <h1 class="display-4">This is where the flashcard packs should be</h1>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Flashcard Packs</title>
 
+        <!-- Link to the CSS file -->
+    </head>
+    <body>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <!-- "Sample Flashcards" text on the left -->
+        <h1>Sample Flashcards Packs</h1>
+    </div>
+    
+    <div class="flashcard-container">
+            @foreach (var flashcardPack in Model)
+            {
+                <div class="flashcard">
+                    <div class="Name">@flashcardPack.name</div>
+                    <div class="ID">@flashcardPack.ID</div>
+                    @foreach (var flashcard in flashcardPack.flaschard)
+                    {
+                        <li>
+                            <strong>Question:</strong> @flashcard.question<br />
+                            <strong>Answer:</strong> @flashcard.answer<br />
+                            <strong>Difficulty Level:</strong> @flashcard.difficultyLevel
+                        </li>
+                    }
+                </div>
+            }
+        </div>
+    </body>
+</html>
