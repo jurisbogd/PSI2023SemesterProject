@@ -101,32 +101,37 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult SortFlashcards(string sortOption)
     {
-        // FlashcardComparer comparer = new FlashcardComparer();
-        List<Flashcard> sortedFlashcards;
+        FlashcardComparer comparer = null;
+        List<Flashcard> sortedFlashcards = new List<Flashcard>();
         List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
 
+        // Checks what sort of comparison will be done and creates that type of object.
         switch (sortOption)
         {
             case "DateAsc":
-                FlashcardComparer dateComparerAsc = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
-                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard, dateComparerAsc).ToList();
-                break;
             case "DateDesc":
-                FlashcardComparer dateComparerDesc = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, dateComparerDesc).ToList();
+                comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
                 break;
             case "DifficultyAsc":
-                // sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.difficultyLevel).ToList();
-                FlashcardComparer difficultyComparerAsc = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
-                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard, difficultyComparerAsc).ToList();
-                break;
             case "DifficultyDesc":
-                FlashcardComparer difficultyComparerDesc = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, difficultyComparerDesc).ToList();
+                comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
                 break;
             default:
                 sortedFlashcards = allFlashcards;
                 break;
+        }
+
+        // Compares by Ascending or Descending, depending on sortOption ending.
+        if (comparer != null)
+        {
+            if (sortOption.EndsWith("Asc"))
+            {
+                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard, comparer).ToList();
+            }
+            else if (sortOption.EndsWith("Desc"))
+            {
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, comparer).ToList();
+            }
         }
 
         return View("CreateSampleFlashcard", sortedFlashcards);
