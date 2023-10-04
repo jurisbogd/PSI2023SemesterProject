@@ -136,5 +136,4 @@ public class FlashcardController : Controller
 
         return View("CreateSampleFlashcard", sortedFlashcards);
     }
-
 }
