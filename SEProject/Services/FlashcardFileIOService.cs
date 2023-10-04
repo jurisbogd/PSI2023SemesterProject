@@ -42,13 +42,4 @@ public class FlashcardFileIOService : IFlashcardDataHandler
         var filepath = _flashcardPath + IDToRemove.ToString() + ".json";
         File.Delete(filepath);
     }
-
-    public void RemoveFlashcard(Flashcard flashcardToRemove, List<Flashcard> Allflashcards)
-    {
-        Allflashcards.Remove(flashcardToRemove);
-    }
-    public void AddFlashcard(Flashcard flashcard, List<Flashcard> Allflashcards)
-    {
-        Allflashcards.Add(flashcard);
-    }
 }
