@@ -3,12 +3,12 @@ using SEProject.Models;
 
 namespace SEProject.Services;
 
-public class FlashcardService
+public class FlashcardService : IFlashcardFileIOService
 {
     private readonly string _flashcardPath = @"Data/Flashcards/";
-    private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true }; 
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };
 
-    private static Flashcard LoadFlashcard(string filepath)
+    public Flashcard LoadFlashcard(string filepath)
     {
         var flashcardJson = File.ReadAllText(filepath);
         var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson);
@@ -41,14 +41,5 @@ public class FlashcardService
     {
         var filepath = _flashcardPath + IDToRemove.ToString() + ".json";
         File.Delete(filepath);
-    }
-
-    public void RemoveFlashcard(Flashcard flashcardToRemove, List<Flashcard> Allflashcards)
-    {
-        Allflashcards.Remove(flashcardToRemove);
-    }
-    public void AddFlashcard(Flashcard flashcard, List<Flashcard> Allflashcards)
-    {
-        Allflashcards.Add(flashcard);
     }
 }
