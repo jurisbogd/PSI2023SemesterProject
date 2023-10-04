@@ -101,29 +101,39 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult SortFlashcards(string sortOption)
     {
-        List<Flashcard> sortedFlashcards;
+        FlashcardComparer comparer = null;
+        List<Flashcard> sortedFlashcards = new List<Flashcard>();
         List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
 
+        // Checks what sort of comparison will be done and creates that type of object.
         switch (sortOption)
         {
             case "DateAsc":
-                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.creationDate).ToList();
-                break;
             case "DateDesc":
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard.creationDate).ToList();
+                comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
                 break;
             case "DifficultyAsc":
-                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.difficultyLevel).ToList();
-                break;
             case "DifficultyDesc":
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard.difficultyLevel).ToList();
+                comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
                 break;
             default:
                 sortedFlashcards = allFlashcards;
                 break;
         }
 
+        // Compares by Ascending or Descending, depending on sortOption ending.
+        if (comparer != null)
+        {
+            if (sortOption.EndsWith("Asc"))
+            {
+                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard, comparer).ToList();
+            }
+            else if (sortOption.EndsWith("Desc"))
+            {
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, comparer).ToList();
+            }
+        }
+
         return View("CreateSampleFlashcard", sortedFlashcards);
     }
-
 }
