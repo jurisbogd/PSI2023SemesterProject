@@ -101,7 +101,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult SortFlashcards(string sortOption)
     {
-        FlashcardComparer comparer = new FlashcardComparer();
+        // FlashcardComparer comparer = new FlashcardComparer();
         List<Flashcard> sortedFlashcards;
         List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
 
@@ -111,14 +111,16 @@ public class FlashcardController : Controller
                 sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.creationDate).ToList();
                 break;
             case "DateDesc":
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, comparer).ToList();
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard.creationDate).ToList();
                 break;
             case "DifficultyAsc":
                 // sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.difficultyLevel).ToList();
-                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard, comparer).ToList();
+                FlashcardComparer difficultyComparerAsc = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
+                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard, difficultyComparerAsc).ToList();
                 break;
             case "DifficultyDesc":
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, comparer).ToList();
+                FlashcardComparer difficultyComparerDesc = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, difficultyComparerDesc).ToList();
                 break;
             default:
                 sortedFlashcards = allFlashcards;
