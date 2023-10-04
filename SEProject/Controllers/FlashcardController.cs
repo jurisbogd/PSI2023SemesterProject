@@ -7,19 +7,17 @@ namespace SEProject.Controllers;
 
 public class FlashcardController : Controller
 {
-    private readonly IWebHostEnvironment _env;
-    private FlashcardService _flashcardService;
+    private readonly IFlashcardDataHandler _flashcardDataHandler;
 
-    public FlashcardController(IWebHostEnvironment env)
+    public FlashcardController(IFlashcardDataHandler flashcardDataHandler)
     {
-        _env = env;
-        _flashcardService = new FlashcardService();
+        _flashcardDataHandler = flashcardDataHandler;
     }
 
     public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
     {
 
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards();
+        List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
 
         return View(allFlashcards);
     }
@@ -28,7 +26,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult CreateSampleFlashcard(Flashcard viewModel)
     {
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards();
+        List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
         if (ModelState.IsValid)
         {
             // Create a new Flashcard object from the form data
@@ -44,7 +42,7 @@ public class FlashcardController : Controller
             allFlashcards.Add(newFlashcard);
 
             // Save the updated list of flashcards to the JSON file
-            _flashcardService.SaveFlashcard(newFlashcard);
+            _flashcardDataHandler.SaveFlashcard(newFlashcard);
         
             // Redirect to the view that displays the flashcards
             return RedirectToAction("CreateSampleFlashcard");
@@ -57,7 +55,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult RemoveSampleFlashcard(Guid ID)
     {
-        _flashcardService.RemoveFlashcard(ID);
+        _flashcardDataHandler.RemoveFlashcard(ID);
         
         // Redirect to the view that displays the flashcards
         return RedirectToAction("CreateSampleFlashcard");
@@ -66,7 +64,7 @@ public class FlashcardController : Controller
     [HttpGet]
     public IActionResult EditFlashcard(Guid id)
     {
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards();
+        List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
         Flashcard flashcardToEdit = allFlashcards.FirstOrDefault(flashcard => flashcard.ID == id);
 
         if (flashcardToEdit == null)
@@ -80,7 +78,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult EditFlashcard(Flashcard editedFlashcard)
     {
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards();
+        List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
 
         // Find the index of the flashcard to be edited
         int indexToEdit = allFlashcards.FindIndex(flashcard => flashcard.ID == editedFlashcard.ID);
@@ -91,7 +89,7 @@ public class FlashcardController : Controller
             allFlashcards[indexToEdit] = editedFlashcard;
 
             // Save the updated list of flashcards to the JSON file
-            _flashcardService.SaveFlashcards(allFlashcards);
+            _flashcardDataHandler.SaveFlashcards(allFlashcards);
 
             // Redirect to the view that displays the flashcards
             return RedirectToAction("CreateSampleFlashcard");
@@ -103,8 +101,9 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult SortFlashcards(string sortOption)
     {
+        FlashcardComparer comparer = new FlashcardComparer();
         List<Flashcard> sortedFlashcards;
-        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+        List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
 
         switch (sortOption)
         {
@@ -112,13 +111,14 @@ public class FlashcardController : Controller
                 sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.creationDate).ToList();
                 break;
             case "DateDesc":
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard.creationDate).ToList();
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, comparer).ToList();
                 break;
             case "DifficultyAsc":
-                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.difficultyLevel).ToList();
+                // sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.difficultyLevel).ToList();
+                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard, comparer).ToList();
                 break;
             case "DifficultyDesc":
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard.difficultyLevel).ToList();
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, comparer).ToList();
                 break;
             default:
                 sortedFlashcards = allFlashcards;
