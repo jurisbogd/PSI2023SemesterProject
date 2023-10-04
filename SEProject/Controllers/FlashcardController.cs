@@ -8,12 +8,12 @@ namespace SEProject.Controllers;
 public class FlashcardController : Controller
 {
     private readonly IWebHostEnvironment _env;
-    private FlashcardService _flashcardService;
+    private readonly IFlashcardFileIOService _flashcardService;
 
-    public FlashcardController(IWebHostEnvironment env)
+    public FlashcardController(IWebHostEnvironment env, IFlashcardFileIOService flashcardService)
     {
         _env = env;
-        _flashcardService = new FlashcardService();
+        _flashcardService = flashcardService;
     }
 
     public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
