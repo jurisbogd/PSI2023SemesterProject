@@ -107,6 +107,51 @@
     border-radius: 5px;
 }
 
+
 .edit-button:hover {
     background-color: #0056b3; /* Hover color for the edit button */
 }
+
+/* Align buttons vertically with spacing */
+.vertical-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Sort button style similar to edit button */
+.custom-sorting-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold; 
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.custom-sorting-button:hover {
+    background-color: #0056b3; 
+}
+
+/* Style the individual dropdown items */
+.sorting-dropdown .dropdown-item {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-bottom: 5px; 
+    transition: background-color 0.3s, color 0.3s; 
+    font-weight: bold; 
+}
+
+.sorting-dropdown .dropdown-item:hover {
+    background-color: #007bff; 
+    color: #fff; 
+    border-radius: 3px;
+}
+
+

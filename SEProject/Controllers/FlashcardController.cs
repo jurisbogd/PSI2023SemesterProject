@@ -99,4 +99,33 @@ public class FlashcardController : Controller
 
         return NotFound(); // Flashcard not found, return a 404 response
     }
+
+    [HttpPost]
+    public IActionResult SortFlashcards(string sortOption)
+    {
+        List<Flashcard> sortedFlashcards;
+        List<Flashcard> allFlashcards = _flashcardService.LoadFlashcards(_env);
+
+        switch (sortOption)
+        {
+            case "DateAsc":
+                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.creationDate).ToList();
+                break;
+            case "DateDesc":
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard.creationDate).ToList();
+                break;
+            case "DifficultyAsc":
+                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.difficultyLevel).ToList();
+                break;
+            case "DifficultyDesc":
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard.difficultyLevel).ToList();
+                break;
+            default:
+                sortedFlashcards = allFlashcards;
+                break;
+        }
+
+        return View("CreateSampleFlashcard", sortedFlashcards);
+    }
+
 }
