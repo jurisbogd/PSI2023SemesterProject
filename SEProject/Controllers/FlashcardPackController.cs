@@ -19,22 +19,62 @@ public class FlashcardPackController : Controller
     {
 
         List<FlashcardPack> allFlaschardPacks = _flashcardPackService.LoadFlashcardPacks(_env);
-        foreach (var flashcardPack in allFlaschardPacks)
-            {
-                Console.WriteLine($"Flashcard Pack Name: {flashcardPack.name}");
-                Console.WriteLine($"Flashcard Pack ID: {flashcardPack.ID}");
 
-                // Iterate through the flashcards in the pack
-                foreach (var flashcard in flashcardPack.flaschard)
-                {
-                    Console.WriteLine("Flashcard:");
-                    Console.WriteLine($"  ID: {flashcard.ID}");
-                    Console.WriteLine($"  Question: {flashcard.question}");
-                    Console.WriteLine($"  Answer: {flashcard.answer}");
-                    Console.WriteLine($"  Difficulty Level: {flashcard.difficultyLevel}");
-                    Console.WriteLine();
-                }
-            }
         return View(allFlaschardPacks);
     }
+
+    public IActionResult ViewFlashcardPack(Guid id)
+    {
+        List<FlashcardPack> allFlashcardPacks = _flashcardPackService.LoadFlashcardPacks(_env);
+        FlashcardPack flashcardPackToView = allFlashcardPacks.FirstOrDefault(flashcardPack => flashcardPack.ID == id);
+
+        return View(flashcardPackToView);
+    }
+
+    [HttpPost]
+    public IActionResult AddFlashcardToPack(Flashcard viewModel, Guid id)
+    {
+        List<FlashcardPack> allFlashcardPacks = _flashcardPackService.LoadFlashcardPacks(_env);
+        FlashcardPack flashcardPackToBeChanged = allFlashcardPacks.FirstOrDefault(flashcardPack => flashcardPack.ID == id);
+        
+        if (ModelState.IsValid)
+        {
+            // Create a new Flashcard object from the form data
+            var newFlashcard = new Flashcard
+            {
+                ID = Guid.NewGuid(),
+                question = viewModel.question,
+                answer = viewModel.answer,
+                difficultyLevel = viewModel.difficultyLevel
+            };
+            
+            // Add the new flashcard to the list
+            flashcardPackToBeChanged.flashcard.Add(newFlashcard);
+
+            // Save the updated list of flashcards to the JSON file
+            _flashcardPackService.SaveFlashcardPacks(allFlashcardPacks);
+        
+            // Redirect to the view that displays the flashcards
+            return RedirectToAction("ViewFlashcardPack", new {id = flashcardPackToBeChanged.ID});
+        }
+
+        // If the model is not valid, return to the form view
+        return View(flashcardPackToBeChanged);
+    }
+
+    [HttpPost]
+    public IActionResult RemoveFlashcardFromPack(Guid id, Guid PackID)
+    {
+        List<FlashcardPack> allFlashcardPacks = _flashcardPackService.LoadFlashcardPacks(_env);
+        FlashcardPack flashcardPackToBeChanged = allFlashcardPacks.FirstOrDefault(flashcardPack => flashcardPack.ID == PackID);
+
+        // Remove flashcard from the list
+        _flashcardPackService.RemoveFlashcard(id, flashcardPackToBeChanged);
+        // Save the updaed JSON
+        _flashcardPackService.SaveFlashcardPacks(allFlashcardPacks);
+        
+        // Redirect to the view that displays the flashcards
+        return RedirectToAction("ViewFlashcardPack", new {id = flashcardPackToBeChanged.ID});
+    }
+    
 }

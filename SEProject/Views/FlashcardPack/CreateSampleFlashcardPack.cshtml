@@ -8,29 +8,28 @@
         <title>Flashcard Packs</title>
 
         <!-- Link to the CSS file -->
+        <link rel="stylesheet" href="~/css/flashcardPack.css">
     </head>
     <body>
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <!-- "Sample Flashcards" text on the left -->
-        <h1>Sample Flashcards Packs</h1>
+        <h1>Flashcards Packs</h1>
     </div>
     
-    <div class="flashcard-container">
+    <div class="flashcardPack-container">
             @foreach (var flashcardPack in Model)
             {
-                <div class="flashcard">
-                    <div class="Name">@flashcardPack.name</div>
-                    <div class="ID">@flashcardPack.ID</div>
-                    @foreach (var flashcard in flashcardPack.flaschard)
+                <div class="flashcardPack">
+                    <div class="name">@flashcardPack.name</div>
+                    <!-- foreach (var flashcard in flashcardPack.flaschard) -->
+                    @using (Html.BeginForm("ViewFlashcardPack", "FlashcardPack", FormMethod.Post))
                     {
-                        <li>
-                            <strong>Question:</strong> @flashcard.question<br />
-                            <strong>Answer:</strong> @flashcard.answer<br />
-                            <strong>Difficulty Level:</strong> @flashcard.difficultyLevel
-                        </li>
+                            <button class="view-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID" name="id" value="@flashcardPack.ID">View Flashcard Pack</button>
+                            // (name) should be set to the same thing its set in the action arguments. I think.
                     }
                 </div>
             }
         </div>
+                <script src="~/js/viewFlashcardPackButton.js"></script>
     </body>
 </html>

@@ -18,4 +18,29 @@ public class FlashcardPackService
         string jsonData = File.ReadAllText(jsonFilePath);
         return JsonSerializer.Deserialize<List<FlashcardPack>>(jsonData);
     }
+
+    public void SaveFlashcardPacks(List<FlashcardPack> AllflashcardPacks)
+    {
+        var jsonOptions = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+        };
+
+        // Serialize the flashcards with proper formatting
+        string jsonString = JsonSerializer.Serialize(AllflashcardPacks, jsonOptions);
+        System.IO.File.WriteAllText("flashcardPacks.json", jsonString);
+    }
+
+    public void RemoveFlashcard(Guid idToRemove, FlashcardPack FlashcardPackToBeChanged)
+    {
+        // Find the index of the flashcard with the specified ID
+        int indexToRemove = FlashcardPackToBeChanged.flashcard.FindIndex(flashcard => flashcard.ID == idToRemove);
+
+        // If the flashcard is found (index >= 0), remove it from the list
+        if (indexToRemove >= 0)
+        {
+            FlashcardPackToBeChanged.flashcard.RemoveAt(indexToRemove);
+        }
+
+    }
 }
