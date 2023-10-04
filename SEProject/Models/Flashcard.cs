@@ -5,8 +5,8 @@ namespace SEProject.Models
 	public class Flashcard
 	{
 		public Guid ID { get; set; }
-		public string question { get; set; }
-		public string answer { get; set; }
+		public string? question { get; set; }
+		public string? answer { get; set; }
 		public DifficultyLevel difficultyLevel { get; set; }
 		public bool isFavorite { get; set; }
 		public DateTime creationDate { get; set; }

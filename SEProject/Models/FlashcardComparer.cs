@@ -17,7 +17,7 @@ namespace SEProject.Models
             _comparisonType = comparisonType;
         }
 
-        public int Compare(Flashcard x, Flashcard y)
+        public int Compare(Flashcard? x, Flashcard? y)
         {
             if (x == null || y == null)
             {
@@ -28,11 +28,9 @@ namespace SEProject.Models
             {
                 case ComparisonType.DifficultyLevel:
                     return x.difficultyLevel.CompareTo(y.difficultyLevel);
-                    break;
                 
                 case ComparisonType.CreationDate:
                     return x.creationDate.CompareTo(y.creationDate);
-                    break;
                 
                 default:
                     throw new ArgumentException("Invalid comparison type.");
