@@ -8,8 +8,8 @@ namespace SEProject.Models
 		public string question { get; set; }
 		public string answer { get; set; }
 		public DifficultyLevel difficultyLevel { get; set; }
-		public bool IsFavorite { get; set; }
-		public DateTime CreationDate { get; set; }
+		public bool isFavorite { get; set; }
+		public DateTime creationDate { get; set; }
 		
 		public enum DifficultyLevel
 		{
@@ -20,8 +20,8 @@ namespace SEProject.Models
 
 		public Flashcard()
 		{
-			IsFavorite = false;
-			CreationDate = DateTime.Today;
+			isFavorite = false;
+			creationDate = DateTime.Now;
 		}
     
 		public Flashcard(Guid ID, string question, string answer, DifficultyLevel difficultyLevel)
@@ -30,8 +30,8 @@ namespace SEProject.Models
 			this.question = question;
 			this.answer = answer;
 			this.difficultyLevel = difficultyLevel;
-			IsFavorite = false;
-			CreationDate = DateTime.Today;
+			isFavorite = false;
+			creationDate = DateTime.Now;
 		}
 
 		// Edit flashcard method
@@ -45,7 +45,7 @@ namespace SEProject.Models
 		// Switch favorite to opposite
 		public void ToggleFavorite()
 		{
-			IsFavorite = !IsFavorite;
+			isFavorite = !isFavorite;
 		}
 
         public override string ToString()
