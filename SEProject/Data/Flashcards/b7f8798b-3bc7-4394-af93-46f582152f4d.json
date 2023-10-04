@@ -2,5 +2,7 @@
   "ID": "b7f8798b-3bc7-4394-af93-46f582152f4d",
   "question": "Is this a flashcard?",
   "answer": "Yes",
-  "difficultyLevel": 2
+  "difficultyLevel": 2,
+  "IsFavorite": false,
+  "CreationDate": "2023-10-03T00:00:00+03:00"
 }

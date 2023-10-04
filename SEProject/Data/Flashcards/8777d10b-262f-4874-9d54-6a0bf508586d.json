@@ -2,5 +2,7 @@
   "ID": "8777d10b-262f-4874-9d54-6a0bf508586d",
   "question": "Does this question fit inside the flashcard even though it is very long?",
   "answer": "Yes",
-  "difficultyLevel": 2
+  "difficultyLevel": 2,
+  "IsFavorite": false,
+  "CreationDate": "2023-10-03T00:00:00+03:00"
 }
