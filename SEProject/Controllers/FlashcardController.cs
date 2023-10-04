@@ -108,10 +108,12 @@ public class FlashcardController : Controller
         switch (sortOption)
         {
             case "DateAsc":
-                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.creationDate).ToList();
+                FlashcardComparer dateComparerAsc = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
+                sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard, dateComparerAsc).ToList();
                 break;
             case "DateDesc":
-                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard.creationDate).ToList();
+                FlashcardComparer dateComparerDesc = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
+                sortedFlashcards = allFlashcards.OrderByDescending(flashcard => flashcard, dateComparerDesc).ToList();
                 break;
             case "DifficultyAsc":
                 // sortedFlashcards = allFlashcards.OrderBy(flashcard => flashcard.difficultyLevel).ToList();
