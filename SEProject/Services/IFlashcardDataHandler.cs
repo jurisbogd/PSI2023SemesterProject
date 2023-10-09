@@ -4,7 +4,7 @@ namespace SEProject.Services;
 
 public interface IFlashcardDataHandler
 {
-    Flashcard LoadFlashcard(string filepath);
+    Flashcard LoadFlashcard(Guid id);
     List<Flashcard> LoadFlashcards();
     void SaveFlashcard(Flashcard flashcard);
     void SaveFlashcards(List<Flashcard> flashcards);

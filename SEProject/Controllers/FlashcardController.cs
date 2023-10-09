@@ -64,15 +64,14 @@ public class FlashcardController : Controller
     [HttpGet]
     public IActionResult EditFlashcard(Guid id)
     {
-        List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
-        Flashcard flashcardToEdit = allFlashcards.FirstOrDefault(flashcard => flashcard.ID == id);
+        var flashcard = _flashcardDataHandler.LoadFlashcard(id);
 
-        if (flashcardToEdit == null)
+        if (flashcard == null)
         {
             return NotFound();
         }
 
-        return View(flashcardToEdit);
+        return View(flashcard);
     }
 
     [HttpPost]
