@@ -5,11 +5,11 @@ namespace SEProject.Models
 	public class Flashcard
 	{
 		public Guid ID { get; set; }
-		public string? question { get; set; }
-		public string? answer { get; set; }
-		public DifficultyLevel difficultyLevel { get; set; }
-		public bool isFavorite { get; set; }
-		public DateTime creationDate { get; set; }
+		public string? Question { get; set; }
+		public string? Answer { get; set; }
+		public DifficultyLevel Difficulty { get; set; }
+		public bool IsFavorite { get; set; }
+		public DateTime CreationDate { get; set; }
 		
 		public enum DifficultyLevel
 		{
@@ -20,37 +20,37 @@ namespace SEProject.Models
 
 		public Flashcard()
 		{
-			isFavorite = false;
-			creationDate = DateTime.Now;
+			IsFavorite = false;
+			CreationDate = DateTime.Now;
 		}
     
-		public Flashcard(Guid ID, string question, string answer, DifficultyLevel difficultyLevel)
+		public Flashcard(Guid id, string question, string answer, DifficultyLevel difficulty)
 		{
-			this.ID = ID;
-			this.question = question;
-			this.answer = answer;
-			this.difficultyLevel = difficultyLevel;
-			isFavorite = false;
-			creationDate = DateTime.Now;
+			ID = id;
+			Question = question;
+			Answer = answer;
+			Difficulty = difficulty;
+			IsFavorite = false;
+			CreationDate = DateTime.Now;
 		}
 
 		// Edit flashcard method
-		public void EditFlashcard(string newQuestion, string newAnswer, DifficultyLevel newDifficultyLevel)
+		public void EditFlashcard(string question, string answer, DifficultyLevel difficulty)
 		{
-			question = newQuestion;
-			answer = newAnswer;
-			difficultyLevel = newDifficultyLevel;
+			Question = question;
+			Answer = answer;
+			Difficulty = difficulty;
 		}
 
 		// Switch favorite to opposite
 		public void ToggleFavorite()
 		{
-			isFavorite = !isFavorite;
+			IsFavorite = !IsFavorite;
 		}
 
         public override string ToString()
         {
-			return $"{question} - {answer}";
+			return $"{Question} - {Answer}";
         }
     }
 }
