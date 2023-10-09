@@ -81,10 +81,10 @@
             @foreach (var flashcard in Model)
             {
                 <div class="flashcard">
-                    <div class="question">@flashcard.question</div>
-                    <div class="answer" style="display: none;">@flashcard.answer</div>
+                    <div class="question">@flashcard.Question</div>
+                    <div class="answer" style="display: none;">@flashcard.Answer</div>
                     <button class="reveal-button">Reveal Answer</button>
-                    <div class="difficulty">@flashcard.difficultyLevel</div>
+                    <div class="difficulty">@flashcard.Difficulty</div>
 
                     @using (Html.BeginForm("RemoveSampleFlashcard", "Flashcard", FormMethod.Post))
                     {

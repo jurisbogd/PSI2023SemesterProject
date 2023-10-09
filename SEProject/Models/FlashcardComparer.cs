@@ -27,10 +27,10 @@ namespace SEProject.Models
             switch(_comparisonType)
             {
                 case ComparisonType.DifficultyLevel:
-                    return x.difficultyLevel.CompareTo(y.difficultyLevel);
+                    return x.Difficulty.CompareTo(y.Difficulty);
                 
                 case ComparisonType.CreationDate:
-                    return x.creationDate.CompareTo(y.creationDate);
+                    return x.CreationDate.CompareTo(y.CreationDate);
                 
                 default:
                     throw new ArgumentException("Invalid comparison type.");

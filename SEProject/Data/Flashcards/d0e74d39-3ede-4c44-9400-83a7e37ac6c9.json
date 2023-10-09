@@ -1,8 +1,8 @@
 {
   "ID": "d0e74d39-3ede-4c44-9400-83a7e37ac6c9",
-  "question": "test\u010D",
-  "answer": "test\u010D",
-  "difficultyLevel": 1,
-  "isFavorite": false,
-  "creationDate": "2023-10-03T18:17:00.7926206+00:00"
+  "Question": "test\u010D",
+  "Answer": "test\u010D",
+  "Difficulty": 1,
+  "IsFavorite": false,
+  "CreationDate": "2023-10-03T21:17:00.7926206+03:00"
 }
