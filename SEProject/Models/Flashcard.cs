@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SEProject.Models
+﻿namespace SEProject.Models
 {
 	public class Flashcard
 	{
