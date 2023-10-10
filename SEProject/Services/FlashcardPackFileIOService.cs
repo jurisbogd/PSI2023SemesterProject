@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace SEProject.Services;
 
-public class FlashcardPackFileIOService
+public class FlashcardPackFileIOService : IFlashcardPackDataHandler
 {
     private readonly string _flashcardPackPath = @"Data/FlashcardPacks/";
     private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };

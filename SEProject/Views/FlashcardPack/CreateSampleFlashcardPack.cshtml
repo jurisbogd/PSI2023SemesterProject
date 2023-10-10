@@ -1,0 +1,35 @@
+﻿@model List<FlashcardPack>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard Packs</title>
+
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="~/css/flashcardPack.css">
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <!-- "Sample Flashcards" text on the left -->
+        <h1>Flashcards Packs</h1>
+    </div>
+
+    <div class="flashcardPack-container">
+        @foreach (var flashcardPack in Model)
+        {
+            <div class="flashcardPack">
+                <div class="name">@flashcardPack.Name</div>
+                <!-- foreach (var flashcard in flashcardPack.flaschard) -->
+                @using (Html.BeginForm("ViewFlashcardPack", "FlashcardPack", FormMethod.Post))
+                {
+                    <button class="view-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID" name="id" value="@flashcardPack.ID">View Flashcard Pack</button>
+                    // (name) should be set to the same thing its set in the action arguments. I think.
+                }
+            </div>
+        }
+    </div>
+    <script src="~/js/viewFlashcardPackButton.js"></script>
+</body>
+</html>

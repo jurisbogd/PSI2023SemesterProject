@@ -1,15 +1,12 @@
 ﻿using SEProject.Models;
-using System;
-using System.Collections.Generic;
 
-namespace SEProject.Services
+namespace SEProject.Services;
+
+public interface IFlashcardPackDataHandler
 {
-    public interface IFlashcardPackDataHandler
-    {
-        FlashcardPack LoadFlashcardPack(Guid id);
-        List<FlashcardPack> LoadFlashcardPacks();
-        void SaveFlashcardPack(FlashcardPack flashcardPack);
-        void SaveFlashcardPacks(List<FlashcardPack> flashcardPacks);
-        void RemoveFlashcardPack(Guid id);
-    }
+    FlashcardPack LoadFlashcardPack(Guid id);
+    List<FlashcardPack> LoadFlashcardPacks();
+    void SaveFlashcardPack(FlashcardPack flashcardPack);
+    void SaveFlashcardPacks(List<FlashcardPack> flashcardPacks);
+    void RemoveFlashcardPack(Guid id);
 }

@@ -1,0 +1,24 @@
+{
+  "Name": "Flashcard Pack 1",
+  "ID": "e7473c26-dc5f-4b21-8e48-9267f051fd10",
+  "Flashcards": [
+    {
+      "ID": "c8a52e20-8f85-4651-9f53-837754827c15",
+      "question": "What is the capital of France?",
+      "answer": "Paris",
+      "difficultyLevel": 1
+    },
+    {
+      "ID": "5dbf7a9e-5372-49b2-88b3-fbc07c5ffdbd",
+      "question": "What is the largest planet in our solar system?",
+      "answer": "Jupiter",
+      "difficultyLevel": 0
+    },
+    {
+      "ID": "c58b9a7c-c03b-4590-a91a-cb7223d855eb",
+      "question": "test",
+      "answer": "1",
+      "difficultyLevel": 0
+    }
+  ]
+}
