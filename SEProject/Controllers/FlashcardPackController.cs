@@ -34,6 +34,10 @@ namespace SEProject.Controllers
             {
                 return NotFound(); // Handle the case when the pack is not found
             }
+            foreach (var flashcard in flashcardPackToView.Flashcards)
+            {
+                Console.WriteLine(flashcard.Question);
+            }
 
             return View(flashcardPackToView);
         }
