@@ -1,8 +1,8 @@
 {
   "ID": "f7bce3ac-9333-4a2b-81a6-7ecf52fecc5c",
-  "question": "Is this a flashcard?",
-  "answer": "Yes",
-  "difficultyLevel": 2,
-  "isFavorite": false,
-  "creationDate": "2023-10-04T18:29:39.058685+03:00"
+  "Question": "Is this a flashcard?",
+  "Answer": "Yes",
+  "Difficulty": 2,
+  "IsFavorite": false,
+  "CreationDate": "2023-10-04T18:29:39.058685+03:00"
 }

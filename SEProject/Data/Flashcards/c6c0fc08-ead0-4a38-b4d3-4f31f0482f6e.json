@@ -1,8 +1,8 @@
 {
   "ID": "c6c0fc08-ead0-4a38-b4d3-4f31f0482f6e",
-  "question": "Whaaaaat is MVC?????",
-  "answer": "A design pattern????",
-  "difficultyLevel": 1,
-  "isFavorite": false,
-  "creationDate": "2023-10-04T18:29:39.058968+03:00"
+  "Question": "Whaaaaat is MVC?????",
+  "Answer": "A design pattern????",
+  "Difficulty": 1,
+  "IsFavorite": false,
+  "CreationDate": "2023-10-04T18:29:39.058968+03:00"
 }

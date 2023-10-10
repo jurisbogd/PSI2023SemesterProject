@@ -33,9 +33,9 @@ public class FlashcardController : Controller
             var newFlashcard = new Flashcard
             {
                 ID = Guid.NewGuid(),
-                question = viewModel.question,
-                answer = viewModel.answer,
-                difficultyLevel = viewModel.difficultyLevel
+                Question = viewModel.Question,
+                Answer = viewModel.Answer,
+                Difficulty = viewModel.Difficulty
             };
             
             // Add the new flashcard to the list
