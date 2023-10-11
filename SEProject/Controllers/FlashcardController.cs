@@ -31,15 +31,7 @@ public class FlashcardController : Controller
         List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
         if (ModelState.IsValid)
         {
-            // Create a new Flashcard object from the form data
-            var newFlashcard = new Flashcard
-            {
-                ID = Guid.NewGuid(),
-                Question = viewModel.Question,
-                Answer = viewModel.Answer,
-                Difficulty = viewModel.Difficulty
-            };
-            
+            var newFlashcard = new Flashcard(Guid.NewGuid(),viewModel.Question,viewModel.Answer,viewModel.Difficulty);
             // Add the new flashcard to the list
             allFlashcards.Add(newFlashcard);
 
