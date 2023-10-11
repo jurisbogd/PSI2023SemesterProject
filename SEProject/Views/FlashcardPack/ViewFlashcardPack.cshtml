@@ -65,12 +65,12 @@
 
                 @using (Html.BeginForm("RemoveFlashcardFromPack", "FlashcardPack", new { PackID = Model.ID }, FormMethod.Post))
                 {
-                    <button class="remove-button" data-flashcard-id="@flashcard.ID" name="id" value="@flashcard.ID">X</button>
+                    <button class="remove-button" data-flashcard-id="@flashcard.ID" name="flashcardID" value="@flashcard.ID">X</button>
                     // (name) should be set to the same thing its set in the action arguments. I think.
                 }
                 @* Button for editing flashcard (disabled for now) *@
                 @* <button class="edit-button" data-flashcard-id="@flashcard.ID">Edit</button> *@
-
+                <button class="edit-button" data-flashcard-id="@flashcard.ID" name="flashcardID" value="@flashcard.ID">Edit</button>
             </div>
         }
     </div>
@@ -78,6 +78,6 @@
     <script src="~/js/flashcard.js"></script>
     <script src="~/js/addFlashcardButton.js"></script>
     <script src="~/js/removeFlashcardButton.js"></script>
-    <script src="~/js/editFlashcard.js"></script>
+    <script src="~/js/editFlashcardInPack.js"></script>
 </body>
 </html>

@@ -36,10 +36,6 @@ namespace SEProject.Controllers
             {
                 return NotFound(); // Handle the case when the pack is not found
             }
-            foreach (var flashcard in flashcardPackToView.Flashcards)
-            {
-                Console.WriteLine(flashcard.Question);
-            }
 
             return View(flashcardPackToView);
         }
@@ -74,6 +70,7 @@ namespace SEProject.Controllers
                 // Create a new Flashcard object from the form data
                 var newFlashcard = new Flashcard
                 {
+                    PackID = id,
                     ID = Guid.NewGuid(),
                     Question = viewModel.Question,
                     Answer = viewModel.Answer,
@@ -111,5 +108,48 @@ namespace SEProject.Controllers
             // Redirect to the view that displays the pack of flashcards
             return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
         }
+
+        [HttpGet]
+        public IActionResult EditFlashcard(Guid flashcardID)
+        {
+            var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPacks().FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
+            Console.WriteLine(flashcardID);
+            if (flashcardPack == null)
+            {
+                Console.WriteLine("Nullas");
+                return NotFound();
+            }
+
+            var flashcardToEdit = flashcardPack.Flashcards.First(f => f.ID == flashcardID);
+            return View(flashcardToEdit);
+        }
+
+        [HttpPost]
+        public IActionResult EditFlashcard(Flashcard editedFlashcard)
+        {
+            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            var flashcardToEdit = allFlashcardPacks.SelectMany(p => p.Flashcards).FirstOrDefault(f => f.ID == editedFlashcard.ID);
+
+            if (flashcardToEdit == null)
+            {
+                return NotFound(); // Flashcard not found, return a 404 response
+            }
+
+            if (ModelState.IsValid)
+            {
+                flashcardToEdit.Question = editedFlashcard.Question;
+                flashcardToEdit.Answer = editedFlashcard.Answer;
+                flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
+
+                _flashcardPackDataHandler.SaveFlashcardPacks(allFlashcardPacks);
+
+                // Redirect to the view that displays the flashcards
+                return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
+            }
+
+            // If the model is not valid, return to the form view with validation errors
+            return View(flashcardToEdit);
+        }
+
     }
 }
