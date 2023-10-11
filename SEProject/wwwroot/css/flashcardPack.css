@@ -18,6 +18,12 @@
     flex-wrap: wrap; /* Allow the cards to wrap to a new row if the container width is limited */
 }
 
+/* CSS for the name within the flashcardPack container */
+.name {
+    font-size: 30px;
+    word-wrap: break-word; /* Add word-wrapping for long words */
+}
+
 /* CSS for the pop-up form */
 .popup-form {
     position: fixed;
