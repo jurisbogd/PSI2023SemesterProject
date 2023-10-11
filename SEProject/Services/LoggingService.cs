@@ -7,8 +7,8 @@ public class LoggingService : ILoggingHandler
 {
     public struct UserParameters
     {
-        public string osName;
-        public string osVersion;
+        public string osName { get; set; }
+        public string osVersion { get; set; }
         public UserParameters(string _osName, string _osVersion)
         {
             osName = _osName;
@@ -24,7 +24,7 @@ public class LoggingService : ILoggingHandler
             OperatingSystem os = Environment.OSVersion;
             UserParameters parameters = new UserParameters(os.Platform.ToString(), os.Version.ToString());
 
-            using (StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "\\log.txt", true))
+            using (StreamWriter writer = new StreamWriter(path: Directory.GetCurrentDirectory() + "\\log.txt", true))
             {
                 writer.WriteLine($"Timestamp: {entry.Timestamp}");
                 writer.WriteLine($"Level: {entry.Level}");
