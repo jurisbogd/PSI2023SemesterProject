@@ -34,10 +34,6 @@ namespace SEProject.Controllers
             {
                 return NotFound(); // Handle the case when the pack is not found
             }
-            foreach (var flashcard in flashcardPackToView.Flashcards)
-            {
-                Console.WriteLine(flashcard.Question);
-            }
 
             return View(flashcardPackToView);
         }
@@ -84,7 +80,7 @@ namespace SEProject.Controllers
             var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(packID);
 
             int indexToRemove = flashcardPack.Flashcards.FindIndex(flashcard => flashcard.ID == flashcardID);
-
+            
             if (indexToRemove >= 0)
             {
                 flashcardPack.Flashcards.RemoveAt(indexToRemove);
