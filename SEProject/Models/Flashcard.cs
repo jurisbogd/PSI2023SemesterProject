@@ -32,20 +32,6 @@
 			CreationDate = DateTime.Now;
 		}
 
-		// Edit flashcard method
-		public void EditFlashcard(string question, string answer, DifficultyLevel difficulty)
-		{
-			Question = question;
-			Answer = answer;
-			Difficulty = difficulty;
-		}
-
-		// Switch favorite to opposite
-		public void ToggleFavorite()
-		{
-			IsFavorite = !IsFavorite;
-		}
-
         public override string ToString()
         {
 			return $"{Question} - {Answer}";
