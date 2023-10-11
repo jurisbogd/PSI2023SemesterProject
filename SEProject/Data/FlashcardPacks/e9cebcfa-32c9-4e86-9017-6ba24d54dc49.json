@@ -1,0 +1,15 @@
+{
+  "Name": "New pack",
+  "ID": "e9cebcfa-32c9-4e86-9017-6ba24d54dc49",
+  "Flashcards": [
+    {
+      "ID": "bb650c0f-5f61-48f0-a1f6-a65d1dd3807f",
+      "PackID": "e9cebcfa-32c9-4e86-9017-6ba24d54dc49",
+      "Question": "Test case",
+      "Answer": "Test case",
+      "Difficulty": 1,
+      "IsFavorite": false,
+      "CreationDate": "2023-10-11T18:14:13.729147+03:00"
+    }
+  ]
+}
