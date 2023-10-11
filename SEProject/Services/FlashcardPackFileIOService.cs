@@ -11,16 +11,28 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
     public FlashcardPack LoadFlashcardPack(Guid id)
     {
         var filepath = _flashcardPackPath + id.ToString() + ".json";
-        var flashcardPackJson = File.ReadAllText(filepath);
-        var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(flashcardPackJson);
-        return flashcardPack;
+        if(File.Exists(filepath))
+        {
+            var flashcardPackJson = File.ReadAllText(filepath);
+            var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(flashcardPackJson)!;
+            return flashcardPack;
+        }else
+        {
+            throw new FileNotFoundException("Flashcard pack file not found.");
+        }
     }
 
     private FlashcardPack LoadFlashcardPack(string filepath)
     {
         var flashcardPackJson = File.ReadAllText(filepath);
         var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(flashcardPackJson);
-        return flashcardPack;
+        if(flashcardPack != null)
+        {
+            return flashcardPack;
+        }else
+        {
+            throw new Exception("Failed to deserialize the FlashcardPack.");
+        }
     }
 
     public List<FlashcardPack> LoadFlashcardPacks()

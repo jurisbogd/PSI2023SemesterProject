@@ -100,7 +100,7 @@ public class FlashcardController : Controller
     [HttpPost]
     public IActionResult SortFlashcards(string sortOption)
     {
-        FlashcardComparer comparer = null;
+        FlashcardComparer? comparer = null;
         List<Flashcard> sortedFlashcards = new List<Flashcard>();
         List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
 

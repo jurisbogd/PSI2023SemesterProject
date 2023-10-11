@@ -156,19 +156,21 @@ namespace SEProject.Controllers
             List<FlashcardPack> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
 
             // Find the flashcard pack with the specified ID
-            FlashcardPack flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
+            FlashcardPack flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
 
             if (flashcardPackToEdit == null)
             {
                 return NotFound(); // Handle the case when the pack is not found
             }
 
-            // Update the flashcard pack's name
-            flashcardPackToEdit.Name = newName;
+            if(newName != null)
+            {
+                // Update the flashcard pack's name
+                flashcardPackToEdit.Name = newName;
 
-            // Save the updated flashcard pack
-            _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit);
-
+                // Save the updated flashcard pack
+                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit);
+            }
             // Redirect back to the page that displays the flashcard packs
             return RedirectToAction("CreateSampleFlashcardPack");
         }
