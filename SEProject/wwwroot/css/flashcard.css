@@ -65,6 +65,8 @@
     height: 300px; /* Adjust the height to make the flashcards taller */
     text-align: center;
     position: relative; /* Add relative positioning to create a positioning context */
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 /* Add CSS styles for flashcards */
