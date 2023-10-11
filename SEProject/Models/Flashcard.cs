@@ -34,7 +34,7 @@
 
         public override string ToString()
         {
-			return $"{Question} - {Answer}";
+			return $"{Question} - {Answer} - {Difficulty} - {CreationDate}";
         }
     }
 }

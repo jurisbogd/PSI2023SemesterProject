@@ -1,0 +1,66 @@
+Timestamp: 11/10/2023 06:15:00
+Level: Information
+Message: Flashcard was edited: fds;l;'sbbh - fsdfsd;l;'sbbhj
+
+Timestamp: 11/10/2023 06:16:07
+Level: Information
+Message: Flashcard was added: System.Func`1[System.String]
+
+Timestamp: 11/10/2023 06:16:23
+Level: Information
+Message: Flashcard was removed, ID: f7bce3ac-9333-4a2b-81a6-7ecf52fecc5c
+
+Timestamp: 11/10/2023 06:18:45
+Level: Information
+Message: Flashcard was added: fgfdg - dfgf444
+
+Timestamp: 11/10/2023 06:42:51
+Level: Information
+Message: Flashcard with ID:e1fa2953-ba6f-4b4b-88ba-65b81ca6c8d8 Was removed
+
+Timestamp: 11/10/2023 06:43:02
+Level: Information
+Message: Flashcard was added: hg - hg - Easy - 11/10/2023 06:43:02
+
+Timestamp: 11/10/2023 06:43:14
+Level: Information
+Message: Flashcard was edited: fgfdg - dfgf444hgj - Easy - 11/10/2023 06:43:14
+
+Timestamp: 11/10/2023 06:43:20
+Level: Information
+Message: Flashcard with ID:192e15b9-23ca-441d-b74d-a15d1b14d2d5 Was removed
+
+Timestamp: 11/10/2023 06:43:22
+Level: Information
+Message: Flashcard with ID:5541d345-29ff-40d5-8ddc-df528c090ae8 Was removed
+
+Timestamp: 11/10/2023 06:45:34
+Level: Information
+Message: Flashcard was added: jh - hj - Easy - 11/10/2023 06:45:34
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 06:45:42
+Level: Information
+Message: Flashcard was edited: jh - hjj - Easy - 11/10/2023 06:45:42
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 06:45:45
+Level: Information
+Message: Flashcard with ID:fd7c1456-da78-499d-847a-9e169c98b031 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 06:58:48
+Level: Information
+Message: Flashcard was added: 12 - 12 - Easy - 11/10/2023 06:58:48
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 06:58:59
+Level: Information
+Message: Flashcard was edited: 123 - 123 - Easy - 11/10/2023 06:58:59
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 06:59:08
+Level: Information
+Message: Flashcard with ID:f8b607aa-ba22-4e1c-b5ec-b57e1f7983b7 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
