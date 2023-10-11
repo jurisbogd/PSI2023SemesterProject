@@ -6,6 +6,7 @@ using SEProject.Models;
 using SEProject.Services;
 using Microsoft.AspNetCore.Hosting;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace SEProject.Controllers
 {
@@ -18,12 +19,13 @@ namespace SEProject.Controllers
             _flashcardPackDataHandler = flashcardPackDataHandler;
         }
 
-        public IActionResult CreateSampleFlashcardPack()
+        public IActionResult CreateSampleFlashcardPack(string name)
         {
             List<FlashcardPack> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
 
             return View(allFlashcardPacks);
         }
+
 
         public IActionResult ViewFlashcardPack(Guid id)
         {
@@ -41,6 +43,20 @@ namespace SEProject.Controllers
 
             return View(flashcardPackToView);
         }
+
+        [HttpPost]
+        public IActionResult AddFlashcardPack(string name)
+        {
+            var newFlashcardPack = new FlashcardPack(
+                name: name,
+                id: Guid.NewGuid(),
+                flashcards: new List<Flashcard>());
+
+            _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
+
+            return RedirectToAction("CreateSampleFlashcardPack");
+        }
+
 
         [HttpPost]
         public IActionResult AddFlashcardToPack(Flashcard viewModel, Guid id)

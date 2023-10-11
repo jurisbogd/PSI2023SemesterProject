@@ -12,8 +12,22 @@
 </head>
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <!-- "Sample Flashcards" text on the left -->
+    <!-- "Sample Flashcards" text on the left -->
         <h1>Flashcards Packs</h1>
+        @using (Html.BeginForm("AddFlashcardPack", "FlashcardPack", FormMethod.Post))
+        {
+            <form>
+                <!-- Flashcard pack name input field -->
+                <div class="form-group">
+                    <label for="packName">Pack Name:</label>
+                    <input type="text" id="packName" name="name" class="form-control" required>
+                </div>
+
+                <!-- Additional fields specific to flashcard packs if needed -->
+                <!-- Submit button to add the flashcard pack -->
+                <button type="submit" class="btn btn-primary">Add Pack</button>
+            </form>
+        }
     </div>
 
     <div class="flashcardPack-container">
@@ -30,6 +44,7 @@
             </div>
         }
     </div>
+
     <script src="~/js/viewFlashcardPackButton.js"></script>
 </body>
 </html>
