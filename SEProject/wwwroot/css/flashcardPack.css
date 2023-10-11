@@ -47,6 +47,26 @@
     margin-top: 15px;
 }
 
+/* CSS for the "Edit" button */
+.edit-flashcard-pack-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border-radius: 5px;
+    position: absolute; /* Position the button absolutely within the container */
+    bottom: 10px; /* Position it 10px from the bottom */
+    right: 10px; /* Position it 10px from the right */
+}
+
+/* Style for the "Edit" button on hover (if needed) */
+.edit-flashcard-pack-button:hover {
+    background-color: #0056b3;
+}
+
 
 label[for="packName"] {
     font-weight: bold;
@@ -63,4 +83,20 @@ label[for="packName"] {
 
 .btn-primary:hover {
     background-color: #0056b3;
+}
+
+/* CSS to style the small pop-up modal and center it */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 200px; /* Set a fixed width */
+    height: 150px; /* Set a fixed height */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }

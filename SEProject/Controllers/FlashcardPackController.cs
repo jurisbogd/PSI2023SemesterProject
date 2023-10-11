@@ -113,10 +113,8 @@ namespace SEProject.Controllers
         public IActionResult EditFlashcard(Guid flashcardID)
         {
             var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPacks().FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
-            Console.WriteLine(flashcardID);
             if (flashcardPack == null)
             {
-                Console.WriteLine("Nullas");
                 return NotFound();
             }
 
@@ -151,5 +149,28 @@ namespace SEProject.Controllers
             return View(flashcardToEdit);
         }
 
+        [HttpPost]
+        public IActionResult EditFlashcardPackName(Guid id, string newName)
+        {
+            // Get the list of all flashcard packs
+            List<FlashcardPack> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+
+            // Find the flashcard pack with the specified ID
+            FlashcardPack flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
+
+            if (flashcardPackToEdit == null)
+            {
+                return NotFound(); // Handle the case when the pack is not found
+            }
+
+            // Update the flashcard pack's name
+            flashcardPackToEdit.Name = newName;
+
+            // Save the updated flashcard pack
+            _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit);
+
+            // Redirect back to the page that displays the flashcard packs
+            return RedirectToAction("CreateSampleFlashcardPack");
+        }
     }
 }
