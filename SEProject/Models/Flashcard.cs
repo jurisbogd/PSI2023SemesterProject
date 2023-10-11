@@ -3,6 +3,7 @@
 	public class Flashcard
 	{
 		public Guid ID { get; set; }
+		public Guid PackID { get; set; }
 		public string? Question { get; set; }
 		public string? Answer { get; set; }
 		public DifficultyLevel Difficulty { get; set; }
