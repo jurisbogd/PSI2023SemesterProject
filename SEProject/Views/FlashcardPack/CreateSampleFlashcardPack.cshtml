@@ -35,7 +35,12 @@
         {
             <div class="flashcardPack">
                 <div class="name">@flashcardPack.Name</div>
-                
+
+                @using (Html.BeginForm("RemoveFlashcardPack", "FlashcardPack", FormMethod.Post))
+                {
+                    <button class="remove-button" data-flashcardPack-id="@flashcardPack.ID" name="flashcardPackID" value="@flashcardPack.ID">X</button>
+                }
+
                 <!-- "Edit" button to trigger the pop-up window -->
                 <button class="edit-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID">Edit</button>
                 

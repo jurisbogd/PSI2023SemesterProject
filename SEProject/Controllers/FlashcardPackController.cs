@@ -92,6 +92,13 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
+        public IActionResult RemoveFlashcardPack(Guid flashcardPackID)
+        {
+            _flashcardPackDataHandler.RemoveFlashcardPack(flashcardPackID);
+            return RedirectToAction("CreateSampleFlashcardPack");
+        }
+
+        [HttpPost]
         public IActionResult RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
         {
             var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(packID);
