@@ -7,6 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@Model.Name</title>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- Bootstrap JavaScript (Popper.js is also required for Bootstrap 4) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <!-- Link to the CSS file -->
     <link rel="stylesheet" href="~/css/flashcard.css">
 </head>
@@ -16,7 +23,23 @@
         <h1>@Model.Name</h1>
 
         <!-- "Add Flashcard" button on the right -->
-        <button id="addFlashcardButton" class="reveal-button">Add Flashcard</button>
+        <div class="vertical-button-container">
+            <button id="addFlashcardButton" class="reveal-button">Add Flashcard</button>
+            <div class="sorting-dropdown">
+                <button class="custom-sorting-button dropdown-toggle" id="sortingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort by
+                </button>
+                <div class="dropdown-menu" aria-labelledby="sortingDropdown">
+                    <form method="post" action="@Url.Action("SortFlashcards", "FlashcardPack")">
+                        @Html.Hidden("flashcardPackID", Model.ID)
+                        <button type="submit" name="sortOption" value="DateAsc" class="dropdown-item">Date Ascending</button>
+                        <button type="submit" name="sortOption" value="DateDesc" class="dropdown-item">Date Descending</button>
+                        <button type="submit" name="sortOption" value="DifficultyAsc" class="dropdown-item">Difficulty Ascending</button>
+                        <button type="submit" name="sortOption" value="DifficultyDesc" class="dropdown-item">Difficulty Descending</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
 

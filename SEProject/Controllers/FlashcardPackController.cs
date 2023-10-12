@@ -181,5 +181,47 @@ namespace SEProject.Controllers
             // Redirect back to the page that displays the flashcard packs
             return RedirectToAction("CreateSampleFlashcardPack");
         }
+
+        [HttpPost]
+        public IActionResult SortFlashcards(Guid flashcardPackID, string sortOption)
+        {
+            FlashcardComparer? comparer = null;
+            var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(flashcardPackID);
+            List<Flashcard> flashcardsInPack = flashcardPack.Flashcards;
+            List<Flashcard> sortedFlashcards = new List<Flashcard>();
+
+            // Checks what sort of comparison will be done and creates that type of object.
+            switch (sortOption)
+            {
+                case "DateAsc":
+                case "DateDesc":
+                    comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
+                    break;
+                case "DifficultyAsc":
+                case "DifficultyDesc":
+                    comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
+                    break;
+                default:
+                    sortedFlashcards = flashcardsInPack;
+                    break;
+            }
+
+            // Compares by Ascending or Descending, depending on sortOption ending.
+            if (comparer != null)
+            {
+                if (sortOption.EndsWith("Asc"))
+                {
+                    sortedFlashcards = flashcardsInPack.OrderBy(flashcard => flashcard, comparer).ToList();
+                }
+                else if (sortOption.EndsWith("Desc"))
+                {
+                    sortedFlashcards = flashcardsInPack.OrderByDescending(flashcard => flashcard, comparer).ToList();
+                }
+            }
+
+            var newPack = flashcardPack.CloneWithNewFlashcards(sortedFlashcards);
+
+            return View("ViewFlashcardPack", newPack);
+        }
     }
 }

@@ -15,5 +15,15 @@ namespace SEProject.Models
             ID = id;
             Flashcards = flashcards;
         }
+
+        public FlashcardPack CloneWithNewFlashcards(List<Flashcard> newFlashcards)
+        {
+            return new FlashcardPack
+            (
+                Name = this.Name, // Keep the same name.
+                ID = this.ID, // Keep the same ID.
+                Flashcards = newFlashcards // Set the new list of flashcards.
+            );
+        }
     }
 }
