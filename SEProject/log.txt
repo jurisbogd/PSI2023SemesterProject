@@ -1,0 +1,140 @@
+Timestamp: 11/10/2023 06:58:48
+Level: Information
+Message: Flashcard was added: 12 - 12 - Easy - 11/10/2023 06:58:48
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 06:58:59
+Level: Information
+Message: Flashcard was edited: 123 - 123 - Easy - 11/10/2023 06:58:59
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 06:59:08
+Level: Information
+Message: Flashcard with ID:f8b607aa-ba22-4e1c-b5ec-b57e1f7983b7 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:21:19
+Level: Information
+Message: Flashcard was added: 4 - 4 - Easy - 11/10/2023 07:21:19
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:21:34
+Level: Information
+Message: Flashcard was edited: 4question - answer - Medium - 11/10/2023 07:21:34
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:21:40
+Level: Information
+Message: Flashcard with ID:09eee95d-44db-4d85-9e28-2cc2d02eab89 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:30:00
+Level: Information
+Message: Flashcard was added: 1 - 2 - Easy - 11/10/2023 07:30:00
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:30:04
+Level: Information
+Message: Flashcard with ID:114218f4-7b7f-4711-a5be-1ee94fe98fc6 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:38:41
+Level: Information
+Message: Flashcard was added: test1 - test2 - Easy - 11/10/2023 07:38:41
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:39:11
+Level: Information
+Message: Flashcard was added: 2 - 3 - Easy - 11/10/2023 07:39:11
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:39:54
+Level: Information
+Message: Flashcard was added: test2 - test3 - Easy - 11/10/2023 07:39:54
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:40:03
+Level: Information
+Message: Flashcard was added: testtt - ttt - Easy - 11/10/2023 07:40:03
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:40:12
+Level: Information
+Message: Flashcard with ID:34ee58a4-8171-475b-8361-f3c051810c59 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:40:13
+Level: Information
+Message: Flashcard with ID:57df7157-1b38-467b-9cbd-c2a12c0a7b51 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:40:14
+Level: Information
+Message: Flashcard with ID:71bdd1d5-d186-48ce-a79e-c8d949bbd118 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:40:16
+Level: Information
+Message: Flashcard with ID:abfeb8d1-c964-46b6-918b-259d390aae00 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:40:17
+Level: Information
+Message: Flashcard with ID:efe3e0ca-9db8-435b-a35f-73f25189cf91 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:48:06
+Level: Information
+Message: Flashcard was added: testQ - testA - Easy - 11/10/2023 07:48:06
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:48:22
+Level: Information
+Message: Flashcard was edited: testQ1 - testA1 - Easy - 11/10/2023 07:48:22
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:48:28
+Level: Information
+Message: Flashcard with ID:5b8d2842-66ec-4303-8532-f4d1e2a2bc60 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:49:29
+Level: Information
+Message: Flashcard was added: testque - test ans - Easy - 11/10/2023 07:49:29 - e5303290-1bc0-4d72-9de0-158d56f9f27a
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:49:41
+Level: Information
+Message: Flashcard was edited: testque2 - test ans2 - Easy - 11/10/2023 07:49:41 - e5303290-1bc0-4d72-9de0-158d56f9f27a
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:49:44
+Level: Information
+Message: Flashcard with ID:e5303290-1bc0-4d72-9de0-158d56f9f27a Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:54:06
+Level: Information
+Message: Flashcard was added: lastQue - lastAns - Easy - 11/10/2023 07:54:06 - 13596787-7327-477f-a2b7-2c2dab5620dd
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:54:13
+Level: Information
+Message: Flashcard was edited: lastQue1 - lastAns1 - Easy - 11/10/2023 07:54:13 - 13596787-7327-477f-a2b7-2c2dab5620dd
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:54:18
+Level: Information
+Message: Flashcard with ID:13596787-7327-477f-a2b7-2c2dab5620dd Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:54:27
+Level: Information
+Message: Flashcard was added: 1 - 2 - Easy - 11/10/2023 07:54:27 - 68daa409-8c5f-492a-8690-1f60ba87dc56
+OS Name: Win32NT, OS Version: 10.0.19044.0
+
+Timestamp: 11/10/2023 07:54:33
+Level: Information
+Message: Flashcard with ID:68daa409-8c5f-492a-8690-1f60ba87dc56 Was removed
+OS Name: Win32NT, OS Version: 10.0.19044.0
+

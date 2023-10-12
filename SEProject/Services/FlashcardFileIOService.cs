@@ -10,14 +10,14 @@ public class FlashcardFileIOService : IFlashcardDataHandler
 
     public Flashcard LoadFlashcard(Guid id) {
         var filepath = _flashcardPath + id.ToString() + ".json";
-        var flashcardJson = File.ReadAllText(filepath);
+        var flashcardJson = File.ReadAllText(path: filepath);
         var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson);
         return flashcard;
     }
 
     private static Flashcard LoadFlashcard(string filepath)
     {
-        var flashcardJson = File.ReadAllText(filepath);
+        var flashcardJson = File.ReadAllText(path: filepath);
         var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson);
         return flashcard;
     }
@@ -34,7 +34,7 @@ public class FlashcardFileIOService : IFlashcardDataHandler
         var filepath = _flashcardPath + flashcard.ID.ToString() + ".json";
         var flashcardJson = JsonSerializer.Serialize(flashcard, _jsonSerializerOptions);
 
-        File.WriteAllText(filepath, flashcardJson);
+        File.WriteAllText(path: filepath, contents: flashcardJson);
     }
 
     public void SaveFlashcards(List<Flashcard> flashcards)

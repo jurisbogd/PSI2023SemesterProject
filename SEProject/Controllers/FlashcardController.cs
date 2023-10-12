@@ -8,10 +8,12 @@ namespace SEProject.Controllers;
 public class FlashcardController : Controller
 {
     private readonly IFlashcardDataHandler _flashcardDataHandler;
+    private readonly ILoggingHandler _LoggingHandler;
 
-    public FlashcardController(IFlashcardDataHandler flashcardDataHandler)
+    public FlashcardController(IFlashcardDataHandler flashcardDataHandler, ILoggingHandler LoggingHandler)
     {
         _flashcardDataHandler = flashcardDataHandler;
+        _LoggingHandler = LoggingHandler;
     }
 
     public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
@@ -29,23 +31,17 @@ public class FlashcardController : Controller
         List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
         if (ModelState.IsValid)
         {
-            // Create a new Flashcard object from the form data
-            var newFlashcard = new Flashcard
-            {
-                ID = Guid.NewGuid(),
-                Question = viewModel.Question,
-                Answer = viewModel.Answer,
-                Difficulty = viewModel.Difficulty
-            };
-            
+            var newFlashcard = new Flashcard(Guid.NewGuid(),viewModel.Question,viewModel.Answer,viewModel.Difficulty);
             // Add the new flashcard to the list
             allFlashcards.Add(newFlashcard);
 
             // Save the updated list of flashcards to the JSON file
-            _flashcardDataHandler.SaveFlashcard(newFlashcard);
-        
+            _flashcardDataHandler.SaveFlashcard(flashcard: newFlashcard);
+
+            LogEntry newLogEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard was added: " + newFlashcard, Level: LogLevel.Information);
+            _LoggingHandler.Log(entry: newLogEntry);
             // Redirect to the view that displays the flashcards
-            return RedirectToAction("CreateSampleFlashcard");
+            return RedirectToAction(actionName: "CreateSampleFlashcard");
         }
 
         // If the model is not valid, return to the form view
@@ -56,7 +52,8 @@ public class FlashcardController : Controller
     public IActionResult RemoveSampleFlashcard(Guid ID)
     {
         _flashcardDataHandler.RemoveFlashcard(ID);
-        
+        LogEntry newLogEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard with ID:" + ID + " Was removed", Level: LogLevel.Information);
+        _LoggingHandler.Log(entry: newLogEntry);
         // Redirect to the view that displays the flashcards
         return RedirectToAction("CreateSampleFlashcard");
     }
@@ -64,13 +61,13 @@ public class FlashcardController : Controller
     [HttpGet]
     public IActionResult EditFlashcard(Guid id)
     {
-        var flashcard = _flashcardDataHandler.LoadFlashcard(id);
+        var flashcard = _flashcardDataHandler.LoadFlashcard(id: id);
 
         if (flashcard == null)
         {
             return NotFound();
         }
-
+        
         return View(flashcard);
     }
 
@@ -80,7 +77,7 @@ public class FlashcardController : Controller
         List<Flashcard> allFlashcards = _flashcardDataHandler.LoadFlashcards();
 
         // Find the index of the flashcard to be edited
-        int indexToEdit = allFlashcards.FindIndex(flashcard => flashcard.ID == editedFlashcard.ID);
+        int indexToEdit = allFlashcards.FindIndex(match: flashcard => flashcard.ID == editedFlashcard.ID);
 
         if (indexToEdit >= 0)
         {
@@ -88,7 +85,10 @@ public class FlashcardController : Controller
             allFlashcards[indexToEdit] = editedFlashcard;
 
             // Save the updated list of flashcards to the JSON file
-            _flashcardDataHandler.SaveFlashcards(allFlashcards);
+            _flashcardDataHandler.SaveFlashcards(flashcards: allFlashcards);
+
+            LogEntry newLogEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard was edited: " + editedFlashcard, Level: LogLevel.Information);
+            _LoggingHandler.Log(entry: newLogEntry);
 
             // Redirect to the view that displays the flashcards
             return RedirectToAction("CreateSampleFlashcard");
@@ -109,11 +109,11 @@ public class FlashcardController : Controller
         {
             case "DateAsc":
             case "DateDesc":
-                comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
+                comparer = new FlashcardComparer(comparisonType: FlashcardComparer.ComparisonType.CreationDate);
                 break;
             case "DifficultyAsc":
             case "DifficultyDesc":
-                comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
+                comparer = new FlashcardComparer(comparisonType: FlashcardComparer.ComparisonType.DifficultyLevel);
                 break;
             default:
                 sortedFlashcards = allFlashcards;
@@ -133,6 +133,8 @@ public class FlashcardController : Controller
             }
         }
 
-        return View("CreateSampleFlashcard", sortedFlashcards);
+        LogEntry newLogEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcards were sorted: ", Level: LogLevel.Information);
+        _LoggingHandler.Log(entry: newLogEntry);
+        return View(viewName: "CreateSampleFlashcard", model: sortedFlashcards);
     }
 }

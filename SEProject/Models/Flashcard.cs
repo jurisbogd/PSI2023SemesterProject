@@ -21,34 +21,21 @@
 			IsFavorite = false;
 			CreationDate = DateTime.Now;
 		}
-    
-		public Flashcard(Guid id, string question, string answer, DifficultyLevel difficulty)
+
+		// optional arguments
+		public Flashcard(Guid id, string question = "Test question", string answer = "Test answer", DifficultyLevel difficulty = DifficultyLevel.Easy, bool isFavorite = false)
 		{
 			ID = id;
 			Question = question;
 			Answer = answer;
 			Difficulty = difficulty;
-			IsFavorite = false;
+			IsFavorite = IsFavorite;
 			CreationDate = DateTime.Now;
-		}
-
-		// Edit flashcard method
-		public void EditFlashcard(string question, string answer, DifficultyLevel difficulty)
-		{
-			Question = question;
-			Answer = answer;
-			Difficulty = difficulty;
-		}
-
-		// Switch favorite to opposite
-		public void ToggleFavorite()
-		{
-			IsFavorite = !IsFavorite;
 		}
 
         public override string ToString()
         {
-			return $"{Question} - {Answer}";
+			return $"{Question} - {Answer} - {Difficulty} - {CreationDate} - {ID}";
         }
     }
 }
