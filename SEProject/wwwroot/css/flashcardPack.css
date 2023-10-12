@@ -110,13 +110,27 @@ label[for="packName"] {
     background-color: #0056b3;
 }
 
+.btn-red {
+    background-color: #ff0000; 
+    border-color: #ff0000; 
+    color: #ffffff; 
+}
+
+.btn-red:hover {
+    background-color: #ff0000;
+}
+
+label[for="newPackName"] {
+    font-weight: bold;
+}
+
 /* CSS to style the small pop-up modal and center it */
 .modal {
-    display: none;
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: none;
+    top: 40%;
+    left: 975px; /* Adjust the right property to align it to the right side */
+    transform: translate(0, -50%); /* Remove the horizontal translation */
     background-color: white;
     width: 200px; /* Set a fixed width */
     height: 150px; /* Set a fixed height */
@@ -125,3 +139,4 @@ label[for="packName"] {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/flashcardPack.css">
 </head>
 <body>
+
     <div style="display: flex; justify-content: space-between; align-items: center;">
     <!-- "Sample Flashcards" text on the left -->
         <h1>Flashcards Packs</h1>
@@ -58,6 +59,7 @@
                         
                         <!-- Submit button to update the name -->
                         <button type="submit" class="btn btn-primary">Save Name</button>
+                        <button type="button" class="btn btn-primary btn-red" onclick="location.href='@Url.Action("CreateSampleFlashcardPack")';">Cancel</button>
                     }
                 </div>
                 
@@ -73,5 +75,6 @@
 
     <script src="~/js/viewFlashcardPackButton.js"></script>
     <script src="~/js/editFlashcardPack.js"></script>
+
 </body>
 </html>
