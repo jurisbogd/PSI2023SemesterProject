@@ -8,11 +8,10 @@ public class FlashcardFileIOService : IFlashcardDataHandler
     private readonly string _flashcardPath = @"Data/Flashcards/";
     private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };
 
-    public Flashcard LoadFlashcard(Guid id) 
-    {
+    public Flashcard LoadFlashcard(Guid id) {
         var filepath = _flashcardPath + id.ToString() + ".json";
-        var flashcardJson = File.ReadAllText(filepath);
-        var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson)!;
+        var flashcardJson = File.ReadAllText(path: filepath);
+        var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson);
         return flashcard;
     }
 
