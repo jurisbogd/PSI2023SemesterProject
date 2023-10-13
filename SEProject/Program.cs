@@ -5,7 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IFlashcardDataHandler, FlashcardFileIOService>();
-builder.Services.AddScoped<IFlashcardPackDataHandler, FlashcardPackFileIOService>();
 builder.Services.AddScoped<ILoggingHandler, LoggingService>();
 
 var app = builder.Build();
