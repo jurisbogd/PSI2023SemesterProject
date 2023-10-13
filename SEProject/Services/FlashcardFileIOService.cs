@@ -11,9 +11,9 @@ public class FlashcardFileIOService : IFlashcardDataHandler
     public Flashcard LoadFlashcard(Guid id) 
     {
         var filepath = _flashcardPath + id.ToString() + ".json";
-            var flashcardJson = File.ReadAllText(filepath);
-            var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson)!;
-            return flashcard;
+        var flashcardJson = File.ReadAllText(filepath);
+        var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson)!;
+        return flashcard;
     }
 
     private static Flashcard LoadFlashcard(string filepath)
