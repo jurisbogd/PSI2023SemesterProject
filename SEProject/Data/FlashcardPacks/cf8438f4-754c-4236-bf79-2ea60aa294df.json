@@ -1,0 +1,24 @@
+{
+  "Name": "Flashcard Pack 2",
+  "ID": "cf8438f4-754c-4236-bf79-2ea60aa294df",
+  "Flashcards": [
+    {
+      "ID": "3c794d01-f77e-4989-93a0-77efab9ff531",
+      "PackID": "cf8438f4-754c-4236-bf79-2ea60aa294df",
+      "Question": "New flashcard",
+      "Answer": "Test answer",
+      "Difficulty": 0,
+      "IsFavorite": false,
+      "CreationDate": "2023-10-13T08:15:41.070482+03:00"
+    },
+    {
+      "ID": "5f5af86f-f757-40f0-9228-2d1f09d82485",
+      "PackID": "cf8438f4-754c-4236-bf79-2ea60aa294df",
+      "Question": "Flashcard 2",
+      "Answer": "2",
+      "Difficulty": 1,
+      "IsFavorite": false,
+      "CreationDate": "2023-10-13T08:15:48.050306+03:00"
+    }
+  ]
+}
