@@ -1,0 +1,142 @@
+﻿.flashcardPack {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
+    margin-right: 7px;
+    margin-left: 7px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 220px; /* Adjust the width to make the flashcards wider */
+    height: 300px; /* Adjust the height to make the flashcards taller */
+    text-align: center;
+    position: relative; /* Add relative positioning to create a positioning context */
+}
+
+/* Add CSS styles for flashcards */
+.flashcardPack-container {
+    display: flex; /* Use flexbox to arrange the flashcards in a row */
+    flex-wrap: wrap; /* Allow the cards to wrap to a new row if the container width is limited */
+}
+
+/* CSS for the name within the flashcardPack container */
+.name {
+    font-size: 30px;
+    word-wrap: break-word; /* Add word-wrapping for long words */
+    margin-top: 12px;
+}
+
+/* CSS for the pop-up form */
+.popup-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    z-index: 1000; /* Ensure it appears above other content */
+}
+
+.name {
+    font-size: 30px;
+}
+
+/* Reveal Answer Button */
+.view-flashcard-pack-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/* CSS for the "Edit" button */
+.edit-flashcard-pack-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border-radius: 5px;
+    position: absolute; /* Position the button absolutely within the container */
+    bottom: 10px; /* Position it 10px from the bottom */
+    right: 10px; /* Position it 10px from the right */
+}
+
+/* Style for the "Edit" button on hover (if needed) */
+.edit-flashcard-pack-button:hover {
+    background-color: #0056b3;
+}
+
+.remove-button {
+    background-color: #efefef;
+    color: #d2d2d2;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border-radius: 5px;
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}
+
+.remove-button:hover {
+    background-color: #ff0000;
+    color: #ffffff;
+}
+
+
+label[for="packName"] {
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-red {
+    background-color: #ff0000; 
+    border-color: #ff0000; 
+    color: #ffffff; 
+}
+
+.btn-red:hover {
+    background-color: #ff0000;
+}
+
+label[for="newPackName"] {
+    font-weight: bold;
+}
+
+/* CSS to style the small pop-up modal and center it */
+.modal {
+    position: fixed;
+    display: none;
+    top: 40%;
+    left: 975px; /* Adjust the right property to align it to the right side */
+    transform: translate(0, -50%); /* Remove the horizontal translation */
+    background-color: white;
+    width: 200px; /* Set a fixed width */
+    height: 150px; /* Set a fixed height */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+

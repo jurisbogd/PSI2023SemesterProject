@@ -7,6 +7,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IFlashcardDataHandler, FlashcardFileIOService>();
 builder.Services.AddScoped<ILoggingHandler, LoggingService>();
 
+builder.Services.AddScoped<IFlashcardPackDataHandler, FlashcardPackFileIOService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

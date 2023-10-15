@@ -1,0 +1,106 @@
+﻿@model FlashcardPack
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.Name</title>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- Bootstrap JavaScript (Popper.js is also required for Bootstrap 4) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="~/css/flashcard.css">
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <!-- "Sample Flashcards" text on the left -->
+        <h1>@Model.Name</h1>
+
+        <!-- "Add Flashcard" button on the right -->
+        <div class="vertical-button-container">
+            <button id="addFlashcardButton" class="reveal-button">Add Flashcard</button>
+            <div class="sorting-dropdown">
+                <button class="custom-sorting-button dropdown-toggle" id="sortingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort by
+                </button>
+                <div class="dropdown-menu" aria-labelledby="sortingDropdown">
+                    <form method="post" action="@Url.Action("SortFlashcards", "FlashcardPack")">
+                        @Html.Hidden("flashcardPackID", Model.ID)
+                        <button type="submit" name="sortOption" value="DateAsc" class="dropdown-item">Date Ascending</button>
+                        <button type="submit" name="sortOption" value="DateDesc" class="dropdown-item">Date Descending</button>
+                        <button type="submit" name="sortOption" value="DifficultyAsc" class="dropdown-item">Difficulty Ascending</button>
+                        <button type="submit" name="sortOption" value="DifficultyDesc" class="dropdown-item">Difficulty Descending</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @using (Html.BeginForm("AddFlashcardToPack", "FlashcardPack", FormMethod.Post))
+    {
+        <!-- Pop-up form for adding flashcards (hidden by default) -->
+        <div id="addFlashcardForm" class="popup-form" style="display: none;">
+            <h2>Add Flashcard</h2>
+            <form>
+                <!-- Flashcard input fields -->
+                <div class="form-group">
+                    <label for="question">Question:</label>
+                    <input type="text" id="question" name="viewModel.Question" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="answer">Answer:</label>
+                    <input type="text" id="answer" name="viewModel.Answer" class="form-control" required>
+                </div>
+
+                <!-- Difficulty selection dropdown -->
+                <div class="form-group">
+                    <label for="difficultyLevel">Difficulty:</label>
+                    <select id="difficultyLevel" name="viewModel.Difficulty" class="form-control">
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary" data-flashcard-id="@Model.ID" name="id" value="@Model.ID">Add</button>
+            </form>
+        </div>
+    }
+
+    <div class="flashcard-container">
+        @foreach (var flashcard in Model.Flashcards)
+        {
+            <div class="flashcard">
+                <div class="question">@flashcard.Question</div>
+                <div class="answer" style="display: none;">@flashcard.Answer</div>
+                <button class="reveal-button">Reveal Answer</button>
+                <div class="difficulty">@flashcard.Difficulty</div>
+
+                @using (Html.BeginForm("RemoveFlashcardFromPack", "FlashcardPack", new { PackID = Model.ID }, FormMethod.Post))
+                {
+                    <button class="remove-button" data-flashcard-id="@flashcard.ID" name="flashcardID" value="@flashcard.ID">X</button>
+                    // (name) should be set to the same thing its set in the action arguments. I think.
+                }
+                @* Button for editing flashcard (disabled for now) *@
+                @* <button class="edit-button" data-flashcard-id="@flashcard.ID">Edit</button> *@
+                <button class="edit-button" data-flashcard-id="@flashcard.ID" name="flashcardID" value="@flashcard.ID">Edit</button>
+            </div>
+        }
+    </div>
+
+    <script src="~/js/flashcard.js"></script>
+    <script src="~/js/addFlashcardButton.js"></script>
+    <script src="~/js/removeFlashcardButton.js"></script>
+    <script src="~/js/editFlashcardInPack.js"></script>
+</body>
+</html>

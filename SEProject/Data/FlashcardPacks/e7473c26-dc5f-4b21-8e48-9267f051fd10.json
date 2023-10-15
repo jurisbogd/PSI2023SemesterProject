@@ -1,0 +1,51 @@
+{
+  "Name": "Flashcard Pack",
+  "ID": "e7473c26-dc5f-4b21-8e48-9267f051fd10",
+  "Flashcards": [
+    {
+      "ID": "c8a52e20-8f85-4651-9f53-837754827c15",
+      "PackID": "e7473c26-dc5f-4b21-8e48-9267f051fd10",
+      "Question": "What is the capital of France?",
+      "Answer": "Paris",
+      "Difficulty": 0,
+      "IsFavorite": false,
+      "CreationDate": "2023-10-10T22:24:17.397766+03:00"
+    },
+    {
+      "ID": "5dbf7a9e-5372-49b2-88b3-fbc07c5ffdbd",
+      "PackID": "e7473c26-dc5f-4b21-8e48-9267f051fd10",
+      "Question": "What is the largest planet in our solar system?",
+      "Answer": "Jupiter",
+      "Difficulty": 0,
+      "IsFavorite": false,
+      "CreationDate": "2023-10-10T22:24:17.397792+03:00"
+    },
+    {
+      "ID": "c58b9a7c-c03b-4590-a91a-cb7223d855eb",
+      "PackID": "e7473c26-dc5f-4b21-8e48-9267f051fd10",
+      "Question": "test???s",
+      "Answer": "1",
+      "Difficulty": 2,
+      "IsFavorite": false,
+      "CreationDate": "2023-10-10T22:24:17.397798+03:00"
+    },
+    {
+      "ID": "f2ac4898-a9b8-4fea-bcdc-d96d9839f0ea",
+      "PackID": "e7473c26-dc5f-4b21-8e48-9267f051fd10",
+      "Question": "10-13",
+      "Answer": "fc",
+      "Difficulty": 0,
+      "IsFavorite": false,
+      "CreationDate": "2023-10-13T08:15:13.16115+03:00"
+    },
+    {
+      "ID": "2e562f17-668e-4229-ae95-02c9f6e4d7df",
+      "PackID": "e7473c26-dc5f-4b21-8e48-9267f051fd10",
+      "Question": "Medium",
+      "Answer": "Medium",
+      "Difficulty": 1,
+      "IsFavorite": false,
+      "CreationDate": "2023-10-13T08:15:56.769571+03:00"
+    }
+  ]
+}

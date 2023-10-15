@@ -1,0 +1,80 @@
+﻿@model List<FlashcardPack>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard Packs</title>
+
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="~/css/flashcardPack.css">
+</head>
+<body>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+    <!-- "Sample Flashcards" text on the left -->
+        <h1>Flashcards Packs</h1>
+        @using (Html.BeginForm("AddFlashcardPack", "FlashcardPack", FormMethod.Post))
+        {
+            <form>
+                <!-- Flashcard pack name input field -->
+                <div class="form-group">
+                    <label for="packName">Pack Name:</label>
+                    <input type="text" id="packName" name="name" class="form-control" required>
+                </div>
+
+                <!-- Additional fields specific to flashcard packs if needed -->
+                <!-- Submit button to add the flashcard pack -->
+                <button type="submit" class="btn btn-primary">Add Pack</button>
+            </form>
+        }
+    </div>
+
+    <div class="flashcardPack-container">
+        @foreach (var flashcardPack in Model)
+        {
+            <div class="flashcardPack">
+                <div class="name">@flashcardPack.Name</div>
+
+                @using (Html.BeginForm("RemoveFlashcardPack", "FlashcardPack", FormMethod.Post))
+                {
+                    <button class="remove-button" data-flashcardPack-id="@flashcardPack.ID" name="flashcardPackID" value="@flashcardPack.ID">X</button>
+                }
+
+                <!-- "Edit" button to trigger the pop-up window -->
+                <button class="edit-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID">Edit</button>
+                
+                <!-- Create a hidden modal for editing the flashcard pack name -->
+                <div class="modal" id="editModal-@flashcardPack.ID">
+                    @using (Html.BeginForm("EditFlashcardPackName", "FlashcardPack", FormMethod.Post))
+                    {
+                        @Html.Hidden("id", flashcardPack.ID) <!-- Hidden input to identify the flashcard pack -->
+                        
+                        <!-- Input field for the new name -->
+                        <div class="form-group">
+                            <label for="newPackName">New Name:</label>
+                            <input type="text" id="newPackName" name="newName" class="form-control" required>
+                        </div>
+                        
+                        <!-- Submit button to update the name -->
+                        <button type="submit" class="btn btn-primary">Save Name</button>
+                        <button type="button" class="btn btn-primary btn-red" onclick="location.href='@Url.Action("CreateSampleFlashcardPack")';">Cancel</button>
+                    }
+                </div>
+                
+                @using (Html.BeginForm("ViewFlashcardPack", "FlashcardPack", FormMethod.Post))
+                {
+                    <button class="view-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID" name="id" value="@flashcardPack.ID">View Flashcard Pack</button>
+                }
+            </div>
+        }
+    </div>
+
+
+
+    <script src="~/js/viewFlashcardPackButton.js"></script>
+    <script src="~/js/editFlashcardPack.js"></script>
+
+</body>
+</html>

@@ -19,7 +19,13 @@ public class FlashcardFileIOService : IFlashcardDataHandler
     {
         var flashcardJson = File.ReadAllText(path: filepath);
         var flashcard = JsonSerializer.Deserialize<Flashcard>(flashcardJson);
-        return flashcard;
+        if(flashcard != null)
+        {
+            return flashcard;
+        }else
+        {
+            throw new Exception("Failed to deserialize the Flashcard.");
+        }
     }
 
     public List<Flashcard> LoadFlashcards()
