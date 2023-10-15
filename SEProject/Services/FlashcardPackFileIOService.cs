@@ -1,5 +1,7 @@
 ﻿using SEProject.Models;
 using System.Text.Json;
+using System.IO;
+using System.Text;
 
 namespace SEProject.Services;
 
@@ -11,12 +13,24 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
     public FlashcardPack LoadFlashcardPack(Guid id)
     {
         var filepath = _flashcardPackPath + id.ToString() + ".json";
-        if(File.Exists(filepath))
+        if (File.Exists(filepath))
         {
-            var flashcardPackJson = File.ReadAllText(filepath);
-            var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(flashcardPackJson)!;
-            return flashcardPack;
-        }else
+            using (FileStream fileStream = File.OpenRead(filepath))
+            using (StreamReader reader = new StreamReader(fileStream))
+            {
+                var flashcardPackJson = reader.ReadToEnd();
+                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(flashcardPackJson);
+                if (flashcardPack != null)
+                {
+                    return flashcardPack;
+                }
+                else
+                {
+                    throw new Exception("Failed to deserialize the FlashcardPack.");
+                }
+            }
+        }
+        else
         {
             throw new FileNotFoundException("Flashcard pack file not found.");
         }
@@ -24,37 +38,77 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
 
     private FlashcardPack LoadFlashcardPack(string filepath)
     {
-        var flashcardPackJson = File.ReadAllText(filepath);
-        var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(flashcardPackJson);
-        if(flashcardPack != null)
+        if (File.Exists(filepath))
         {
-            return flashcardPack;
-        }else
+            using (FileStream fileStream = File.OpenRead(filepath))
+            using (StreamReader reader = new StreamReader(fileStream))
+            {
+                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(reader.ReadToEnd());
+                if (flashcardPack != null)
+                {
+                    return flashcardPack;
+                }
+                else
+                {
+                    throw new Exception("Failed to deserialize the FlashcardPack.");
+                }
+            }
+        }
+        else
         {
-            throw new Exception("Failed to deserialize the FlashcardPack.");
+            throw new FileNotFoundException("Flashcard pack file not found.");
         }
     }
 
     public List<FlashcardPack> LoadFlashcardPacks()
     {
         var flashcardPackFilepaths = Directory.GetFiles(_flashcardPackPath);
-        var flashcardPacks = flashcardPackFilepaths.Select(LoadFlashcardPack).ToList();
+        var flashcardPacks = new List<FlashcardPack>();
+
+        foreach (var filepath in flashcardPackFilepaths)
+        {
+            using (FileStream fileStream = File.OpenRead(filepath))
+            using (StreamReader reader = new StreamReader(fileStream))
+            {
+                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(reader.ReadToEnd());
+                if (flashcardPack != null)
+                {
+                    flashcardPacks.Add(flashcardPack);
+                }
+                else
+                {
+                    throw new Exception("Failed to deserialize a FlashcardPack.");
+                }
+            }
+        }
         return flashcardPacks;
     }
 
     public void SaveFlashcardPack(FlashcardPack flashcardPack)
     {
         var filepath = _flashcardPackPath + flashcardPack.ID.ToString() + ".json";
-        var flashcardPackJson = JsonSerializer.Serialize(flashcardPack, _jsonSerializerOptions);
 
-        File.WriteAllText(filepath, flashcardPackJson);
+        using (FileStream fileStream = File.Create(filepath))
+        using (StreamWriter writer = new StreamWriter(fileStream))
+        {
+            var json = JsonSerializer.Serialize(flashcardPack, _jsonSerializerOptions);
+            writer.Write(json);
+        }
     }
+
 
     public void SaveFlashcardPacks(List<FlashcardPack> flashcardPacks)
     {
         foreach (FlashcardPack flashcardPack in flashcardPacks)
         {
-            SaveFlashcardPack(flashcardPack);
+            var filepath = _flashcardPackPath + flashcardPack.ID.ToString() + ".json";
+
+            using (FileStream fileStream = File.Create(filepath))
+            using (StreamWriter writer = new StreamWriter(fileStream))
+            {
+                var json = JsonSerializer.Serialize(flashcardPack, _jsonSerializerOptions);
+                writer.Write(json);
+            }
         }
     }
 
