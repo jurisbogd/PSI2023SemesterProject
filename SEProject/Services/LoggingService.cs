@@ -23,8 +23,8 @@ public class LoggingService : ILoggingHandler
         {
             OperatingSystem os = Environment.OSVersion;
             UserParameters parameters = new UserParameters(os.Platform.ToString(), os.Version.ToString());
-
-            using (StreamWriter writer = new StreamWriter(path: Directory.GetCurrentDirectory() + "\\log.txt", true))
+            string filePath = "log.txt";
+            using (StreamWriter writer = new StreamWriter(filePath, true))
             {
                 writer.WriteLine($"Timestamp: {entry.Timestamp}");
                 writer.WriteLine($"Level: {entry.Level}");
