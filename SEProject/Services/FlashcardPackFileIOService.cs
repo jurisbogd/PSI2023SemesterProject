@@ -10,7 +10,7 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
     private readonly string _flashcardPackPath = @"Data/FlashcardPacks/";
     private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };
 
-    public FlashcardPack LoadFlashcardPack(Guid id)
+    public FlashcardPack<Flashcard> LoadFlashcardPack(Guid id)
     {
         var filepath = _flashcardPackPath + id.ToString() + ".json";
         if (File.Exists(filepath))
@@ -19,7 +19,7 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
             using (StreamReader reader = new StreamReader(fileStream))
             {
                 var flashcardPackJson = reader.ReadToEnd();
-                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(flashcardPackJson);
+                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack<Flashcard>>(flashcardPackJson);
                 if (flashcardPack != null)
                 {
                     return flashcardPack;
@@ -36,14 +36,14 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         }
     }
 
-    private FlashcardPack LoadFlashcardPack(string filepath)
+    private FlashcardPack<Flashcard> LoadFlashcardPack(string filepath)
     {
         if (File.Exists(filepath))
         {
             using (FileStream fileStream = File.OpenRead(filepath))
             using (StreamReader reader = new StreamReader(fileStream))
             {
-                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(reader.ReadToEnd());
+                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack<Flashcard>>(reader.ReadToEnd());
                 if (flashcardPack != null)
                 {
                     return flashcardPack;
@@ -60,17 +60,17 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         }
     }
 
-    public List<FlashcardPack> LoadFlashcardPacks()
+    public List<FlashcardPack<Flashcard>> LoadFlashcardPacks()
     {
         var flashcardPackFilepaths = Directory.GetFiles(_flashcardPackPath);
-        var flashcardPacks = new List<FlashcardPack>();
+        var flashcardPacks = new List<FlashcardPack<Flashcard>>();
 
         foreach (var filepath in flashcardPackFilepaths)
         {
             using (FileStream fileStream = File.OpenRead(filepath))
             using (StreamReader reader = new StreamReader(fileStream))
             {
-                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack>(reader.ReadToEnd());
+                var flashcardPack = JsonSerializer.Deserialize<FlashcardPack<Flashcard>>(reader.ReadToEnd());
                 if (flashcardPack != null)
                 {
                     flashcardPacks.Add(flashcardPack);
@@ -84,7 +84,7 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         return flashcardPacks;
     }
 
-    public void SaveFlashcardPack(FlashcardPack flashcardPack)
+    public void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack)
     {
         var filepath = _flashcardPackPath + flashcardPack.ID.ToString() + ".json";
 
@@ -97,9 +97,9 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
     }
 
 
-    public void SaveFlashcardPacks(List<FlashcardPack> flashcardPacks)
+    public void SaveFlashcardPacks(List<FlashcardPack<Flashcard>> flashcardPacks)
     {
-        foreach (FlashcardPack flashcardPack in flashcardPacks)
+        foreach (FlashcardPack<Flashcard> flashcardPack in flashcardPacks)
         {
             var filepath = _flashcardPackPath + flashcardPack.ID.ToString() + ".json";
 
