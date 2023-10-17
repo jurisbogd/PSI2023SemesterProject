@@ -1,0 +1,5 @@
+Timestamp: 16/10/2023 20:47:16
+Level: Information
+Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack
+OS Name: Unix, OS Version: 14.0.0
+

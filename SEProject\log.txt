@@ -1,0 +1,45 @@
+Timestamp: 16/10/2023 20:38:17
+Level: Information
+Message: Flashcard with ID:ff3d6b9c-de47-490e-bed0-4ecc0828cd3d was removed from:e7473c26-dc5f-4b21-8e48-9267f051fd10pack
+OS Name: Unix, OS Version: 14.0.0
+
+Timestamp: 16/10/2023 20:38:45
+Level: Information
+Message: Flashcard was added:  -  - Easy - 16/10/2023 20:38:45 - 4b22a92d-78d6-48d7-86b1-ade9f681a309
+OS Name: Unix, OS Version: 14.0.0
+
+Timestamp: 16/10/2023 20:39:01
+Level: Information
+Message: Flashcard with ID:4b22a92d-78d6-48d7-86b1-ade9f681a309 Was removed
+OS Name: Unix, OS Version: 14.0.0
+
+Timestamp: 16/10/2023 20:39:55
+Level: Information
+Message: Flashcards were sorted: 
+OS Name: Unix, OS Version: 14.0.0
+
+Timestamp: 16/10/2023 20:41:47
+Level: Information
+Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack
+OS Name: Unix, OS Version: 14.0.0
+
+Timestamp: 16/10/2023 20:42:29
+Level: Information
+Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack
+OS Name: Unix, OS Version: 14.0.0
+
+Timestamp: 16/10/2023 20:43:59
+Level: Information
+Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack
+OS Name: Unix, OS Version: 14.0.0
+
+Timestamp: 16/10/2023 20:44:41
+Level: Information
+Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack
+OS Name: Unix, OS Version: 14.0.0
+
+Timestamp: 16/10/2023 20:45:07
+Level: Information
+Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack
+OS Name: Unix, OS Version: 14.0.0
+
