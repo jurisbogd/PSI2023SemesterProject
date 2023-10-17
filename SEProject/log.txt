@@ -13,3 +13,8 @@ Level: Information
 Message: Flashcards were sorted: 
 OS Name: Unix, OS Version: 14.0.0
 
+Timestamp: 2023.10.17 22:14:35
+Level: Information
+Message: Flashcards were sorted
+OS Name: Win32NT, OS Version: 10.0.19045.0
+
