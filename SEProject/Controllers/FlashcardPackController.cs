@@ -23,7 +23,7 @@ namespace SEProject.Controllers
 
         public IActionResult CreateSampleFlashcardPack(string name)
         {
-            List<FlashcardPack> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            List<FlashcardPack<Flashcard>> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
 
             return View(allFlashcardPacks);
         }
@@ -31,8 +31,8 @@ namespace SEProject.Controllers
 
         public IActionResult ViewFlashcardPack(Guid id)
         {
-            List<FlashcardPack> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-            FlashcardPack? flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
+            List<FlashcardPack<Flashcard>> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            FlashcardPack<Flashcard>? flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
 
             if (flashcardPackToView == null)
             {
@@ -45,7 +45,7 @@ namespace SEProject.Controllers
         [HttpPost]
         public IActionResult AddFlashcardPack(string name)
         {
-            var newFlashcardPack = new FlashcardPack(
+            var newFlashcardPack = new FlashcardPack<Flashcard>(
                 name: name,
                 id: Guid.NewGuid(),
                 flashcards: new List<Flashcard>());
@@ -60,8 +60,8 @@ namespace SEProject.Controllers
         [HttpPost]
         public IActionResult AddFlashcardToPack(Flashcard viewModel, Guid id)
         {
-            List<FlashcardPack> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-            FlashcardPack? flashcardPackToBeChanged = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
+            List<FlashcardPack<Flashcard>> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            FlashcardPack<Flashcard>? flashcardPackToBeChanged = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
 
             if (flashcardPackToBeChanged == null)
             {
@@ -166,10 +166,10 @@ namespace SEProject.Controllers
         public IActionResult EditFlashcardPackName(Guid id, string newName)
         {
             // Get the list of all flashcard packs
-            List<FlashcardPack> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            List<FlashcardPack<Flashcard>> allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
 
             // Find the flashcard pack with the specified ID
-            FlashcardPack flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
+            FlashcardPack<Flashcard> flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
 
             if (flashcardPackToEdit == null)
             {

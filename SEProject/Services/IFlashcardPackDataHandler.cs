@@ -4,9 +4,9 @@ namespace SEProject.Services;
 
 public interface IFlashcardPackDataHandler
 {
-    FlashcardPack LoadFlashcardPack(Guid id);
-    List<FlashcardPack> LoadFlashcardPacks();
-    void SaveFlashcardPack(FlashcardPack flashcardPack);
-    void SaveFlashcardPacks(List<FlashcardPack> flashcardPacks);
+    FlashcardPack<Flashcard> LoadFlashcardPack(Guid id);
+    List<FlashcardPack<Flashcard>> LoadFlashcardPacks();
+    void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack);
+    void SaveFlashcardPacks(List<FlashcardPack<Flashcard>> flashcardPacks);
     void RemoveFlashcardPack(Guid id);
 }

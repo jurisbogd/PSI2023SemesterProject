@@ -3,26 +3,26 @@ using System.Collections.Generic;
 
 namespace SEProject.Models
 {
-    public class FlashcardPack
+    public class FlashcardPack<T>
     {
         public string Name { get; set; }
         public Guid ID { get; set; }
-        public List<Flashcard> Flashcards { get; set; }
+        public List<T> Flashcards { get; set; }
 
-        public FlashcardPack(string name, Guid id, List<Flashcard> flashcards)
+        public FlashcardPack(string name, Guid id, List<T> flashcards)
         {
             Name = name;
             ID = id;
             Flashcards = flashcards;
         }
 
-        public FlashcardPack CloneWithNewFlashcards(List<Flashcard> newFlashcards)
+        public FlashcardPack<T> CloneWithNewFlashcards(List<T> newFlashcards)
         {
-            return new FlashcardPack
+            return new FlashcardPack<T>
             (
-                Name = this.Name, // Keep the same name.
-                ID = this.ID, // Keep the same ID.
-                Flashcards = newFlashcards // Set the new list of flashcards.
+                Name = this.Name, 
+                ID = this.ID, 
+                Flashcards = newFlashcards
             );
         }
     }
