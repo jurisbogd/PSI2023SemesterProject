@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using SEProject.Models;
 using SEProject.Services;
-using Microsoft.AspNetCore.Hosting;
-using System.Text.Json;
-using System.Xml.Linq;
 
 namespace SEProject.Controllers
 {

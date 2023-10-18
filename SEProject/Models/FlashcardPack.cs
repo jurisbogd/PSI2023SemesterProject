@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SEProject.Models
+﻿namespace SEProject.Models
 {
     public class FlashcardPack<T>
     {

@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace SEProject.Services;
 
 public class LoggingService : ILoggingHandler
