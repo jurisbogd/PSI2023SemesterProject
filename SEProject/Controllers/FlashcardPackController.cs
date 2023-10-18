@@ -43,7 +43,8 @@ namespace SEProject.Controllers
             (
                 name: name,
                 id: Guid.NewGuid(),
-                flashcards: new List<Flashcard>());
+                flashcards: new List<Flashcard>()
+            );
             
             var logEntry = new LogEntry(message: "Flashcard pack was added: " + newFlashcardPack.ID);
             _logger.Log(logEntry);
