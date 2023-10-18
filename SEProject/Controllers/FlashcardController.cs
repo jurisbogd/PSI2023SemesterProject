@@ -1,82 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SEProject.Models;
 using SEProject.Services;
 
 namespace SEProject.Controllers
 {
-    public class FlashcardPackController : Controller
+    public class FlashcardController : Controller
     {
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
         private readonly ILoggingHandler _logger;
 
-        public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, ILoggingHandler logger)
+        public FlashcardController(IFlashcardPackDataHandler flashcardPackDataHandler, ILoggingHandler logger)
         {
             _flashcardPackDataHandler = flashcardPackDataHandler;
             _logger = logger;
         }
-
-        public IActionResult CreateSampleFlashcardPack(string name)
-        {
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-
-            return View(allFlashcardPacks);
-        }
-
-
-        public IActionResult ViewFlashcardPack(Guid id)
-        {
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-            var flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
-
-            if (flashcardPackToView == null)
-            {
-                return NotFound(); // Handle the case when the pack is not found
-            }
-
-            return View(flashcardPackToView);
-        }
-
-        [HttpPost]
-        public IActionResult AddFlashcardPack(string name)
-        {
-            try
-            {
-                var newFlashcardPack = new FlashcardPack<Flashcard>
-                (
-                    name: name,
-                    id: Guid.NewGuid(),
-                    flashcards: new List<Flashcard>()
-                );
-
-                // Create a log entry with a custom message and log level (optional parameters)
-                var logEntry = new LogEntry(
-                    message: $"Flashcard pack with ID {newFlashcardPack.ID} was added",
-                    level: LogLevel.Information
-                );
-
-                // Log the entry using the injected logger
-                _logger.Log(logEntry);
-
-                _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
-
-                return RedirectToAction("CreateSampleFlashcardPack");
-            }
-            catch (Exception ex)
-            {
-                // Handle the exception and log an error message with the exception details
-                var logEntry = new LogEntry(
-                    message: "Error while adding a flashcard pack",
-                    exception: ex,
-                    level: LogLevel.Error
-                );
-
-                _logger.Log(logEntry);
-
-                // You can also handle the exception further or return an error view
-                return View("Error", ex);
-            }
-        }
-
 
         [HttpPost]
         public IActionResult AddFlashcardToPack(Flashcard viewModel, Guid id)
@@ -141,17 +78,6 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveFlashcardPack(Guid flashcardPackID)
-        {
-            _flashcardPackDataHandler.RemoveFlashcardPack(flashcardPackID);
-
-            var logEntry = new LogEntry(message: $"Flashcard pack with ID {flashcardPackID} was removed");
-            _logger.Log(logEntry);
-
-            return RedirectToAction("CreateSampleFlashcardPack");
-        }
-
-        [HttpPost]
         public IActionResult RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
         {
             var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(packID);
@@ -212,36 +138,6 @@ namespace SEProject.Controllers
 
             // If the model is not valid, return to the form view with validation errors
             return View(flashcardToEdit);
-        }
-
-        [HttpPost]
-        public IActionResult EditFlashcardPackName(Guid id, string newName)
-        {
-            // Get the list of all flashcard packs
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-
-            // Find the flashcard pack with the specified ID
-            var flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
-
-            if (flashcardPackToEdit == null)
-            {
-                return NotFound(); // Handle the case when the pack is not found
-            }
-
-            if(newName != null)
-            {
-                // Update the flashcard pack's name
-                flashcardPackToEdit.Name = newName;
-
-                // Save the updated flashcard pack
-                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit);
-            }
-
-            var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");
-            _logger.Log(logEntry);
-
-            // Redirect back to the page that displays the flashcard packs
-            return RedirectToAction("CreateSampleFlashcardPack");
         }
 
         [HttpPost]
