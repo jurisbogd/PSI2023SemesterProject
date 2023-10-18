@@ -3,6 +3,7 @@ namespace SEProject.Services;
 public class LoggingService : ILoggingHandler
 {
     private const string _logFilePath = "log.txt";
+    private readonly List<LogEntry> _logEntries = new();
 
     public struct UserParameters
     {
@@ -16,10 +17,10 @@ public class LoggingService : ILoggingHandler
         }
     }
 
-    private List<LogEntry> _logEntries = new();
-
     public void Log(LogEntry entry)
     {
+        _logEntries.Add(entry);
+
         try
         {
             var os = Environment.OSVersion;
