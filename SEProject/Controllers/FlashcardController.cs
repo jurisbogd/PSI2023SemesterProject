@@ -7,12 +7,10 @@ namespace SEProject.Controllers;
 public class FlashcardController : Controller
 {
     private readonly IFlashcardDataHandler _flashcardDataHandler;
-    private readonly ILoggingHandler _LoggingHandler;
 
-    public FlashcardController(IFlashcardDataHandler flashcardDataHandler, ILoggingHandler LoggingHandler)
+    public FlashcardController(IFlashcardDataHandler flashcardDataHandler)
     {
         _flashcardDataHandler = flashcardDataHandler;
-        _LoggingHandler = LoggingHandler;
     }
 
     public IActionResult CreateSampleFlashcard() // NOTE: this will be executed every time you reload the page
@@ -36,9 +34,6 @@ public class FlashcardController : Controller
 
             // Save the updated list of flashcards to the JSON file
             _flashcardDataHandler.SaveFlashcard(flashcard: newFlashcard);
-
-            LogEntry newLogEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard was added: " + newFlashcard, Level: LogLevel.Information);
-            _LoggingHandler.Log(entry: newLogEntry);
             // Redirect to the view that displays the flashcards
             return RedirectToAction(actionName: "CreateSampleFlashcard");
         }
@@ -51,8 +46,6 @@ public class FlashcardController : Controller
     public IActionResult RemoveSampleFlashcard(Guid ID)
     {
         _flashcardDataHandler.RemoveFlashcard(ID);
-        LogEntry newLogEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard with ID:" + ID + " Was removed", Level: LogLevel.Information);
-        _LoggingHandler.Log(entry: newLogEntry);
         // Redirect to the view that displays the flashcards
         return RedirectToAction("CreateSampleFlashcard");
     }
@@ -85,9 +78,6 @@ public class FlashcardController : Controller
 
             // Save the updated list of flashcards to the JSON file
             _flashcardDataHandler.SaveFlashcards(flashcards: allFlashcards);
-
-            LogEntry newLogEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard was edited: " + editedFlashcard, Level: LogLevel.Information);
-            _LoggingHandler.Log(entry: newLogEntry);
 
             // Redirect to the view that displays the flashcards
             return RedirectToAction("CreateSampleFlashcard");
@@ -132,8 +122,6 @@ public class FlashcardController : Controller
             }
         }
 
-        LogEntry newLogEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcards were sorted: ", Level: LogLevel.Information);
-        _LoggingHandler.Log(entry: newLogEntry);
         return View(viewName: "CreateSampleFlashcard", model: sortedFlashcards);
     }
 }
