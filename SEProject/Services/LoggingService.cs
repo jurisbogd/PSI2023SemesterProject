@@ -26,7 +26,7 @@ public class LoggingService : ILoggingHandler
 
             using (StreamWriter writer = new StreamWriter(filePath, true))
             {
-                writer.WriteLine($"Timestamp: {entry.Timestamp}");
+                writer.WriteLine($"Timestamp: {entry.TimeStamp}");
                 writer.WriteLine($"Level: {entry.Level}");
                 writer.WriteLine($"Message: {entry.Message}");
                 writer.WriteLine($"OS Name: {parameters.OSName}, OS Version: {parameters.OSVersion}");
