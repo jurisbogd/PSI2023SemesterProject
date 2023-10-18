@@ -39,57 +39,106 @@ namespace SEProject.Controllers
         [HttpPost]
         public IActionResult AddFlashcardPack(string name)
         {
-            var newFlashcardPack = new FlashcardPack<Flashcard>
-            (
-                name: name,
-                id: Guid.NewGuid(),
-                flashcards: new List<Flashcard>()
-            );
-            
-            var logEntry = new LogEntry(message: $"Flashcard pack with ID {newFlashcardPack.ID} was added");
-            _logger.Log(logEntry);
+            try
+            {
+                var newFlashcardPack = new FlashcardPack<Flashcard>
+                (
+                    name: name,
+                    id: Guid.NewGuid(),
+                    flashcards: new List<Flashcard>()
+                );
 
-            _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
+                // Create a log entry with a custom message and log level (optional parameters)
+                var logEntry = new LogEntry(
+                    message: $"Flashcard pack with ID {newFlashcardPack.ID} was added",
+                    level: LogLevel.Information
+                );
 
-            return RedirectToAction("CreateSampleFlashcardPack");
+                // Log the entry using the injected logger
+                _logger.Log(logEntry);
+
+                _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
+
+                return RedirectToAction("CreateSampleFlashcardPack");
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception and log an error message with the exception details
+                var logEntry = new LogEntry(
+                    message: "Error while adding a flashcard pack",
+                    exception: ex,
+                    level: LogLevel.Error
+                );
+
+                _logger.Log(logEntry);
+
+                // You can also handle the exception further or return an error view
+                return View("Error", ex);
+            }
         }
+
 
 
         [HttpPost]
         public IActionResult AddFlashcardToPack(Flashcard viewModel, Guid id)
         {
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-            var flashcardPackToBeChanged = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
-
-            if (flashcardPackToBeChanged == null)
+            try
             {
-                return NotFound(); // Handle the case when the pack is not found
-            }
+                var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+                var flashcardPackToBeChanged = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
 
-            if (ModelState.IsValid)
-            {
-                // Create a new Flashcard object from the form data
-                var newFlashcard = new Flashcard
+                if (flashcardPackToBeChanged == null)
                 {
-                    PackID = id,
-                    ID = Guid.NewGuid(),
-                    Question = viewModel.Question,
-                    Answer = viewModel.Answer,
-                    Difficulty = viewModel.Difficulty
-                };
+                    return NotFound(); // Handle the case when the pack is not found
+                }
 
-                // Add the new flashcard to the pack
-                flashcardPackToBeChanged.Flashcards.Add(newFlashcard);
+                if (ModelState.IsValid)
+                {
+                    // Create a new Flashcard object from the form data
+                    var newFlashcard = new Flashcard
+                    {
+                        PackID = id,
+                        ID = Guid.NewGuid(),
+                        Question = viewModel.Question,
+                        Answer = viewModel.Answer,
+                        Difficulty = viewModel.Difficulty
+                    };
 
-                // Save the updated pack of flashcards to the JSON file
-                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToBeChanged);
+                    // Add the new flashcard to the pack
+                    flashcardPackToBeChanged.Flashcards.Add(newFlashcard);
 
-                // Redirect to the view that displays the pack of flashcards
-                return RedirectToAction("ViewFlashcardPack", new { id = flashcardPackToBeChanged.ID });
+                    // Save the updated pack of flashcards to the JSON file
+                    _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToBeChanged);
+
+                    // Create a log entry for the successful addition
+                    var logEntry = new LogEntry(
+                        message: $"Flashcard with ID {newFlashcard.ID} was added to pack with ID {id}",
+                        level: LogLevel.Information
+                    );
+
+                    _logger.Log(logEntry);
+
+                    // Redirect to the view that displays the pack of flashcards
+                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardPackToBeChanged.ID });
+                }
+
+                // If the model is not valid, return to the form view with validation errors
+                return View(flashcardPackToBeChanged);
             }
+            catch (Exception ex)
+            {
+                // Handle the exception and log an error message with the exception details
+                var logEntry = new LogEntry(
+                    message: "Error while adding a flashcard to the pack",
+                    exception: ex,
+                    level: LogLevel.Error
+                );
 
-            // If the model is not valid, return to the form view with validation errors
-            return View(flashcardPackToBeChanged);
+                _logger.Log(logEntry);
+
+                // You can also handle the exception further or return an error view
+                return View("Error", ex);
+            }
         }
 
         [HttpPost]
