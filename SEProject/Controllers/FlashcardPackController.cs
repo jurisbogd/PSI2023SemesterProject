@@ -46,7 +46,7 @@ namespace SEProject.Controllers
                 flashcards: new List<Flashcard>()
             );
             
-            var logEntry = new LogEntry(message: "Flashcard pack was added: " + newFlashcardPack.ID);
+            var logEntry = new LogEntry(message: $"Flashcard pack with ID {newFlashcardPack.ID} was added");
             _logger.Log(logEntry);
 
             _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
@@ -97,7 +97,7 @@ namespace SEProject.Controllers
         {
             _flashcardPackDataHandler.RemoveFlashcardPack(flashcardPackID);
 
-            var logEntry = new LogEntry(message: "Flashcard pack was removed: " + flashcardPackID);
+            var logEntry = new LogEntry(message: $"Flashcard pack with ID {flashcardPackID} was removed");
             _logger.Log(logEntry);
 
             return RedirectToAction("CreateSampleFlashcardPack");
@@ -117,7 +117,7 @@ namespace SEProject.Controllers
                 _flashcardPackDataHandler.SaveFlashcardPack(flashcardPack);
             }
 
-            var logEntry = new LogEntry(message: "Flashcard with ID:" + flashcardID + " was removed from:" + packID + "pack");
+            var logEntry = new LogEntry(message: $"Flashcard with ID {flashcardID} was removed from pack with ID {packID}");
             _logger.Log(logEntry);
 
             // Redirect to the view that displays the pack of flashcards
@@ -159,7 +159,7 @@ namespace SEProject.Controllers
                 return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
             }
 
-            var logEntry = new LogEntry(message: "Flashcard was edited: " + editedFlashcard);
+            var logEntry = new LogEntry(message: $"Flashcard with ID {editedFlashcard.ID} was edited");
             _logger.Log(logEntry);
 
             // If the model is not valid, return to the form view with validation errors
@@ -189,7 +189,7 @@ namespace SEProject.Controllers
                 _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit);
             }
 
-            var logEntry = new LogEntry(message: "Flashcard pack name was edited: " + flashcardPackToEdit);
+            var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");
             _logger.Log(logEntry);
 
             // Redirect back to the page that displays the flashcard packs
@@ -233,7 +233,7 @@ namespace SEProject.Controllers
                 }
             }
 
-            var logEntry = new LogEntry(message: "Flashcards were sorted");
+            var logEntry = new LogEntry(message: $"Flashcards were sorted by sort option {sortOption}");
             _logger.Log(logEntry);
 
             var newPack = flashcardPack.CloneWithNewFlashcards(sortedFlashcards);
