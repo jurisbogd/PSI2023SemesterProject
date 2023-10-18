@@ -1,4 +1,6 @@
-﻿namespace SEProject.Models
+﻿using SEProject.Enums;
+
+namespace SEProject.Models
 {
 	public class Flashcard
 	{
@@ -9,13 +11,6 @@
 		public DifficultyLevel Difficulty { get; set; }
 		public bool IsFavorite { get; set; }
 		public DateTime CreationDate { get; set; }
-		
-		public enum DifficultyLevel
-		{
-			Easy = 0,
-			Medium,
-			Hard
-		}
 
 		public Flashcard()
 		{

@@ -63,3 +63,53 @@ Information
 Flashcards were sorted by sort option DateAsc
 OS: Win32NT, Version: 10.0.19045.0
 
+18/10/2023 20:28:23
+Information
+Flashcard pack with ID f9fabf5d-6300-4d3f-857f-cf33e397b0d3 was added
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:26
+Information
+Name of flashcard pack with ID f9fabf5d-6300-4d3f-857f-cf33e397b0d3 with was edited
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:48
+Information
+Flashcards were sorted by sort option DateAsc
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:49
+Information
+Flashcards were sorted by sort option DateDesc
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:51
+Information
+Flashcards were sorted by sort option DifficultyAsc
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:53
+Information
+Flashcards were sorted by sort option DifficultyDesc
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:55
+Information
+Flashcard with ID fde22566-7890-4b1b-a63c-9a902814157c was removed from pack with ID f9fabf5d-6300-4d3f-857f-cf33e397b0d3
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:56
+Information
+Flashcard with ID 5aacc8db-89fb-4218-b1f5-b3fa02cbc05c was removed from pack with ID f9fabf5d-6300-4d3f-857f-cf33e397b0d3
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:57
+Information
+Flashcard with ID a5c4ae37-e4a4-4630-a776-387a4658f873 was removed from pack with ID f9fabf5d-6300-4d3f-857f-cf33e397b0d3
+OS: Unix, Version: 14.0.0
+
+18/10/2023 20:28:59
+Information
+Flashcard pack with ID f9fabf5d-6300-4d3f-857f-cf33e397b0d3 was removed
+OS: Unix, Version: 14.0.0
+
