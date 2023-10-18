@@ -39,7 +39,8 @@ namespace SEProject.Controllers
         [HttpPost]
         public IActionResult AddFlashcardPack(string name)
         {
-            var newFlashcardPack = new FlashcardPack<Flashcard>(
+            var newFlashcardPack = new FlashcardPack<Flashcard>
+            (
                 name: name,
                 id: Guid.NewGuid(),
                 flashcards: new List<Flashcard>());
