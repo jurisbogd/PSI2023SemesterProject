@@ -18,3 +18,28 @@ Level: Information
 Message: Flashcards were sorted
 OS Name: Win32NT, OS Version: 10.0.19045.0
 
+Timestamp: 2023-10-18 16:04:10
+Level: Information
+Message: Flashcard pack was added: SEProject.Models.FlashcardPack`1[SEProject.Models.Flashcard]
+OS Name: Win32NT, OS Version: 10.0.19045.0
+
+Timestamp: 2023-10-18 16:04:37
+Level: Information
+Message: Flashcards were sorted
+OS Name: Win32NT, OS Version: 10.0.19045.0
+
+Timestamp: 2023-10-18 16:05:05
+Level: Information
+Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack`1[SEProject.Models.Flashcard]
+OS Name: Win32NT, OS Version: 10.0.19045.0
+
+Timestamp: 2023-10-18 16:05:08
+Level: Information
+Message: Flashcard pack was removed: ac29e81c-4a2d-41ac-9deb-fc4356be75c4
+OS Name: Win32NT, OS Version: 10.0.19045.0
+
+Timestamp: 2023-10-18 16:05:23
+Level: Information
+Message: Flashcard with ID:8b3f6b5c-173c-4df7-8d2e-4e5f98646534 was removed from:e7473c26-dc5f-4b21-8e48-9267f051fd10pack
+OS Name: Win32NT, OS Version: 10.0.19045.0
+
