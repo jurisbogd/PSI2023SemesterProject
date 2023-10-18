@@ -2,6 +2,8 @@ namespace SEProject.Services;
 
 public class LoggingService : ILoggingHandler
 {
+    private const string _logFilePath = "log.txt";
+
     public struct UserParameters
     {
         public string OSName { get; set; }
@@ -22,9 +24,8 @@ public class LoggingService : ILoggingHandler
         {
             var os = Environment.OSVersion;
             var parameters = new UserParameters(os.Platform.ToString(), os.Version.ToString());
-            var filePath = "log.txt";
 
-            using var writer = new StreamWriter(filePath, true);
+            using var writer = new StreamWriter(_logFilePath, true);
             writer.WriteLine(entry.TimeStamp);
             writer.WriteLine(entry.Level);
             writer.WriteLine(entry.Message);
