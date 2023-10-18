@@ -4,12 +4,13 @@ public class LoggingService : ILoggingHandler
 {
     public struct UserParameters
     {
-        public string osName { get; set; }
-        public string osVersion { get; set; }
-        public UserParameters(string _osName, string _osVersion)
+        public string OSName { get; set; }
+        public string OSVersion { get; set; }
+
+        public UserParameters(string osName, string osVersion)
         {
-            osName = _osName;
-            osVersion = _osVersion;
+            OSName = osName;
+            OSVersion = osVersion;
         }
     }
     private List<LogEntry> logEntries = new List<LogEntry>();
@@ -26,7 +27,7 @@ public class LoggingService : ILoggingHandler
                 writer.WriteLine($"Timestamp: {entry.Timestamp}");
                 writer.WriteLine($"Level: {entry.Level}");
                 writer.WriteLine($"Message: {entry.Message}");
-                writer.WriteLine($"OS Name: {parameters.osName}, OS Version: {parameters.osVersion}");
+                writer.WriteLine($"OS Name: {parameters.OSName}, OS Version: {parameters.OSVersion}");
                 writer.WriteLine();
             }
         }
