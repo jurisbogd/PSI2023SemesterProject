@@ -7,12 +7,12 @@ namespace SEProject.Controllers
     public class FlashcardPackController : Controller
     {
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
-        private readonly ILoggingHandler _LoggingHandler;
+        private readonly ILoggingHandler _logger;
 
-        public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, ILoggingHandler LoggingHandler)
+        public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, ILoggingHandler logger)
         {
             _flashcardPackDataHandler = flashcardPackDataHandler;
-            _LoggingHandler = LoggingHandler;
+            _logger = logger;
         }
 
         public IActionResult CreateSampleFlashcardPack(string name)
@@ -44,7 +44,7 @@ namespace SEProject.Controllers
                 id: Guid.NewGuid(),
                 flashcards: new List<Flashcard>());
             var logEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard pack was added: " + newFlashcardPack, Level: LogLevel.Information);
-            _LoggingHandler.Log(entry: logEntry);
+            _logger.Log(entry: logEntry);
             _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
 
             return RedirectToAction("CreateSampleFlashcardPack");
@@ -93,7 +93,7 @@ namespace SEProject.Controllers
         {
             _flashcardPackDataHandler.RemoveFlashcardPack(flashcardPackID);
             var logEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard pack was removed: " + flashcardPackID, Level: LogLevel.Information);
-            _LoggingHandler.Log(entry: logEntry);
+            _logger.Log(entry: logEntry);
             return RedirectToAction("CreateSampleFlashcardPack");
         }
 
@@ -111,7 +111,7 @@ namespace SEProject.Controllers
                 _flashcardPackDataHandler.SaveFlashcardPack(flashcardPack);
             }
             var logEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard with ID:" + flashcardID + " was removed from:" + packID + "pack", Level: LogLevel.Information);
-            _LoggingHandler.Log(entry: logEntry);
+            _logger.Log(entry: logEntry);
             // Redirect to the view that displays the pack of flashcards
             return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
         }
@@ -151,7 +151,7 @@ namespace SEProject.Controllers
                 return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
             }
             var logEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard was edited: " + editedFlashcard, Level: LogLevel.Information);
-            _LoggingHandler.Log(entry: logEntry);
+            _logger.Log(entry: logEntry);
             // If the model is not valid, return to the form view with validation errors
             return View(flashcardToEdit);
         }
@@ -179,7 +179,7 @@ namespace SEProject.Controllers
                 _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit);
             }
             var logEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard pack name was edited: " + flashcardPackToEdit, Level: LogLevel.Information);
-            _LoggingHandler.Log(entry: logEntry);
+            _logger.Log(entry: logEntry);
             // Redirect back to the page that displays the flashcard packs
             return RedirectToAction("CreateSampleFlashcardPack");
         }
@@ -221,7 +221,7 @@ namespace SEProject.Controllers
                 }
             }
             var logEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcards were sorted", Level: LogLevel.Information);
-            _LoggingHandler.Log(entry: logEntry);
+            _logger.Log(entry: logEntry);
             var newPack = flashcardPack.CloneWithNewFlashcards(sortedFlashcards);
 
             return View("ViewFlashcardPack", newPack);
