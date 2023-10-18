@@ -1,35 +1,35 @@
-using System;
-using System.IO;
-
 namespace SEProject.Services;
 
 public class LoggingService : ILoggingHandler
 {
     public struct UserParameters
     {
-        public string osName { get; set; }
-        public string osVersion { get; set; }
-        public UserParameters(string _osName, string _osVersion)
+        public string OSName { get; set; }
+        public string OSVersion { get; set; }
+
+        public UserParameters(string osName, string osVersion)
         {
-            osName = _osName;
-            osVersion = _osVersion;
+            OSName = osName;
+            OSVersion = osVersion;
         }
     }
-    private List<LogEntry> logEntries = new List<LogEntry>();
 
-     public void Log(LogEntry entry)
+    private List<LogEntry> _logEntries = new();
+
+    public void Log(LogEntry entry)
     {
         try
         {
-            OperatingSystem os = Environment.OSVersion;
-            UserParameters parameters = new UserParameters(os.Platform.ToString(), os.Version.ToString());
-            string filePath = "log.txt";
+            var os = Environment.OSVersion;
+            var parameters = new UserParameters(os.Platform.ToString(), os.Version.ToString());
+            var filePath = "log.txt";
+
             using (StreamWriter writer = new StreamWriter(filePath, true))
             {
                 writer.WriteLine($"Timestamp: {entry.Timestamp}");
                 writer.WriteLine($"Level: {entry.Level}");
                 writer.WriteLine($"Message: {entry.Message}");
-                writer.WriteLine($"OS Name: {parameters.osName}, OS Version: {parameters.osVersion}");
+                writer.WriteLine($"OS Name: {parameters.OSName}, OS Version: {parameters.OSVersion}");
                 writer.WriteLine();
             }
         }
@@ -41,6 +41,6 @@ public class LoggingService : ILoggingHandler
 
     public List<LogEntry> GetLogs()
     {
-        return logEntries;
+        return _logEntries;
     }
 }
