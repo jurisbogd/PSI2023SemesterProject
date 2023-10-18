@@ -4,7 +4,7 @@ namespace SEProject.Services;
 
 public static class FileStreamJsonExtensions
 {
-    public static void Serialize<T>(this FileStream fileStream, T t, JsonSerializerOptions options) {
+    public static void Serialize(this FileStream fileStream, object t, JsonSerializerOptions options) {
         using var writer = new StreamWriter(fileStream);
         var json = JsonSerializer.Serialize(t, options);
         writer.Write(json);
