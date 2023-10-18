@@ -39,10 +39,13 @@ namespace SEProject.Controllers
         [HttpPost]
         public IActionResult AddFlashcardPack(string name)
         {
-            var newFlashcardPack = new FlashcardPack<Flashcard>(
+            var newFlashcardPack = new FlashcardPack<Flashcard>
+            (
                 name: name,
                 id: Guid.NewGuid(),
-                flashcards: new List<Flashcard>());
+                flashcards: new List<Flashcard>()
+            );
+
             var logEntry = new LogEntry(Timestamp: DateTime.Now, Message: "Flashcard pack was added: " + newFlashcardPack, Level: LogLevel.Information);
             _logger.Log(entry: logEntry);
             _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
