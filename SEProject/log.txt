@@ -1,45 +1,65 @@
-Timestamp: 16/10/2023 20:46:51
-Level: Information
-Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack
-OS Name: Unix, OS Version: 14.0.0
+2023-10-18 16:31:37
+Information
+Flashcard with ID:70bbbaa4-ff68-42ff-9579-b1b14304c06e was removed from:cf8438f4-754c-4236-bf79-2ea60aa294dfpack
+OS: Win32NT, Version: 10.0.19045.0
 
-Timestamp: 16/10/2023 20:48:19
-Level: Information
-Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack
-OS Name: Unix, OS Version: 14.0.0
+2023-10-18 16:37:03
+Information
+Flashcards were sorted by sortoption DifficultyAsc
+OS: Win32NT, Version: 10.0.19045.0
 
-Timestamp: 16/10/2023 20:48:29
-Level: Information
-Message: Flashcards were sorted: 
-OS Name: Unix, OS Version: 14.0.0
+2023-10-18 16:37:05
+Information
+Flashcards were sorted by sortoption DateAsc
+OS: Win32NT, Version: 10.0.19045.0
 
-Timestamp: 2023.10.17 22:14:35
-Level: Information
-Message: Flashcards were sorted
-OS Name: Win32NT, OS Version: 10.0.19045.0
+2023-10-18 16:37:51
+Information
+Flashcards were sorted by sortoption DateDesc
+OS: Win32NT, Version: 10.0.19045.0
 
-Timestamp: 2023-10-18 16:04:10
-Level: Information
-Message: Flashcard pack was added: SEProject.Models.FlashcardPack`1[SEProject.Models.Flashcard]
-OS Name: Win32NT, OS Version: 10.0.19045.0
+2023-10-18 16:39:38
+Information
+Flashcards were sorted by sort option DifficultyAsc
+OS: Win32NT, Version: 10.0.19045.0
 
-Timestamp: 2023-10-18 16:04:37
-Level: Information
-Message: Flashcards were sorted
-OS Name: Win32NT, OS Version: 10.0.19045.0
+2023-10-18 16:40:19
+Information
+Flashcard with ID ad7ae32c-b7f4-4444-b450-ddfb58fe7d23 was removed from pack with ID e7473c26-dc5f-4b21-8e48-9267f051fd10
+OS: Win32NT, Version: 10.0.19045.0
 
-Timestamp: 2023-10-18 16:05:05
-Level: Information
-Message: Flashcard pack name was edited: SEProject.Models.FlashcardPack`1[SEProject.Models.Flashcard]
-OS Name: Win32NT, OS Version: 10.0.19045.0
+2023-10-18 16:40:59
+Information
+Flashcard with ID 9dfa1aed-bb09-48ad-b2e7-e1afaecad81e was removed from pack with ID e7473c26-dc5f-4b21-8e48-9267f051fd10
+OS: Win32NT, Version: 10.0.19045.0
 
-Timestamp: 2023-10-18 16:05:08
-Level: Information
-Message: Flashcard pack was removed: ac29e81c-4a2d-41ac-9deb-fc4356be75c4
-OS Name: Win32NT, OS Version: 10.0.19045.0
+2023-10-18 17:13:55
+Information
+Name of flashcard pack with ID cf8438f4-754c-4236-bf79-2ea60aa294df with was edited
+OS: Win32NT, Version: 10.0.19045.0
 
-Timestamp: 2023-10-18 16:05:23
-Level: Information
-Message: Flashcard with ID:8b3f6b5c-173c-4df7-8d2e-4e5f98646534 was removed from:e7473c26-dc5f-4b21-8e48-9267f051fd10pack
-OS Name: Win32NT, OS Version: 10.0.19045.0
+2023-10-18 17:14:25
+Information
+Flashcard with ID 0eecd1e7-81ad-44d1-a2eb-998b80ff9e22 was removed from pack with ID cf8438f4-754c-4236-bf79-2ea60aa294df
+OS: Win32NT, Version: 10.0.19045.0
+
+2023-10-18 17:14:36
+Information
+Flashcards were sorted by sort option DifficultyAsc
+OS: Win32NT, Version: 10.0.19045.0
+
+2023-10-18 17:14:44
+Information
+Flashcards were sorted by sort option DateDesc
+OS: Win32NT, Version: 10.0.19045.0
+
+2023-10-18 17:14:55
+Information
+Flashcard pack with ID f22bb0da-85ea-4335-b7a0-9b4c0b15a1d2 was added
+OS: Win32NT, Version: 10.0.19045.0
+
+2023-10-18 17:15:29
+Information
+Flashcards were sorted by sort option DateAsc
+OS: Win32NT, Version: 10.0.19045.0
 
