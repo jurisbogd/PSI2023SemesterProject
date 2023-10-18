@@ -24,14 +24,12 @@ public class LoggingService : ILoggingHandler
             var parameters = new UserParameters(os.Platform.ToString(), os.Version.ToString());
             var filePath = "log.txt";
 
-            using (StreamWriter writer = new StreamWriter(filePath, true))
-            {
-                writer.WriteLine($"Timestamp: {entry.TimeStamp}");
-                writer.WriteLine($"Level: {entry.Level}");
-                writer.WriteLine($"Message: {entry.Message}");
-                writer.WriteLine($"OS Name: {parameters.OSName}, OS Version: {parameters.OSVersion}");
-                writer.WriteLine();
-            }
+            using var writer = new StreamWriter(filePath, true);
+            writer.WriteLine(entry.TimeStamp);
+            writer.WriteLine(entry.Level);
+            writer.WriteLine(entry.Message);
+            writer.WriteLine($"OS: {parameters.OSName}, Version: {parameters.OSVersion}");
+            writer.WriteLine();
         }
         catch (Exception ex)
         {
