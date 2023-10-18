@@ -30,7 +30,7 @@
 			Question = question;
 			Answer = answer;
 			Difficulty = difficulty;
-			IsFavorite = IsFavorite;
+			IsFavorite = isFavorite;
 			CreationDate = DateTime.Now;
 		}
 
