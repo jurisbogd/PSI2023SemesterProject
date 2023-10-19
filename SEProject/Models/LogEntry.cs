@@ -12,7 +12,7 @@ public record LogEntry {
         LogLevel level = LogLevel.Information
     ) {
         Message = exception == null ? message : message + Environment.NewLine + exception;
-        TimeStamp = timeStamp == null ? DateTime.Now : (DateTime)timeStamp;
+        TimeStamp = timeStamp ?? DateTime.Now;
         Level = level;
     }
 }

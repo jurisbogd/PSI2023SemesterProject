@@ -1,21 +1,11 @@
+using SEProject.Models;
+
 namespace SEProject.Services;
 
 public class LoggingService : ILoggingHandler
 {
     private const string _logFilePath = "log.txt";
     private readonly List<LogEntry> _logEntries = new();
-
-    public struct UserParameters
-    {
-        public string OSName { get; set; }
-        public string OSVersion { get; set; }
-
-        public UserParameters(string osName, string osVersion)
-        {
-            OSName = osName;
-            OSVersion = osVersion;
-        }
-    }
 
     public void Log(LogEntry entry)
     {
