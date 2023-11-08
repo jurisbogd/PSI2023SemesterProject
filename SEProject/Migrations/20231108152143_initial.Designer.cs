@@ -12,8 +12,8 @@ using SEProject.Models;
 namespace SEProject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231107164920_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231108152143_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

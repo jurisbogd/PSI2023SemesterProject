@@ -14,7 +14,7 @@ builder.Services.AddScoped<IFlashcardPackDataHandler, FlashcardPackFileIOService
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseSqlServer("Server=LAPTOP-G14SEIVM\\SQLEXPRESS;Database=FlashcardDB;Trusted_Connection=True;TrustServerCertificate=True;");
+    options.UseSqlServer("Server=tcp:flashcard-db.database.windows.net,1433;Initial Catalog=FlashcardDB;Persist Security Info=False;User ID=serveradmin;Password=Lapkritis123+;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 });
 
 var app = builder.Build();
