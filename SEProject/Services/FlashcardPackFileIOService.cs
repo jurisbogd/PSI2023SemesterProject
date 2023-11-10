@@ -12,9 +12,9 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         this._context = context;
     }
 
-    public FlashcardPack<Flashcard> LoadFlashcardPack(Guid ID)
+    public FlashcardPack<Flashcard>? LoadFlashcardPack(Guid ID)
     {
-        FlashcardPack<Flashcard> flashcardPack = _context.FlashcardPacks
+        FlashcardPack<Flashcard>? flashcardPack = _context.FlashcardPacks
         .Include(pack => pack.Flashcards)
         .FirstOrDefault(pack => pack.ID == ID);
 
@@ -32,7 +32,9 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
 
     public void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack)
     {
-        var existingPack = _context.FlashcardPacks.FirstOrDefault(pack => pack.ID == flashcardPack.ID);
+        var existingPack = _context.FlashcardPacks
+            .FirstOrDefault(pack => pack.ID == flashcardPack.ID);
+
         if (existingPack == null)
         {
             _context.FlashcardPacks.Add(flashcardPack);

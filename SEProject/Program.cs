@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ILoggingHandler, LoggingService>();
 
+builder.Services.AddScoped<IFlashcardIOService, FlashcardIOService>();
 builder.Services.AddScoped<IFlashcardPackDataHandler, FlashcardPackFileIOService>();
 
 builder.Services.AddDbContext<DatabaseContext>(options =>

@@ -7,11 +7,14 @@ namespace SEProject.Controllers
     public class FlashcardPackController : Controller
     {
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
+        private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
 
-        public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, ILoggingHandler logger)
+        public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, 
+            IFlashcardIOService flashcardIOService, ILoggingHandler logger)
         {
             _flashcardPackDataHandler = flashcardPackDataHandler;
+            _flashcardIOService = flashcardIOService;
             _logger = logger;
         }
 
@@ -83,13 +86,8 @@ namespace SEProject.Controllers
         {
             try
             {
-                var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-                var flashcardPackToBeChanged = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
-
-                if (flashcardPackToBeChanged == null)
-                {
-                    return NotFound(); // Handle the case when the pack is not found
-                }
+                var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPacks()
+                    .FirstOrDefault(fpack => fpack.ID == id);
 
                 if (ModelState.IsValid)
                 {
@@ -103,11 +101,7 @@ namespace SEProject.Controllers
                         Difficulty = viewModel.Difficulty
                     };
 
-                    // Add the new flashcard to the pack
-                    flashcardPackToBeChanged.Flashcards.Add(newFlashcard);
-
-                    // Save the updated pack of flashcards to the JSON file
-                    _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToBeChanged);
+                    _flashcardIOService.SaveFlashcard(newFlashcard);
 
                     // Create a log entry for the successful addition
                     var logEntry = new LogEntry(
@@ -118,11 +112,11 @@ namespace SEProject.Controllers
                     _logger.Log(logEntry);
 
                     // Redirect to the view that displays the pack of flashcards
-                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardPackToBeChanged.ID });
+                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
                 }
 
                 // If the model is not valid, return to the form view with validation errors
-                return View(flashcardPackToBeChanged);
+                return View(flashcardPack);
             }
             catch (Exception ex)
             {
@@ -156,14 +150,9 @@ namespace SEProject.Controllers
         {
             var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(packID);
 
-            var indexToRemove = flashcardPack.Flashcards.FindIndex(flashcard => flashcard.ID == flashcardID);
+            var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
 
-            if (indexToRemove >= 0)
-            {
-                flashcardPack.Flashcards.RemoveAt(indexToRemove);
-
-                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPack);
-            }
+            _flashcardIOService.RemoveFlashcard(flashcardToRemove);
 
             var logEntry = new LogEntry(message: $"Flashcard with ID {flashcardID} was removed from pack with ID {packID}");
             _logger.Log(logEntry);
@@ -184,7 +173,7 @@ namespace SEProject.Controllers
             return View(flashcardToEdit);
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public IActionResult EditFlashcard(Flashcard editedFlashcard)
         {
             var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
@@ -192,18 +181,13 @@ namespace SEProject.Controllers
                 .SelectMany(p => p.Flashcards)
                 .FirstOrDefault(f => f.ID == editedFlashcard.ID);
 
-            if (flashcardToEdit == null)
-            {
-                return NotFound(); // Flashcard not found, return a 404 response
-            }
-
             if (ModelState.IsValid)
             {
                 flashcardToEdit.Question = editedFlashcard.Question;
                 flashcardToEdit.Answer = editedFlashcard.Answer;
                 flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
 
-                _flashcardPackDataHandler.SaveFlashcardPacks(allFlashcardPacks);
+                _flashcardIOService.SaveFlashcard(flashcardToEdit);
 
                 // Redirect to the view that displays the flashcards
                 return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
@@ -214,7 +198,7 @@ namespace SEProject.Controllers
 
             // If the model is not valid, return to the form view with validation errors
             return View(flashcardToEdit);
-        }*/
+        }
 
         [HttpPost]
         public IActionResult EditFlashcardPackName(Guid id, string newName)
