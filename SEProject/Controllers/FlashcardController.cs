@@ -110,7 +110,7 @@ namespace SEProject.Controllers
             return View(flashcardToEdit);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult EditFlashcard(Flashcard editedFlashcard)
         {
             var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
@@ -138,7 +138,7 @@ namespace SEProject.Controllers
 
             // If the model is not valid, return to the form view with validation errors
             return View(flashcardToEdit);
-        }
+        }*/
 
         [HttpPost]
         public IActionResult SortFlashcards(Guid flashcardPackID, string sortOption)

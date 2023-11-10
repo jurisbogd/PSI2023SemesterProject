@@ -184,11 +184,13 @@ namespace SEProject.Controllers
             return View(flashcardToEdit);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult EditFlashcard(Flashcard editedFlashcard)
         {
             var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-            var flashcardToEdit = allFlashcardPacks.SelectMany(p => p.Flashcards).FirstOrDefault(f => f.ID == editedFlashcard.ID);
+            var flashcardToEdit = allFlashcardPacks
+                .SelectMany(p => p.Flashcards)
+                .FirstOrDefault(f => f.ID == editedFlashcard.ID);
 
             if (flashcardToEdit == null)
             {
@@ -212,7 +214,7 @@ namespace SEProject.Controllers
 
             // If the model is not valid, return to the form view with validation errors
             return View(flashcardToEdit);
-        }
+        }*/
 
         [HttpPost]
         public IActionResult EditFlashcardPackName(Guid id, string newName)
