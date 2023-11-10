@@ -11,6 +11,13 @@ namespace SEProject.Models
         {
             
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FlashcardPack<Flashcard>>()
+                .HasMany(pack => pack.Flashcards)
+                .WithOne()
+                .HasForeignKey(flashcard => flashcard.PackID);
+        }
 
     }
 }
