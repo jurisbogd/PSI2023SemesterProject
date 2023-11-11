@@ -43,7 +43,6 @@ namespace SEProject.Controllers
                     // Add the new flashcard to the pack
                     flashcardPackToBeChanged.Flashcards.Add(newFlashcard);
 
-                    // Save the updated pack of flashcards to the JSON file
                     _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToBeChanged);
 
                     // Create a log entry for the successful addition
