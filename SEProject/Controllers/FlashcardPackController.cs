@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SEProject.Models;
 using SEProject.Services;
+using SEProject;
 
 namespace SEProject.Controllers
 {
     public class FlashcardPackController : Controller
     {
+        Func<FlashcardPack<Flashcard>, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
         private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
@@ -60,7 +62,7 @@ namespace SEProject.Controllers
                 // Log the entry using the injected logger
                 _logger.Log(logEntry);
 
-                _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
+                _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack, FlashcardPackIDValidation);
 
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
@@ -220,7 +222,7 @@ namespace SEProject.Controllers
                 flashcardPackToEdit.Name = newName;
 
                 // Save the updated flashcard pack
-                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit);
+                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit, FlashcardPackIDValidation);
             }
 
             var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");

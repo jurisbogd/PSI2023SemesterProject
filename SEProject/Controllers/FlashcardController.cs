@@ -6,6 +6,7 @@ namespace SEProject.Controllers
 {
     public class FlashcardController : Controller
     {
+        Func<FlashcardPack<Flashcard>, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
         private readonly ILoggingHandler _logger;
 
@@ -43,7 +44,7 @@ namespace SEProject.Controllers
                     // Add the new flashcard to the pack
                     flashcardPackToBeChanged.Flashcards.Add(newFlashcard);
 
-                    _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToBeChanged);
+                    _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToBeChanged, FlashcardPackIDValidation);
 
                     // Create a log entry for the successful addition
                     var logEntry = new LogEntry(
@@ -87,7 +88,7 @@ namespace SEProject.Controllers
             {
                 flashcardPack.Flashcards.RemoveAt(indexToRemove);
 
-                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPack);
+                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPack, FlashcardPackIDValidation);
             }
 
             var logEntry = new LogEntry(message: $"Flashcard with ID {flashcardID} was removed from pack with ID {packID}");
@@ -108,36 +109,6 @@ namespace SEProject.Controllers
             var flashcardToEdit = flashcardPack.Flashcards.First(f => f.ID == flashcardID);
             return View(flashcardToEdit);
         }
-
-        /*[HttpPost]
-        public IActionResult EditFlashcard(Flashcard editedFlashcard)
-        {
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-            var flashcardToEdit = allFlashcardPacks.SelectMany(p => p.Flashcards).FirstOrDefault(f => f.ID == editedFlashcard.ID);
-
-            if (flashcardToEdit == null)
-            {
-                return NotFound(); // Flashcard not found, return a 404 response
-            }
-
-            if (ModelState.IsValid)
-            {
-                flashcardToEdit.Question = editedFlashcard.Question;
-                flashcardToEdit.Answer = editedFlashcard.Answer;
-                flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
-
-                _flashcardPackDataHandler.SaveFlashcardPacks(allFlashcardPacks);
-
-                // Redirect to the view that displays the flashcards
-                return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
-            }
-
-            var logEntry = new LogEntry(message: $"Flashcard with ID {editedFlashcard.ID} was edited");
-            _logger.Log(logEntry);
-
-            // If the model is not valid, return to the form view with validation errors
-            return View(flashcardToEdit);
-        }*/
 
         [HttpPost]
         public IActionResult SortFlashcards(Guid flashcardPackID, string sortOption)

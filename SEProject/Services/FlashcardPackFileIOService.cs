@@ -30,7 +30,7 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         return flashcardPacks;
     }
 
-    public void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack)
+    public void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack, Func<FlashcardPack<Flashcard>, bool> validationFunction = null)
     {
         var existingPack = _context.FlashcardPacks
             .FirstOrDefault(pack => pack.ID == flashcardPack.ID);
