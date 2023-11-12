@@ -18,17 +18,17 @@ namespace SEProject.Controllers
             _logger = logger;
         }
 
-        public IActionResult CreateSampleFlashcardPack(string name)
+        public async Task<IActionResult> CreateSampleFlashcardPack(string name)
         {
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
 
             return View(allFlashcardPacks);
         }
 
 
-        public IActionResult ViewFlashcardPack(Guid id)
+        public async Task<IActionResult> ViewFlashcardPack(Guid id)
         {
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
             var flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
 
             if (flashcardPackToView == null)
@@ -40,7 +40,7 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddFlashcardPack(string name)
+        public async Task<IActionResult> AddFlashcardPack(string name)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace SEProject.Controllers
                 // Log the entry using the injected logger
                 _logger.Log(logEntry);
 
-                _flashcardPackDataHandler.SaveFlashcardPack(newFlashcardPack);
+                await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack);
 
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
@@ -82,12 +82,12 @@ namespace SEProject.Controllers
 
 
         [HttpPost]
-        public IActionResult AddFlashcardToPack(Flashcard viewModel, Guid id)
+        public async Task<IActionResult> AddFlashcardToPack(Flashcard viewModel, Guid id)
         {
             try
             {
-                var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPacks()
-                    .FirstOrDefault(fpack => fpack.ID == id);
+                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                var flashcardPack = flashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
 
                 if (ModelState.IsValid)
                 {
@@ -101,7 +101,7 @@ namespace SEProject.Controllers
                         Difficulty = viewModel.Difficulty
                     };
 
-                    _flashcardIOService.SaveFlashcard(newFlashcard);
+                    await _flashcardIOService.SaveFlashcard(newFlashcard);
 
                     // Create a log entry for the successful addition
                     var logEntry = new LogEntry(
@@ -135,9 +135,9 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveFlashcardPack(Guid flashcardPackID)
+        public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID)
         {
-            _flashcardPackDataHandler.RemoveFlashcardPack(flashcardPackID);
+            await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
 
             var logEntry = new LogEntry(message: $"Flashcard pack with ID {flashcardPackID} was removed");
             _logger.Log(logEntry);
@@ -146,13 +146,13 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
+        public async Task<IActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
         {
-            var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(packID);
+            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(packID);
 
             var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
 
-            _flashcardIOService.RemoveFlashcard(flashcardToRemove);
+            await _flashcardIOService.RemoveFlashcard(flashcardToRemove);
 
             var logEntry = new LogEntry(message: $"Flashcard with ID {flashcardID} was removed from pack with ID {packID}");
             _logger.Log(logEntry);
@@ -162,9 +162,11 @@ namespace SEProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditFlashcard(Guid flashcardID)
+        public async Task<IActionResult> EditFlashcard(Guid flashcardID)
         {
-            var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPacks().FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
+            var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+            var flashcardPack = flashcardPacks.FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
+            
             if (flashcardPack == null)
             {
                 return NotFound();
@@ -174,9 +176,9 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditFlashcard(Flashcard editedFlashcard)
+        public async Task<IActionResult> EditFlashcard(Flashcard editedFlashcard)
         {
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
             var flashcardToEdit = allFlashcardPacks
                 .SelectMany(p => p.Flashcards)
                 .FirstOrDefault(f => f.ID == editedFlashcard.ID);
@@ -187,7 +189,7 @@ namespace SEProject.Controllers
                 flashcardToEdit.Answer = editedFlashcard.Answer;
                 flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
 
-                _flashcardIOService.SaveFlashcard(flashcardToEdit);
+                await _flashcardIOService.SaveFlashcard(flashcardToEdit);
 
                 // Redirect to the view that displays the flashcards
                 return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
@@ -201,10 +203,10 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditFlashcardPackName(Guid id, string newName)
+        public async Task<IActionResult> EditFlashcardPackName(Guid id, string newName)
         {
             // Get the list of all flashcard packs
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
+            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
 
             // Find the flashcard pack with the specified ID
             var flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
@@ -220,7 +222,7 @@ namespace SEProject.Controllers
                 flashcardPackToEdit.Name = newName;
 
                 // Save the updated flashcard pack
-                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToEdit);
+                await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit);
             }
 
             var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");
@@ -231,10 +233,10 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult SortFlashcards(Guid flashcardPackID, string sortOption)
+        public async Task<IActionResult> SortFlashcards(Guid flashcardPackID, string sortOption)
         {
             FlashcardComparer? comparer = null;
-            var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(flashcardPackID);
+            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(flashcardPackID);
             var flashcardsInPack = flashcardPack.Flashcards;
             var sortedFlashcards = new List<Flashcard>();
 

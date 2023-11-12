@@ -4,7 +4,7 @@ namespace SEProject.Services;
 
 public interface IFlashcardIOService
 {
-    public void SaveFlashcard(Flashcard flashcard);
-    public void RemoveFlashcard(Flashcard flashcard);
+    Task SaveFlashcard(Flashcard flashcard);
+    Task RemoveFlashcard(Flashcard flashcard);
 }
 

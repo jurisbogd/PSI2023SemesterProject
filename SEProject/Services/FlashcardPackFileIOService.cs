@@ -12,28 +12,28 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         this._context = context;
     }
 
-    public FlashcardPack<Flashcard>? LoadFlashcardPack(Guid ID)
+    public async Task<FlashcardPack<Flashcard>>? LoadFlashcardPackAsync(Guid ID)
     {
-        FlashcardPack<Flashcard>? flashcardPack = _context.FlashcardPacks
-        .Include(pack => pack.Flashcards)
-        .FirstOrDefault(pack => pack.ID == ID);
+        FlashcardPack<Flashcard>? flashcardPack = await _context.FlashcardPacks
+            .Include(pack => pack.Flashcards)
+            .FirstOrDefaultAsync(pack => pack.ID == ID);
 
         return flashcardPack;
     }
 
-    public List<FlashcardPack<Flashcard>> LoadFlashcardPacks()
+    public async Task<List<FlashcardPack<Flashcard>>> LoadFlashcardPacksAsync()
     {
-        List<FlashcardPack<Flashcard>> flashcardPacks = _context.FlashcardPacks
+        List<FlashcardPack<Flashcard>> flashcardPacks = await _context.FlashcardPacks
         .Include(pack => pack.Flashcards)
-        .ToList();
+        .ToListAsync();
 
         return flashcardPacks;
     }
 
-    public void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack)
+    public async Task SaveFlashcardPackAsync(FlashcardPack<Flashcard> flashcardPack)
     {
-        var existingPack = _context.FlashcardPacks
-            .FirstOrDefault(pack => pack.ID == flashcardPack.ID);
+        var existingPack = await _context.FlashcardPacks
+            .FirstOrDefaultAsync(pack => pack.ID == flashcardPack.ID);
 
         if (existingPack == null)
         {
@@ -43,17 +43,17 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         {
             existingPack.Name = flashcardPack.Name;
         }
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public void RemoveFlashcardPack(Guid ID)
+    public async Task RemoveFlashcardPackAsync(Guid ID)
     {
-        var packToDelete = _context.FlashcardPacks
+        var packToDelete = await _context.FlashcardPacks
         .Include(pack => pack.Flashcards)
-        .FirstOrDefault(pack => pack.ID == ID);
+        .FirstOrDefaultAsync(pack => pack.ID == ID);
 
         _context.FlashcardPacks.Remove(packToDelete);
         _context.Flashcards.RemoveRange(packToDelete.Flashcards);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }

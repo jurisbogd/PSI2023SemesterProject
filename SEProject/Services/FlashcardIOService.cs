@@ -11,10 +11,10 @@ public class FlashcardIOService : IFlashcardIOService
         this._context = context;
     }
 
-    public void SaveFlashcard(Flashcard flashcard)
+    public async Task SaveFlashcard(Flashcard flashcard)
     {
-        var existingFlashcard = _context.Flashcards
-            .FirstOrDefault(card => card.ID == flashcard.ID);
+        var existingFlashcard = await _context.Flashcards
+            .FirstOrDefaultAsync(card => card.ID == flashcard.ID);
         if(existingFlashcard == null) 
         { 
             _context.Flashcards.Add(flashcard);
@@ -27,15 +27,15 @@ public class FlashcardIOService : IFlashcardIOService
                 property.SetValue(existingFlashcard, newValue);
             }
         }
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
-
-    public void RemoveFlashcard(Flashcard flashcard)
+        
+    public async Task RemoveFlashcard(Flashcard flashcard)
     {
-        var flashcardToRemove = _context.Flashcards
-            .FirstOrDefault(card => card.ID == flashcard.ID);
+        var flashcardToRemove = await _context.Flashcards
+            .FirstOrDefaultAsync(card => card.ID == flashcard.ID);
         _context.Remove(flashcardToRemove);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
 }

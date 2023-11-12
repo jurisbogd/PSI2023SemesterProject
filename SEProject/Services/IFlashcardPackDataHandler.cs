@@ -4,8 +4,8 @@ namespace SEProject.Services;
 
 public interface IFlashcardPackDataHandler
 {
-    FlashcardPack<Flashcard> LoadFlashcardPack(Guid ID);
-    List<FlashcardPack<Flashcard>> LoadFlashcardPacks();
-    void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack);
-    void RemoveFlashcardPack(Guid ID);
+    Task<FlashcardPack<Flashcard>>? LoadFlashcardPackAsync(Guid ID);
+    Task<List<FlashcardPack<Flashcard>>> LoadFlashcardPacksAsync();
+    Task SaveFlashcardPackAsync(FlashcardPack<Flashcard> flashcardPack);
+    Task RemoveFlashcardPackAsync(Guid ID);
 }
