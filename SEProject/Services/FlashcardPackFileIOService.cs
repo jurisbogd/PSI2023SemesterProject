@@ -32,6 +32,11 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
 
     public void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack, Func<FlashcardPack<Flashcard>, bool> validationFunction = null)
     {
+        if (validationFunction != null && !validationFunction(flashcardPack))
+        {
+            // Validation failed, do not save the flashcard
+            return;
+        }
         var existingPack = _context.FlashcardPacks
             .FirstOrDefault(pack => pack.ID == flashcardPack.ID);
 
