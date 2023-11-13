@@ -188,3 +188,13 @@ Information
 Flashcard pack with ID bc9ea82e-50a7-4e72-823c-2dfb84264df5 was removed
 OS: Unix, Version: 14.0.0
 
+13/11/2023 17:37:52
+Information
+Flashcard with ID 4cbd1870-930f-421c-9f7d-d998610e631e was added to pack with ID d94b4de0-4c96-42a6-86aa-819006b4a9fb
+OS: Unix, Version: 14.0.0
+
+13/11/2023 17:38:04
+Information
+Flashcard with ID 4cbd1870-930f-421c-9f7d-d998610e631e was removed from pack with ID d94b4de0-4c96-42a6-86aa-819006b4a9fb
+OS: Unix, Version: 14.0.0
+
