@@ -21,6 +21,7 @@ namespace SEProject.Controllers
             return View("PresentFlashcard", flashcards.First());
         }
 
+        [HttpPost]
         public async Task<ActionResult> PresentNextFlashcard(Guid packID, Guid currentFlashcardID)
         {
             List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
@@ -36,6 +37,12 @@ namespace SEProject.Controllers
 
             return RedirectToAction("PresentFlashard");
         }
+
+        /*[HttpPost]
+        public IActionResult RevealAnswer(Guid ID)
+        {
+
+        }*/
 
     }
 }
