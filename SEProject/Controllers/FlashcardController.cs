@@ -35,7 +35,7 @@ namespace SEProject.Controllers
                 return View("PresentFlashcard", flashcards[currentFlashcardIndex + 1]);
             }
 
-            return RedirectToAction("PresentFlashard");
+            return RedirectToAction("PresentFlashcard");
         }
 
         /*[HttpPost]

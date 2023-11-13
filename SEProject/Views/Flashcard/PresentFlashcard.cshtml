@@ -19,6 +19,12 @@
     </div>
     <form id="revealForm">
         <button id="revealButton" class="reveal-button">Reveal</button>
+        
+    </form>
+    <form id="NextFlashcardForm" action="PresentNextFlashcard" method="post">
+        <input type="hidden" name="packID" value=@Model.PackID />
+        <input type="hidden" name="currentFlashcardID" value=@Model.ID />
+        <button id="arrowButton" class="arrow"></button>
     </form>
 
     <script src="~/js/presentFlashcard.js"></script>
