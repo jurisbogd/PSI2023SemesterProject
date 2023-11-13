@@ -33,8 +33,8 @@
     position: relative;
     word-wrap: break-word;
     white-space: normal;
-    overflow-y: auto; /* Allow vertical scrolling if content overflows */
-    height: 100%; /* Set a fixed height for the flashcard */
+    overflow-y: auto;
+    height: 80%;
 }
 
 #revealForm {
