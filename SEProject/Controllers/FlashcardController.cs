@@ -37,7 +37,7 @@ namespace SEProject.Controllers
             // Return to flashcardPacks page if there are no more flashcards to present
             else
             {
-                return RedirectToAction("CreateSampleFlashcardPack", "FlashcardPack");
+                return RedirectToAction("ViewFlashcardPack", "FlashcardPack", new { id = packID });
             }
         }
     }
