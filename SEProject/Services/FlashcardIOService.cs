@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SEProject.Models;
 
+#pragma warning disable 8981 // Disable warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)
 namespace SEProject.Services;
 public class FlashcardIOService : IFlashcardIOService
 {
@@ -49,3 +50,4 @@ public class FlashcardIOService : IFlashcardIOService
     }
 
 }
+#pragma warning restore 8981 // Restore warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)
