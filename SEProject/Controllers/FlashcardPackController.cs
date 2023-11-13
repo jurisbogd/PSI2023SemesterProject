@@ -126,7 +126,7 @@ namespace SEProject.Controllers
                     _logger.Log(logEntry);
 
                     // Redirect to the view that displays the pack of flashcards
-                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
+                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack!.ID });
                 }
 
                 // If the model is not valid, return to the form view with validation errors
@@ -159,11 +159,11 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
         {
-            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(packID);
+            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(packID)!;
 
             var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
 
-            await _flashcardIOService.RemoveFlashcard(flashcardToRemove);
+            await _flashcardIOService.RemoveFlashcard(flashcardToRemove!);
 
             var logEntry = new LogEntry(message: $"Flashcard with ID {flashcardID} was removed from pack with ID {packID}");
             _logger.Log(logEntry);

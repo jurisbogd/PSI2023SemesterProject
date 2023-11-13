@@ -45,7 +45,7 @@ public class FlashcardIOService : IFlashcardIOService
     {
         var flashcardToRemove = await _context.Flashcards
             .FirstOrDefaultAsync(card => card.ID == flashcard.ID);
-        _context.Remove(flashcardToRemove);
+        _context.Remove(flashcardToRemove!);
         await _context.SaveChangesAsync();
     }
 

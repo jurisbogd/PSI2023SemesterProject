@@ -57,8 +57,8 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         .Include(pack => pack.Flashcards)
         .FirstOrDefaultAsync(pack => pack.ID == ID);
 
-        _context.FlashcardPacks.Remove(packToDelete);
-        _context.Flashcards.RemoveRange(packToDelete.Flashcards);
+        _context.FlashcardPacks.Remove(packToDelete!);
+        _context.Flashcards.RemoveRange(packToDelete.Flashcards!);
         await _context.SaveChangesAsync();
     }
 }

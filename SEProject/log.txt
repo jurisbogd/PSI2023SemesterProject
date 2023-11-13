@@ -198,3 +198,18 @@ Information
 Flashcard with ID 0be051af-ff49-4bcc-b743-91cdf5383cd1 was removed from pack with ID 1b1d160a-e64d-4a36-9de3-aec918a49d97
 OS: Unix, Version: 14.0.0
 
+13/11/2023 18:59:25
+Information
+Flashcard with ID c73db0d5-6144-4f41-8b5d-3e116804e7fd was added to pack with ID 1b1d160a-e64d-4a36-9de3-aec918a49d97
+OS: Unix, Version: 14.0.0
+
+13/11/2023 18:59:33
+Information
+Flashcard with ID c73db0d5-6144-4f41-8b5d-3e116804e7fd was removed from pack with ID 1b1d160a-e64d-4a36-9de3-aec918a49d97
+OS: Unix, Version: 14.0.0
+
+13/11/2023 18:59:35
+Information
+Flashcard pack with ID 1b1d160a-e64d-4a36-9de3-aec918a49d97 was removed
+OS: Unix, Version: 14.0.0
+

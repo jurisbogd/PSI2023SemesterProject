@@ -26,7 +26,7 @@ namespace SEProject.Controllers
         {
             List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
 
-            Flashcard currentFlashcard = flashcards.FirstOrDefault(f => f.ID == currentFlashcardID);
+            Flashcard currentFlashcard = flashcards.FirstOrDefault(f => f.ID == currentFlashcardID)!;
 
             int currentFlashcardIndex = flashcards.IndexOf(currentFlashcard);
 
