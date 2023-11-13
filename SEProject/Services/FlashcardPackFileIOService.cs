@@ -1,66 +1,59 @@
-﻿using SEProject.Models;
-using System.Text.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using SEProject.Models;
 
 namespace SEProject.Services;
 
 public class FlashcardPackFileIOService : IFlashcardPackDataHandler
 {
-    private readonly string _flashcardPackPath = @"Data/FlashcardPacks/";
-    private readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };
 
-    public FlashcardPack<Flashcard> LoadFlashcardPack(Guid id)
+    private DatabaseContext _context;
+    public FlashcardPackFileIOService(DatabaseContext context)
     {
-        var filepath = _flashcardPackPath + id.ToString() + ".json";
-        return LoadFlashcardPack(filepath);
+        this._context = context;
     }
 
-    private FlashcardPack<Flashcard> LoadFlashcardPack(string filepath)
+    public async Task<FlashcardPack<Flashcard>>? LoadFlashcardPackAsync(Guid ID)
     {
-        if (File.Exists(filepath))
-        {
-            using FileStream fileStream = File.OpenRead(filepath);
-            return fileStream.Deserialize<FlashcardPack<Flashcard>>()
-                ?? throw new Exception("Failed to deserialize the FlashcardPack.");
-        }
-        else
-        {
-            throw new FileNotFoundException("Flashcard pack file not found.");
-        }
+        FlashcardPack<Flashcard>? flashcardPack = await _context.FlashcardPacks
+            .Include(pack => pack.Flashcards)
+            .FirstOrDefaultAsync(pack => pack.ID == ID);
+
+        return flashcardPack;
     }
 
-    public List<FlashcardPack<Flashcard>> LoadFlashcardPacks()
+    public async Task<List<FlashcardPack<Flashcard>>> LoadFlashcardPacksAsync()
     {
-        var flashcardPackFilepaths = Directory.GetFiles(_flashcardPackPath);
-        var flashcardPacks = new List<FlashcardPack<Flashcard>>();
-
-        foreach (var filepath in flashcardPackFilepaths)
-        {
-            flashcardPacks.Add(LoadFlashcardPack(filepath));
-        }
+        List<FlashcardPack<Flashcard>> flashcardPacks = await _context.FlashcardPacks
+        .Include(pack => pack.Flashcards)
+        .ToListAsync();
 
         return flashcardPacks;
     }
 
-    public void SaveFlashcardPack(FlashcardPack<Flashcard> flashcardPack)
+    public async Task SaveFlashcardPackAsync(FlashcardPack<Flashcard> flashcardPack)
     {
-        var filepath = _flashcardPackPath + flashcardPack.ID.ToString() + ".json";
+        var existingPack = await _context.FlashcardPacks
+            .FirstOrDefaultAsync(pack => pack.ID == flashcardPack.ID);
 
-        using var fileStream = File.Create(filepath);
-        fileStream.Serialize(flashcardPack, _jsonSerializerOptions);
-    }
-
-
-    public void SaveFlashcardPacks(List<FlashcardPack<Flashcard>> flashcardPacks)
-    {
-        foreach (var flashcardPack in flashcardPacks)
+        if (existingPack == null)
         {
-            SaveFlashcardPack(flashcardPack);
+            _context.FlashcardPacks.Add(flashcardPack);
         }
+        else
+        {
+            existingPack.Name = flashcardPack.Name;
+        }
+        await _context.SaveChangesAsync();
     }
 
-    public void RemoveFlashcardPack(Guid IDToRemove)
+    public async Task RemoveFlashcardPackAsync(Guid ID)
     {
-        var filepath = _flashcardPackPath + IDToRemove.ToString() + ".json";
-        File.Delete(filepath);
+        var packToDelete = await _context.FlashcardPacks
+        .Include(pack => pack.Flashcards)
+        .FirstOrDefaultAsync(pack => pack.ID == ID);
+
+        _context.FlashcardPacks.Remove(packToDelete);
+        _context.Flashcards.RemoveRange(packToDelete.Flashcards);
+        await _context.SaveChangesAsync();
     }
 }

@@ -6,183 +6,43 @@ namespace SEProject.Controllers
 {
     public class FlashcardController : Controller
     {
-        private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
-        private readonly ILoggingHandler _logger;
+        private readonly IFlashcardIOService _flashcardIOService;
 
-        public FlashcardController(IFlashcardPackDataHandler flashcardPackDataHandler, ILoggingHandler logger)
+        public FlashcardController(IFlashcardIOService flashcardIOService)
         {
-            _flashcardPackDataHandler = flashcardPackDataHandler;
-            _logger = logger;
+            _flashcardIOService = flashcardIOService;
         }
 
         [HttpPost]
-        public IActionResult AddFlashcardToPack(Flashcard viewModel, Guid id)
+        public async Task<ActionResult> PresentFlashcard(Guid packID)
         {
-            try
-            {
-                var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-                var flashcardPackToBeChanged = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
+            List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
 
-                if (flashcardPackToBeChanged == null)
-                {
-                    return NotFound(); // Handle the case when the pack is not found
-                }
-
-                if (ModelState.IsValid)
-                {
-                    // Create a new Flashcard object from the form data
-                    var newFlashcard = new Flashcard
-                    {
-                        PackID = id,
-                        ID = Guid.NewGuid(),
-                        Question = viewModel.Question,
-                        Answer = viewModel.Answer,
-                        Difficulty = viewModel.Difficulty
-                    };
-
-                    // Add the new flashcard to the pack
-                    flashcardPackToBeChanged.Flashcards.Add(newFlashcard);
-
-                    // Save the updated pack of flashcards to the JSON file
-                    _flashcardPackDataHandler.SaveFlashcardPack(flashcardPackToBeChanged);
-
-                    // Create a log entry for the successful addition
-                    var logEntry = new LogEntry(
-                        message: $"Flashcard with ID {newFlashcard.ID} was added to pack with ID {id}",
-                        level: LogLevel.Information
-                    );
-
-                    _logger.Log(logEntry);
-
-                    // Redirect to the view that displays the pack of flashcards
-                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardPackToBeChanged.ID });
-                }
-
-                // If the model is not valid, return to the form view with validation errors
-                return View(flashcardPackToBeChanged);
-            }
-            catch (Exception ex)
-            {
-                // Handle the exception and log an error message with the exception details
-                var logEntry = new LogEntry(
-                    message: "Error while adding a flashcard to the pack",
-                    exception: ex,
-                    level: LogLevel.Error
-                );
-
-                _logger.Log(logEntry);
-
-                // You can also handle the exception further or return an error view
-                return View("Error", ex);
-            }
+            return View("PresentFlashcard", flashcards.First());
         }
 
         [HttpPost]
-        public IActionResult RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
+        public async Task<ActionResult> PresentNextFlashcard(Guid packID, Guid currentFlashcardID)
         {
-            var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(packID);
+            List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
 
-            var indexToRemove = flashcardPack.Flashcards.FindIndex(flashcard => flashcard.ID == flashcardID);
+            Flashcard currentFlashcard = flashcards.FirstOrDefault(f => f.ID == currentFlashcardID);
 
-            if (indexToRemove >= 0)
+            int currentFlashcardIndex = flashcards.IndexOf(currentFlashcard);
+
+            if(currentFlashcardIndex >= 0 && currentFlashcardIndex < flashcards.Count() - 1)
             {
-                flashcardPack.Flashcards.RemoveAt(indexToRemove);
-
-                _flashcardPackDataHandler.SaveFlashcardPack(flashcardPack);
+                return View("PresentFlashcard", flashcards[currentFlashcardIndex + 1]);
             }
 
-            var logEntry = new LogEntry(message: $"Flashcard with ID {flashcardID} was removed from pack with ID {packID}");
-            _logger.Log(logEntry);
-
-            // Redirect to the view that displays the pack of flashcards
-            return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
+            return RedirectToAction("PresentFlashcard");
         }
 
-        [HttpGet]
-        public IActionResult EditFlashcard(Guid flashcardID)
+        /*[HttpPost]
+        public IActionResult RevealAnswer(Guid ID)
         {
-            var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPacks().FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
-            if (flashcardPack == null)
-            {
-                return NotFound();
-            }
-            var flashcardToEdit = flashcardPack.Flashcards.First(f => f.ID == flashcardID);
-            return View(flashcardToEdit);
-        }
 
-        [HttpPost]
-        public IActionResult EditFlashcard(Flashcard editedFlashcard)
-        {
-            var allFlashcardPacks = _flashcardPackDataHandler.LoadFlashcardPacks();
-            var flashcardToEdit = allFlashcardPacks.SelectMany(p => p.Flashcards).FirstOrDefault(f => f.ID == editedFlashcard.ID);
+        }*/
 
-            if (flashcardToEdit == null)
-            {
-                return NotFound(); // Flashcard not found, return a 404 response
-            }
-
-            if (ModelState.IsValid)
-            {
-                flashcardToEdit.Question = editedFlashcard.Question;
-                flashcardToEdit.Answer = editedFlashcard.Answer;
-                flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
-
-                _flashcardPackDataHandler.SaveFlashcardPacks(allFlashcardPacks);
-
-                // Redirect to the view that displays the flashcards
-                return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
-            }
-
-            var logEntry = new LogEntry(message: $"Flashcard with ID {editedFlashcard.ID} was edited");
-            _logger.Log(logEntry);
-
-            // If the model is not valid, return to the form view with validation errors
-            return View(flashcardToEdit);
-        }
-
-        [HttpPost]
-        public IActionResult SortFlashcards(Guid flashcardPackID, string sortOption)
-        {
-            FlashcardComparer? comparer = null;
-            var flashcardPack = _flashcardPackDataHandler.LoadFlashcardPack(flashcardPackID);
-            var flashcardsInPack = flashcardPack.Flashcards;
-            var sortedFlashcards = new List<Flashcard>();
-
-            // Checks what sort of comparison will be done and creates that type of object.
-            switch (sortOption)
-            {
-                case "DateAsc":
-                case "DateDesc":
-                    comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
-                    break;
-                case "DifficultyAsc":
-                case "DifficultyDesc":
-                    comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
-                    break;
-                default:
-                    sortedFlashcards = flashcardsInPack;
-                    break;
-            }
-
-            // Compares by Ascending or Descending, depending on sortOption ending.
-            if (comparer != null)
-            {
-                if (sortOption.EndsWith("Asc"))
-                {
-                    sortedFlashcards = flashcardsInPack.OrderBy(flashcard => flashcard, comparer).ToList();
-                }
-                else if (sortOption.EndsWith("Desc"))
-                {
-                    sortedFlashcards = flashcardsInPack.OrderByDescending(flashcard => flashcard, comparer).ToList();
-                }
-            }
-
-            var logEntry = new LogEntry(message: $"Flashcards were sorted by sort option {sortOption}");
-            _logger.Log(logEntry);
-
-            var newPack = flashcardPack.CloneWithNewFlashcards(sortedFlashcards);
-
-            return View("ViewFlashcardPack", newPack);
-        }
     }
 }

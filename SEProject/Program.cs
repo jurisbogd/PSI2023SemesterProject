@@ -1,4 +1,8 @@
-﻿using SEProject.Services;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using SEProject.Models;
+
+using SEProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ILoggingHandler, LoggingService>();
 
+builder.Services.AddScoped<IFlashcardIOService, FlashcardIOService>();
 builder.Services.AddScoped<IFlashcardPackDataHandler, FlashcardPackFileIOService>();
+
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlServer("Server=tcp:flashcard-db.database.windows.net,1433;Initial Catalog=FlashcardDB;Persist Security Info=False;User ID=serveradmin;Password=Lapkritis123+;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+});
 
 var app = builder.Build();
 

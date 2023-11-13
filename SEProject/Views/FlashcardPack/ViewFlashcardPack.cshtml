@@ -39,6 +39,10 @@
                     </form>
                 </div>
             </div>
+            <form method="post" action="@Url.Action("PresentFlashcard", "Flashcard")">
+                <input type="hidden" name="packID" value="@Model.ID"/>
+                <button id="presentFlashcardButton" class="reveal-button">Present</button>
+            </form>
         </div>
     </div>
 

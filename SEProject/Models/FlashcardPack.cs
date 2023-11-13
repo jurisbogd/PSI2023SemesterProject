@@ -6,6 +6,11 @@
         public Guid ID { get; set; }
         public List<T> Flashcards { get; set; }
 
+        public FlashcardPack()
+        {
+
+        }
+
         public FlashcardPack(string name, Guid id, List<T> flashcards)
         {
             Name = name;

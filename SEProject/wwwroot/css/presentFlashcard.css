@@ -1,0 +1,84 @@
+﻿.answer {
+    font-weight: bold;
+    font-size: 30px;
+    padding-top: 50px;
+    padding-right: 20px;
+    color: #007bff;
+}
+
+.question {
+    font-weight: bold;
+    font-size: 30px;
+    padding-top: 50px;
+    padding-right: 20px; 
+}
+
+.flashcard-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 82vh;
+    overflow: hidden; /* Ensure overflow is hidden to prevent expanding */
+}
+
+.flashcard {
+    border: 3px solid #ccc;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-y: auto;
+    height: 80%;
+}
+
+#revealForm {
+    position: absolute;
+    bottom: 230px; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#revealButton {
+    position: relative;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+#NextFlashcardForm {
+    position: absolute;
+    bottom: 50%;
+    left: 70%;
+    transform: translateX(-50%);
+}
+
+.arrow {
+    position: absolute;
+    bottom: 50%;
+    left: 100%;
+    transform: translateX(-50%) translateY(50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 30px 0 30px 30px;
+    border-color: transparent transparent transparent #007bff;
+    transition: transform 0.3s ease-in-out;
+}
+.arrow:hover {
+    transform: translateX(0) translateY(50%);
+}
+
+#revealButton:hover {
+    background-color: #0056b3;
+}

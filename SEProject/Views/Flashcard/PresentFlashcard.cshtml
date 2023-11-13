@@ -1,0 +1,31 @@
+﻿@model SEProject.Models.Flashcard
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard</title>
+
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="~/css/presentFlashcard.css">
+</head>
+<body>
+    <div class="flashcard-container">
+        <div class="flashcard">
+            <div class="question" id="question">@Model.Question</div>
+            <div class="answer" id="answer">@Model.Answer</div>
+        </div>
+    </div>
+    <form id="revealForm">
+        <button id="revealButton" class="reveal-button">Reveal</button>
+        
+    </form>
+    <form id="NextFlashcardForm" action="PresentNextFlashcard" method="post">
+        <input type="hidden" name="packID" value=@Model.PackID />
+        <input type="hidden" name="currentFlashcardID" value=@Model.ID />
+        <button id="arrowButton" class="arrow"></button>
+    </form>
+
+    <script src="~/js/presentFlashcard.js"></script>
+</body>
