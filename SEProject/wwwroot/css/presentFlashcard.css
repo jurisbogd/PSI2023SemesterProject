@@ -1,5 +1,4 @@
-﻿
-.answer {
+﻿.answer {
     font-weight: bold;
     font-size: 30px;
     padding-top: 50px;
@@ -19,13 +18,13 @@
     justify-content: center;
     align-items: center;
     height: 82vh;
+    overflow: hidden; /* Ensure overflow is hidden to prevent expanding */
 }
 
 .flashcard {
     border: 3px solid #ccc;
     border-radius: 20px;
     padding: 50px;
-    padding-bottom: 450px;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
     box-sizing: border-box;
     width: 100%;
@@ -34,6 +33,8 @@
     position: relative;
     word-wrap: break-word;
     white-space: normal;
+    overflow-y: auto; /* Allow vertical scrolling if content overflows */
+    height: 100%; /* Set a fixed height for the flashcard */
 }
 
 #revealForm {
