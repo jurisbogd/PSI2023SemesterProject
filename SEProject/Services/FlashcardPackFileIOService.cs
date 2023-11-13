@@ -17,6 +17,11 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         FlashcardPack<Flashcard>? flashcardPack = await _context.FlashcardPacks
             .Include(pack => pack.Flashcards)
             .FirstOrDefaultAsync(pack => pack.ID == ID);
+         if (flashcardPack == null)
+        {
+            // Handle the case where the flashcardPack is null
+            throw new Exception("FlashcardPack not found");
+        }
 
         return flashcardPack;
     }

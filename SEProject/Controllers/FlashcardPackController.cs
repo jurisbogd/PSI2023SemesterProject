@@ -20,23 +20,40 @@ namespace SEProject.Controllers
 
         public async Task<IActionResult> CreateSampleFlashcardPack(string name)
         {
-            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-
-            return View(allFlashcardPacks);
+            try
+            {
+                // Get the list of all flashcard packs
+                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                return View(allFlashcardPacks);
+            }
+            catch (Exception ex)
+            {
+                var logEntry = new LogEntry(
+                        message: $"An error occurred while loading FlashcardPack with name {name}: {ex.Message}",
+                        level: LogLevel.Error);
+                _logger.Log(logEntry);
+                return View();
+            }
         }
 
 
         public async Task<IActionResult> ViewFlashcardPack(Guid id)
         {
-            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-            var flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
-
-            if (flashcardPackToView == null)
+            try
             {
-                return NotFound(); // Handle the case when the pack is not found
+                // Get the list of all flashcard packs
+                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                var flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
+                return View(flashcardPackToView);
             }
-
-            return View(flashcardPackToView);
+            catch (Exception ex)
+            {
+                var logEntry = new LogEntry(
+                        message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
+                        level: LogLevel.Error);
+                _logger.Log(logEntry);
+                return NotFound();
+            }
         }
 
         [HttpPost]
@@ -68,11 +85,8 @@ namespace SEProject.Controllers
             {
                 // Handle the exception and log an error message with the exception details
                 var logEntry = new LogEntry(
-                    message: "Error while adding a flashcard pack",
-                    exception: ex,
-                    level: LogLevel.Error
-                );
-
+                        message: $"An error occurred while loading FlashcardPack with name {name}: {ex.Message}",
+                        level: LogLevel.Error);
                 _logger.Log(logEntry);
 
                 // You can also handle the exception further or return an error view
@@ -122,11 +136,8 @@ namespace SEProject.Controllers
             {
                 // Handle the exception and log an error message with the exception details
                 var logEntry = new LogEntry(
-                    message: "Error while adding a flashcard to the pack",
-                    exception: ex,
-                    level: LogLevel.Error
-                );
-
+                        message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
+                        level: LogLevel.Error);
                 _logger.Log(logEntry);
 
                 // You can also handle the exception further or return an error view
@@ -164,15 +175,22 @@ namespace SEProject.Controllers
         [HttpGet]
         public async Task<IActionResult> EditFlashcard(Guid flashcardID)
         {
-            var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-            var flashcardPack = flashcardPacks.FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
-            
-            if (flashcardPack == null)
+            try
             {
+                // Get the list of all flashcard packs
+                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                var flashcardPack = flashcardPacks.FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
+                var flashcardToEdit = flashcardPack.Flashcards.First(f => f.ID == flashcardID);
+                return View(flashcardToEdit);
+            }
+            catch (Exception ex)
+            {
+                var logEntry = new LogEntry(
+                        message: $"An error occurred while loading FlashcardPack with ID {flashcardID}: {ex.Message}",
+                        level: LogLevel.Error);
+                _logger.Log(logEntry);
                 return NotFound();
             }
-            var flashcardToEdit = flashcardPack.Flashcards.First(f => f.ID == flashcardID);
-            return View(flashcardToEdit);
         }
 
         [HttpPost]
@@ -205,31 +223,34 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> EditFlashcardPackName(Guid id, string newName)
         {
-            // Get the list of all flashcard packs
-            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-
-            // Find the flashcard pack with the specified ID
-            var flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
-
-            if (flashcardPackToEdit == null)
+            try
             {
-                return NotFound(); // Handle the case when the pack is not found
-            }
+                // Get the list of all flashcard packs
+                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                // Find the flashcard pack with the specified ID
+                var flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
+                if(newName != null)
+                {
+                    // Update the flashcard pack's name
+                    flashcardPackToEdit.Name = newName;
 
-            if(newName != null)
+                    // Save the updated flashcard pack
+                    await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit);
+                }
+                var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");
+                _logger.Log(logEntry);
+
+                // Redirect back to the page that displays the flashcard packs
+                return RedirectToAction("CreateSampleFlashcardPack");
+            }
+            catch (Exception ex)
             {
-                // Update the flashcard pack's name
-                flashcardPackToEdit.Name = newName;
-
-                // Save the updated flashcard pack
-                await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit);
+                var logEntryError = new LogEntry(
+                        message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
+                        level: LogLevel.Error);
+                _logger.Log(logEntryError);
+                return NotFound();
             }
-
-            var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");
-            _logger.Log(logEntry);
-
-            // Redirect back to the page that displays the flashcard packs
-            return RedirectToAction("CreateSampleFlashcardPack");
         }
 
         [HttpPost]
