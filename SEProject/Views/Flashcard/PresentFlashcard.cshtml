@@ -1,0 +1,19 @@
+﻿@model SEProject.Models.Flashcard
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard</title>
+
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="~/css/presentFlashcard.css">
+</head>
+<body>
+    <div class="flashcard-container">
+        <div class="flashcardTopSide">
+            <div class="question">@Model.Question</div>
+        </div>
+    </div>
+</body>

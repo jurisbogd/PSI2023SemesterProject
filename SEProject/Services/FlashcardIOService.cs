@@ -11,6 +11,16 @@ public class FlashcardIOService : IFlashcardIOService
         this._context = context;
     }
 
+    public async Task<List<Flashcard>> LoadFlashcardsAsync(Guid packID)
+    {
+        List<Flashcard> flashcards = await _context.FlashcardPacks
+            .Where(pack => pack.ID == packID)
+            .SelectMany(pack => pack.Flashcards)
+            .ToListAsync();
+
+        return flashcards;
+    }
+
     public async Task SaveFlashcard(Flashcard flashcard)
     {
         var existingFlashcard = await _context.Flashcards

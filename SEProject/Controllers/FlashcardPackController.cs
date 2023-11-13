@@ -276,5 +276,11 @@ namespace SEProject.Controllers
 
             return View("ViewFlashcardPack", newPack);
         }
+
+        [HttpPost]
+        public IActionResult Present(Guid packID)
+        {
+            return RedirectToAction("PresentFlashcard", packID);
+        }
     }
 }
