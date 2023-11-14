@@ -7,8 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flashcard</title>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <!-- Link to the CSS file -->
     <link rel="stylesheet" href="~/css/presentFlashcard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/regular.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css">
+    
+
+
 </head>
 <body>
     <div class="flashcard-container">
@@ -27,5 +34,16 @@
         <button id="arrowButton" style="display: none;" class="arrow"></button>
     </form>
 
+    <div id="flashcard-property" data-isfavorite="@Model.IsFavorite.ToString().ToLower()"/>
+    <div id="pack-id" data-pack-id="@Model.PackID.ToString().ToLower()" />
+    <div id="flashcard-id" data-flashcard-id="@Model.ID.ToString().ToLower()" />
+
+    <button id="favorite-button" class="favorite-button">
+        <i id="filled" class="fas fa-star" title="Favorite" style="@(Model.IsFavorite ? "display: inline-block;" : "display: none;")"></i>
+        <i id="non-filled" class="far fa-star" title="Favorite" style="@(Model.IsFavorite ? "display: none;" : "display: inline-block;")"></i>
+    </button>
+
+
     <script src="~/js/presentFlashcard.js"></script>
+    
 </body>
