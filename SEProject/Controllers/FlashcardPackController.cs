@@ -9,6 +9,8 @@ namespace SEProject.Controllers
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
         private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
+        Func<FlashcardPack<Flashcard>, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
+        Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
         public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, 
             IFlashcardIOService flashcardIOService, ILoggingHandler logger)
@@ -60,7 +62,7 @@ namespace SEProject.Controllers
                 // Log the entry using the injected logger
                 _logger.Log(logEntry);
 
-                await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack);
+                await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack, FlashcardPackIDValidation);
 
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
@@ -101,7 +103,7 @@ namespace SEProject.Controllers
                         Difficulty = viewModel.Difficulty
                     };
 
-                    await _flashcardIOService.SaveFlashcard(newFlashcard);
+                    await _flashcardIOService.SaveFlashcard(newFlashcard, FlashcardIDValidation);
 
                     // Create a log entry for the successful addition
                     var logEntry = new LogEntry(
@@ -189,7 +191,7 @@ namespace SEProject.Controllers
                 flashcardToEdit.Answer = editedFlashcard.Answer;
                 flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
 
-                await _flashcardIOService.SaveFlashcard(flashcardToEdit);
+                await _flashcardIOService.SaveFlashcard(flashcardToEdit, FlashcardIDValidation);
 
                 // Redirect to the view that displays the flashcards
                 return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
@@ -222,7 +224,7 @@ namespace SEProject.Controllers
                 flashcardPackToEdit.Name = newName;
 
                 // Save the updated flashcard pack
-                await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit);
+                await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit, FlashcardPackIDValidation);
             }
 
             var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");

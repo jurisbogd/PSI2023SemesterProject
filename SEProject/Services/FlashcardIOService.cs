@@ -21,8 +21,13 @@ public class FlashcardIOService : IFlashcardIOService
         return flashcards;
     }
 
-    public async Task SaveFlashcard(Flashcard flashcard)
+    public async Task SaveFlashcard(Flashcard flashcard, Func<Flashcard, bool> validationFunction)
     {
+        if (validationFunction != null && !validationFunction(flashcard))
+        {
+            // Validation failed, do not save the flashcard
+            return;
+        }
         var existingFlashcard = await _context.Flashcards
             .FirstOrDefaultAsync(card => card.ID == flashcard.ID);
         if(existingFlashcard == null) 
