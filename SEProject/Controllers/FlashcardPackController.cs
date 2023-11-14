@@ -125,13 +125,21 @@ namespace SEProject.Controllers
                     };
 
                     // Subscribe to the FlashcardSavedOrUpdated event
-                    _flashcardIOService.FlashcardSavedOrUpdated += FlashcardSavedOrUpdatedHandler;
+                    _flashcardIOService.FlashcardSavedOrUpdated += (sender, e) =>
+                    {
+                        // Use a lambda function to pass the additional argument to your event handler
+                        FlashcardSavedOrUpdatedHandler(sender, e, $"Flashcard was added ID - {newFlashcard.ID}, Question - {newFlashcard.Question}, Answer - {newFlashcard.Answer}, Difficulty - {newFlashcard.Difficulty} to FlashcardPack ID - {newFlashcard.PackID}, Name - {flashcardPack.Name}");
+                    };
 
                     // Save the new flashcard (this will trigger the event)
                     await _flashcardIOService.SaveFlashcard(newFlashcard, FlashcardIDValidation);
 
                     // Unsubscribe from the event to avoid memory leaks
-                    _flashcardIOService.FlashcardSavedOrUpdated -= FlashcardSavedOrUpdatedHandler;
+                    _flashcardIOService.FlashcardSavedOrUpdated -= (sender, e) =>
+                    {
+                        // Use a lambda function to pass the additional argument to your event handler
+                        FlashcardSavedOrUpdatedHandler(sender, e, $"Flashcard was added ID - {newFlashcard.ID}, Question - {newFlashcard.Question}, Answer - {newFlashcard.Answer}, Difficulty - {newFlashcard.Difficulty} to FlashcardPack ID - {newFlashcard.PackID}, Name - {flashcardPack.Name}");
+                    };
 
                     // Redirect to the view that displays the pack of flashcards
                     return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack!.ID });
@@ -183,12 +191,20 @@ namespace SEProject.Controllers
             var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
 
             // Subscribe to the FlashcardRemoved event
-            _flashcardIOService.FlashcardRemoved += FlashcardRemovedHandler;
+            _flashcardIOService.FlashcardRemoved += (sender, e) =>
+            {
+                // Use a lambda function to pass the additional argument to your event handler
+                FlashcardRemovedHandler(sender, e, $"Flashcard was removed ID - {flashcardToRemove.ID}, Question - {flashcardToRemove.Question}, Answer - {flashcardToRemove.Answer}, Difficulty - {flashcardToRemove.Difficulty} from FlashcardPack ID - {flashcardPack.ID}, Name - {flashcardPack.Name}");
+            };
 
             await _flashcardIOService.RemoveFlashcard(flashcardToRemove!);
 
             // Unsubscribe from the event to avoid memory leaks
-            _flashcardIOService.FlashcardRemoved -= FlashcardRemovedHandler;
+            _flashcardIOService.FlashcardRemoved -= (sender, e) =>
+            {
+                // Use a lambda function to pass the additional argument to your event handler
+                FlashcardRemovedHandler(sender, e, $"Flashcard was removed ID - {flashcardToRemove.ID}, Question - {flashcardToRemove.Question}, Answer - {flashcardToRemove.Answer}, Difficulty - {flashcardToRemove.Difficulty} from FlashcardPack ID - {flashcardPack.ID}, Name - {flashcardPack.Name}");
+            };
 
             // Redirect to the view that displays the pack of flashcards
             return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
@@ -230,20 +246,25 @@ namespace SEProject.Controllers
                 flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
 
                 // Subscribe to the FlashcardSavedOrUpdated event
-                _flashcardIOService.FlashcardSavedOrUpdated += FlashcardSavedOrUpdatedHandler;
+                _flashcardIOService.FlashcardSavedOrUpdated += (sender, e) =>
+                {
+                    // Use a lambda function to pass the additional argument to your event handler
+                    FlashcardSavedOrUpdatedHandler(sender, e, $"Flashcard was edited ID - {flashcardToEdit.ID}, Question - {flashcardToEdit.Question}, Answer - {flashcardToEdit.Answer}, Difficulty - {flashcardToEdit.Difficulty}");
+                };
 
                 // Save the new flashcard (this will trigger the event)
                 await _flashcardIOService.SaveFlashcard(flashcardToEdit, FlashcardIDValidation);
 
                 // Unsubscribe from the event to avoid memory leaks
-                _flashcardIOService.FlashcardSavedOrUpdated -= FlashcardSavedOrUpdatedHandler;
+                _flashcardIOService.FlashcardSavedOrUpdated -= (sender, e) =>
+                {
+                    // Use a lambda function to pass the additional argument to your event handler
+                    FlashcardSavedOrUpdatedHandler(sender, e, $"Flashcard was edited ID - {flashcardToEdit.ID}, Question - {flashcardToEdit.Question}, Answer - {flashcardToEdit.Answer}, Difficulty - {flashcardToEdit.Difficulty}");
+                };
 
                 // Redirect to the view that displays the flashcards
                 return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
             }
-
-            var logEntry = new LogEntry(message: $"Flashcard with ID {editedFlashcard.ID} was edited");
-            _logger.Log(logEntry);
 
             // If the model is not valid, return to the form view with validation errors
             return View(flashcardToEdit);
@@ -277,12 +298,9 @@ namespace SEProject.Controllers
                     // Unsubscribe from the event to avoid memory leaks
                     _flashcardPackDataHandler.FlashcardPackSavedOrUpdated -= (sender, e) =>
                     {
-                        // Use a lambda function to pass the additional argument to your event handler
                         FlashcardPackSavedOrUpdatedHandler(sender, e, $"Flashcard pack name was edited ID - {flashcardPackToEdit.ID}, Old name - {flashcardPackToEdit.Name}, New name - {newName}");
                     };
                 }
-                var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");
-                _logger.Log(logEntry);
 
                 // Redirect back to the page that displays the flashcard packs
                 return RedirectToAction("CreateSampleFlashcardPack");
@@ -348,19 +366,19 @@ namespace SEProject.Controllers
             return RedirectToAction("PresentFlashcard", packID);
         }
 
-        private void FlashcardSavedOrUpdatedHandler(object sender, FlashcardEventArgs e)
+        private void FlashcardSavedOrUpdatedHandler(object sender, FlashcardEventArgs e, string loggerMessage)
         {
             var logEntry = new LogEntry(
-                message: $"Flashcard saved or updated: ID {e.Flashcard.ID}, Question - {e.Flashcard.Question}, Answer - {e.Flashcard.Answer}",
+                message: $"FLASHCARD SAVED OR UPDATED: {loggerMessage}",
                 level: LogLevel.Information
             );
             _logger.Log(logEntry);
         }
 
-        private void FlashcardRemovedHandler(object sender, FlashcardEventArgs e)
+        private void FlashcardRemovedHandler(object sender, FlashcardEventArgs e, string loggerMessage)
         {
             var logEntry = new LogEntry(
-                message: $"Flashcard removed: ID {e.Flashcard.ID}, Question - {e.Flashcard.Question}, Answer - {e.Flashcard.Answer}",
+                message: $"FLASHCARD REMOVED: {loggerMessage}",
                 level: LogLevel.Information
             );
             _logger.Log(logEntry);
