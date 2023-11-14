@@ -34,15 +34,11 @@ namespace SEProject.Controllers
             {
                 return View("PresentFlashcard", flashcards[currentFlashcardIndex + 1]);
             }
-
-            return RedirectToAction("PresentFlashcard");
+            // Return to flashcardPacks page if there are no more flashcards to present
+            else
+            {
+                return RedirectToAction("ViewFlashcardPack", "FlashcardPack", new { id = packID });
+            }
         }
-
-        /*[HttpPost]
-        public IActionResult RevealAnswer(Guid ID)
-        {
-
-        }*/
-
     }
 }
