@@ -80,7 +80,14 @@ namespace SEProject.Controllers
                 // Log the entry using the injected logger
                 _logger.Log(logEntry);
 
+                // Subscribe to the FlashcardSavedOrUpdated event
+                _flashcardPackDataHandler.FlashcardPackSavedOrUpdated += FlashcardPackSavedOrUpdatedHandler;
+
+                // Save the new flashcard (this will trigger the event)
                 await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack, FlashcardPackIDValidation);
+
+                // Unsubscribe from the event to avoid memory leaks
+                _flashcardPackDataHandler.FlashcardPackSavedOrUpdated -= FlashcardPackSavedOrUpdatedHandler;
 
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
@@ -159,12 +166,12 @@ namespace SEProject.Controllers
         public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID)
         {
             // Subscribe to the FlashcardRemoved event
-            _flashcardIOService.FlashcardRemoved += FlashcardRemovedHandler;
+            _flashcardPackDataHandler.FlashcardPackRemoved += FlashcardPackRemovedHandler;
 
             await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
 
             // Unsubscribe from the event to avoid memory leaks
-            _flashcardIOService.FlashcardRemoved -= FlashcardRemovedHandler;
+            _flashcardPackDataHandler.FlashcardPackRemoved -= FlashcardPackRemovedHandler;
 
             var logEntry = new LogEntry(message: $"Flashcard pack with ID {flashcardPackID} was removed");
             _logger.Log(logEntry);
@@ -263,8 +270,14 @@ namespace SEProject.Controllers
                     // Update the flashcard pack's name
                     flashcardPackToEdit.Name = newName;
 
-                    // Save the updated flashcard pack
+                    // Subscribe to the FlashcardSavedOrUpdated event
+                    _flashcardPackDataHandler.FlashcardPackSavedOrUpdated += FlashcardPackSavedOrUpdatedHandler;
+
+                    // Save the new flashcard (this will trigger the event)
                     await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit);
+
+                    // Unsubscribe from the event to avoid memory leaks
+                    _flashcardPackDataHandler.FlashcardPackSavedOrUpdated -= FlashcardPackSavedOrUpdatedHandler;
                 }
                 var logEntry = new LogEntry(message: $"Name of flashcard pack with ID {flashcardPackToEdit.ID} with was edited");
                 _logger.Log(logEntry);
@@ -346,6 +359,24 @@ namespace SEProject.Controllers
         {
             var logEntry = new LogEntry(
                 message: $"Flashcard removed: ID {e.Flashcard.ID}, Question - {e.Flashcard.Question}, Answer - {e.Flashcard.Answer}",
+                level: LogLevel.Information
+            );
+            _logger.Log(logEntry);
+        }
+
+        private void FlashcardPackSavedOrUpdatedHandler(object sender, FlashcardPackEventArgs e)
+        {
+            var logEntry = new LogEntry(
+                message: $"FlashcardPack saved or updated: ID {e.FlashcardPack.ID}, Name - {e.FlashcardPack.Name}",
+                level: LogLevel.Information
+            );
+            _logger.Log(logEntry);
+        }
+
+        private void FlashcardPackRemovedHandler(object sender, FlashcardPackEventArgs e)
+        {
+            var logEntry = new LogEntry(
+                message: $"FlashcardPack removed: ID {e.FlashcardPack.ID}, Name - {e.FlashcardPack.Name}",
                 level: LogLevel.Information
             );
             _logger.Log(logEntry);
