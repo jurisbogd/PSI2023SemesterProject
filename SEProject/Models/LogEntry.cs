@@ -1,9 +1,11 @@
+using Microsoft.Extensions.Logging;
+
 namespace SEProject.Services;
 
 public record LogEntry {
     public DateTime TimeStamp { get; init; }
     public string Message { get; init; }
-    public LogLevel Level { get; init; }
+    public LogLevel Level { get; set; }
 
     public LogEntry(
         string message,

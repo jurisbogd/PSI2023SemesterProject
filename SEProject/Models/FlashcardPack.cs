@@ -2,7 +2,7 @@
 {
     public class FlashcardPack<T>
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public Guid ID { get; set; }
         public List<T> Flashcards { get; set; }
 
