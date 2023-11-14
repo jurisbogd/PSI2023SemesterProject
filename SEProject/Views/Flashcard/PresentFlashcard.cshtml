@@ -14,7 +14,7 @@
     <div class="flashcard-container">
         <div class="flashcard">
             <div class="question" id="question">@Model.Question</div>
-            <div class="answer" id="answer">@Model.Answer</div>
+            <div class="answer" style="display: none;" id="answer">@Model.Answer</div>
         </div>
     </div>
     <form id="revealForm">
@@ -24,7 +24,7 @@
     <form id="NextFlashcardForm" action="PresentNextFlashcard" method="post">
         <input type="hidden" name="packID" value=@Model.PackID />
         <input type="hidden" name="currentFlashcardID" value=@Model.ID />
-        <button id="arrowButton" class="arrow"></button>
+        <button id="arrowButton" style="display: none;" class="arrow"></button>
     </form>
 
     <script src="~/js/presentFlashcard.js"></script>
