@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SEProject.Models;
 using SEProject.Services;
+using SEProject.Events;
 
 namespace SEProject.Controllers
 {
@@ -117,7 +118,14 @@ namespace SEProject.Controllers
                         Difficulty = viewModel.Difficulty
                     };
 
+                    // Subscribe to the FlashcardSavedOrUpdated event
+                    _flashcardIOService.FlashcardSavedOrUpdated += FlashcardSavedOrUpdatedHandler;
+
+                    // Save the new flashcard (this will trigger the event)
                     await _flashcardIOService.SaveFlashcard(newFlashcard, FlashcardIDValidation);
+
+                    // Unsubscribe from the event to avoid memory leaks
+                    _flashcardIOService.FlashcardSavedOrUpdated -= FlashcardSavedOrUpdatedHandler;
 
                     // Create a log entry for the successful addition
                     var logEntry = new LogEntry(
@@ -150,7 +158,13 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID)
         {
+            // Subscribe to the FlashcardRemoved event
+            _flashcardIOService.FlashcardRemoved += FlashcardRemovedHandler;
+
             await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
+
+            // Unsubscribe from the event to avoid memory leaks
+            _flashcardIOService.FlashcardRemoved -= FlashcardRemovedHandler;
 
             var logEntry = new LogEntry(message: $"Flashcard pack with ID {flashcardPackID} was removed");
             _logger.Log(logEntry);
@@ -165,7 +179,13 @@ namespace SEProject.Controllers
 
             var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
 
+            // Subscribe to the FlashcardRemoved event
+            _flashcardIOService.FlashcardRemoved += FlashcardRemovedHandler;
+
             await _flashcardIOService.RemoveFlashcard(flashcardToRemove!);
+
+            // Unsubscribe from the event to avoid memory leaks
+            _flashcardIOService.FlashcardRemoved -= FlashcardRemovedHandler;
 
             var logEntry = new LogEntry(message: $"Flashcard with ID {flashcardID} was removed from pack with ID {packID}");
             _logger.Log(logEntry);
@@ -209,7 +229,14 @@ namespace SEProject.Controllers
                 flashcardToEdit.Answer = editedFlashcard.Answer;
                 flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
 
+                // Subscribe to the FlashcardSavedOrUpdated event
+                _flashcardIOService.FlashcardSavedOrUpdated += FlashcardSavedOrUpdatedHandler;
+
+                // Save the new flashcard (this will trigger the event)
                 await _flashcardIOService.SaveFlashcard(flashcardToEdit, FlashcardIDValidation);
+
+                // Unsubscribe from the event to avoid memory leaks
+                _flashcardIOService.FlashcardSavedOrUpdated -= FlashcardSavedOrUpdatedHandler;
 
                 // Redirect to the view that displays the flashcards
                 return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
@@ -304,6 +331,24 @@ namespace SEProject.Controllers
         public IActionResult Present(Guid packID)
         {
             return RedirectToAction("PresentFlashcard", packID);
+        }
+
+        private void FlashcardSavedOrUpdatedHandler(object sender, FlashcardEventArgs e)
+        {
+            var logEntry = new LogEntry(
+                message: $"Flashcard saved or updated: ID {e.Flashcard.ID}, Question - {e.Flashcard.Question}, Answer - {e.Flashcard.Answer}",
+                level: LogLevel.Information
+            );
+            _logger.Log(logEntry);
+        }
+
+        private void FlashcardRemovedHandler(object sender, FlashcardEventArgs e)
+        {
+            var logEntry = new LogEntry(
+                message: $"Flashcard removed: ID {e.Flashcard.ID}, Question - {e.Flashcard.Question}, Answer - {e.Flashcard.Answer}",
+                level: LogLevel.Information
+            );
+            _logger.Log(logEntry);
         }
     }
 }
