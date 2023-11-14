@@ -35,8 +35,13 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         return flashcardPacks;
     }
 
-    public async Task SaveFlashcardPackAsync(FlashcardPack<Flashcard> flashcardPack)
+    public async Task SaveFlashcardPackAsync(FlashcardPack<Flashcard> flashcardPack, Func<FlashcardPack<Flashcard>, bool> validationFunction = null)
     {
+        if (validationFunction != null && !validationFunction(flashcardPack))
+        {
+            // Validation failed, do not save the flashcard
+            return;
+        }
         var existingPack = await _context.FlashcardPacks
             .FirstOrDefaultAsync(pack => pack.ID == flashcardPack.ID);
 
