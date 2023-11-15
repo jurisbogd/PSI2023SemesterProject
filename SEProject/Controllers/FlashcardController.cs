@@ -43,7 +43,7 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ToggleFavorite(Guid packID, Guid currentFlashcardID, bool isFavorite)
+        public async Task<JsonResult> ToggleFavorite(Guid packID, Guid currentFlashcardID, bool isFavorite)
         {
             List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
 
@@ -53,9 +53,7 @@ namespace SEProject.Controllers
 
             await _flashcardIOService.SaveFlashcard(currentFlashcard, FlashcardIDValidation);
 
-            // Perform any logic related to toggling favorite status here
-
-            return RedirectToAction("PresentNextFlashcard", new { packID = packID, currentFlashcardID = currentFlashcardID });
+            return new JsonResult(Ok());
         }
     }
 }

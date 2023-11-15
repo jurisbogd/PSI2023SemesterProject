@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var nonFilledStar = document.getElementById('non-filled');
     var arrowButton = document.getElementById("arrowButton");
 
-    var flashcardPropertyIsFavorite = document.getElementById("flashcard-property");
+    var flashcardPropertyIsFavorite = document.getElementById("is-favorite");
     var flashcardPropertyPackID = document.getElementById("pack-id");
     var flashcardPropertyFlashcardID = document.getElementById("flashcard-id");
 
@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('favorite-button').addEventListener('click', function () {
         isFavorite = !isFavorite;
+        console.log(isFavorite);
         filledStar.style.display = isFavorite ? '' : 'none';
         nonFilledStar.style.display = isFavorite ? 'none' : '';
     });
@@ -40,14 +41,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateFavoriteOnServer(isFavorite) {
 
+        console.log("Script started");
+
         $.ajax({
             type: "POST",
             url: 'ToggleFavorite',
             data: { packID: packID, currentFlashcardID: flashcardID, isFavorite: isFavorite },
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: "json",
             success: function (result) {
-                alert(result);
+                console.log("Success")
             },
+            error: function (xhr, status, error) {
+                console.log("Error: " + error);
+            }
         });
     }
 });

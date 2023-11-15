@@ -99,10 +99,10 @@
 
 .favorite-button i {
     font-size: 35px; 
-    color: #ffd700; /* Yellow color for the star */
+    color: #ffd700; 
     transition: color 0.3s ease-in-out;
 }
 
 .favorite-button:hover i {
-    color: #b38f00; /* Even darker yellow on hover */
+    color: #b38f00; 
 }
