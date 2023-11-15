@@ -14,7 +14,7 @@ namespace SEProject.EventServices
         public void OnFlashcardPackChanged(object source, FlashcardPackEventArgs e)
         {
             var logEntry = new LogEntry(
-                        message: $"FlashcardPack {e.FlashcardPack.Name} changed",
+                        message: $"FlashcardPack: ID - {e.FlashcardPack.ID}, name - {e.FlashcardPack.Name} was updated. {e.Message}",
                         level: LogLevel.Information);
             _logger.Log(logEntry);
         }

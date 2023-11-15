@@ -141,6 +141,9 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID)
         {
+            // Subscribing to event
+            _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
+
             await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
 
             return RedirectToAction("CreateSampleFlashcardPack");
@@ -219,6 +222,8 @@ namespace SEProject.Controllers
                     var oldName = flashcardPackToEdit.Name;
                     // Update the flashcard pack's name
                     flashcardPackToEdit.Name = newName;
+
+                    _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
 
                     // Save the new flashcard (this will trigger the event)
                     await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit);

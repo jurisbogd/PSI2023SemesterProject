@@ -57,7 +57,7 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         }
         
         await _context.SaveChangesAsync();
-        OnFlashcardPackChanged(new FlashcardPackEventArgs(flashcardPack));
+        OnFlashcardPackChanged(new FlashcardPackEventArgs(flashcardPack, "Saved"));
     }
 
     public async Task RemoveFlashcardPackAsync(Guid ID)
@@ -70,7 +70,7 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         _context.Flashcards.RemoveRange(packToDelete.Flashcards!);
 
         await _context.SaveChangesAsync();
-        OnFlashcardPackChanged(new FlashcardPackEventArgs(packToDelete));
+        OnFlashcardPackChanged(new FlashcardPackEventArgs(packToDelete, "Deleted"));
     }
 
     public virtual void OnFlashcardPackChanged(FlashcardPackEventArgs e)
