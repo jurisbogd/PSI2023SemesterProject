@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SEProject.Models;
+using SEProject.Events;
 
 namespace SEProject.Services;
 
@@ -11,6 +12,12 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
     {
         this._context = context;
     }
+
+    // Event for when a flashcard is saved or updated
+    public event EventHandler<FlashcardPackEventArgs> FlashcardPackSavedOrUpdated;
+
+    // Event for when a flashcard is removed
+    public event EventHandler<FlashcardPackEventArgs> FlashcardPackRemoved;
 
     public async Task<FlashcardPack<Flashcard>>? LoadFlashcardPackAsync(Guid ID)
     {
@@ -53,6 +60,10 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         {
             existingPack.Name = flashcardPack.Name;
         }
+
+        // Notify subscribers that the flashcard pack was saved or updated
+        OnFlashcardPackSavedOrUpdated(new FlashcardPackEventArgs(flashcardPack));
+        
         await _context.SaveChangesAsync();
     }
 
@@ -64,6 +75,20 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
 
         _context.FlashcardPacks.Remove(packToDelete!);
         _context.Flashcards.RemoveRange(packToDelete.Flashcards!);
+
+        // Notify subscribers that the flashcard pack was removed
+        OnFlashcardPackRemoved(new FlashcardPackEventArgs(packToDelete));
+
         await _context.SaveChangesAsync();
+    }
+
+    public virtual void OnFlashcardPackSavedOrUpdated(FlashcardPackEventArgs e)
+    {
+        FlashcardPackSavedOrUpdated?.Invoke(this, e);
+    }
+
+    public virtual void OnFlashcardPackRemoved(FlashcardPackEventArgs e)
+    {
+        FlashcardPackRemoved?.Invoke(this, e);
     }
 }
