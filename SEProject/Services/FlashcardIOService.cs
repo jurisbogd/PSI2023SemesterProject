@@ -6,6 +6,7 @@ using SEProject.EventArguments;
 namespace SEProject.Services;
 public class FlashcardIOService : IFlashcardIOService
 {
+    public event EventHandler<FlashcardEventArgs>? FlashcardChanged;
     private DatabaseContext _context;
 
     public FlashcardIOService(DatabaseContext context)
@@ -46,6 +47,8 @@ public class FlashcardIOService : IFlashcardIOService
             }
         }
         await _context.SaveChangesAsync();
+
+        OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Saved"));
     }
         
     public async Task RemoveFlashcard(Flashcard flashcard)
@@ -55,6 +58,16 @@ public class FlashcardIOService : IFlashcardIOService
         
         _context.Remove(flashcardToRemove!);
         await _context.SaveChangesAsync();
+
+        OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Deleted"));
+    }
+
+    public virtual void OnFlashcardChanged(FlashcardEventArgs e)
+    {
+        if(FlashcardChanged != null)
+        {
+            FlashcardChanged(this, e);
+        }
     }
 }
 #pragma warning restore 8981 // Restore warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)

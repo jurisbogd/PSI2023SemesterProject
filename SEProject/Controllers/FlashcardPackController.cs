@@ -12,16 +12,19 @@ namespace SEProject.Controllers
         private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
         private readonly IFlashcardPackEventService _flashcardPackEventService;
+        private readonly IFlashcardEventService _flashcardEventService;
         Func<FlashcardPack<Flashcard>, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
         Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
         public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, 
-            IFlashcardIOService flashcardIOService, ILoggingHandler logger, IFlashcardPackEventService flashcardPackEventService)
+            IFlashcardIOService flashcardIOService, ILoggingHandler logger, 
+            IFlashcardPackEventService flashcardPackEventService, IFlashcardEventService flashcardEventService)
         {
             _flashcardPackDataHandler = flashcardPackDataHandler;
             _flashcardIOService = flashcardIOService;
             _logger = logger;
             _flashcardPackEventService = flashcardPackEventService;
+            _flashcardEventService = flashcardEventService;
         }
 
         public async Task<IActionResult> CreateSampleFlashcardPack(string name)
@@ -115,6 +118,7 @@ namespace SEProject.Controllers
                         Difficulty = viewModel.Difficulty
                     };
 
+                    _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                     // Save the new flashcard (this will trigger the event)
                     await _flashcardIOService.SaveFlashcard(newFlashcard, FlashcardIDValidation);
 
@@ -156,6 +160,7 @@ namespace SEProject.Controllers
 
             var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
 
+            _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
             await _flashcardIOService.RemoveFlashcard(flashcardToRemove!);
 
             // Redirect to the view that displays the pack of flashcards
@@ -197,6 +202,7 @@ namespace SEProject.Controllers
                 flashcardToEdit.Answer = editedFlashcard.Answer;
                 flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
 
+                _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                 // Save the new flashcard (this will trigger the event)
                 await _flashcardIOService.SaveFlashcard(flashcardToEdit, FlashcardIDValidation);
 

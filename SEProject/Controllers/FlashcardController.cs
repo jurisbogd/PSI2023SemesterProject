@@ -1,17 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using SEProject.Models;
 using SEProject.Services;
+using SEProject.EventArguments;
+using SEProject.EventServices;
 
 namespace SEProject.Controllers
 {
     public class FlashcardController : Controller
     {
         private readonly IFlashcardIOService _flashcardIOService;
+        private readonly IFlashcardEventService _flashcardEventService;
         private Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
-        public FlashcardController(IFlashcardIOService flashcardIOService)
+        public FlashcardController(IFlashcardIOService flashcardIOService, IFlashcardEventService flashcardEventService)
         {
             _flashcardIOService = flashcardIOService;
+            _flashcardEventService = flashcardEventService;
         }
 
         [HttpPost]
@@ -51,6 +55,7 @@ namespace SEProject.Controllers
 
             currentFlashcard.IsFavorite = isFavorite;
 
+            _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
             await _flashcardIOService.SaveFlashcard(currentFlashcard, FlashcardIDValidation);
 
             return new JsonResult(Ok());

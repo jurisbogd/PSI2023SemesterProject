@@ -16,6 +16,7 @@ builder.Services.AddScoped<IFlashcardIOService, FlashcardIOService>();
 builder.Services.AddScoped<IFlashcardPackDataHandler, FlashcardPackFileIOService>();
 
 builder.Services.AddScoped<IFlashcardPackEventService, FlashcardPackEventService>();
+builder.Services.AddScoped<IFlashcardEventService, FlashcardEventService>();
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
