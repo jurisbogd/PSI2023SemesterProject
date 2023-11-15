@@ -1,5 +1,5 @@
 ﻿using SEProject.Models;
-using SEProject.Events;
+using SEProject.EventArguments;
 
 namespace SEProject.Services;
 

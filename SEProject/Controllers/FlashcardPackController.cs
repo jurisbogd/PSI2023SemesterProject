@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SEProject.Models;
 using SEProject.Services;
-using SEProject.Events;
+using SEProject.EventArguments;
+using SEProject.EventServices;
 
 namespace SEProject.Controllers
 {
@@ -10,15 +11,17 @@ namespace SEProject.Controllers
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
         private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
+        private readonly IFlashcardPackEventService _flashcardPackEventService;
         Func<FlashcardPack<Flashcard>, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
         Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
         public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, 
-            IFlashcardIOService flashcardIOService, ILoggingHandler logger)
+            IFlashcardIOService flashcardIOService, ILoggingHandler logger, IFlashcardPackEventService flashcardPackEventService)
         {
             _flashcardPackDataHandler = flashcardPackDataHandler;
             _flashcardIOService = flashcardIOService;
             _logger = logger;
+            _flashcardPackEventService = flashcardPackEventService;
         }
 
         public async Task<IActionResult> CreateSampleFlashcardPack(string name)
@@ -70,6 +73,8 @@ namespace SEProject.Controllers
                     id: Guid.NewGuid(),
                     flashcards: new List<Flashcard>()
                 );
+
+                _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
 
                 // Save the new flashcard (this will trigger the event)
                 await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack, FlashcardPackIDValidation);

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SEProject.Models;
-using SEProject.Events;
+using SEProject.EventArguments;
 
 #pragma warning disable 8981 // Disable warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)
 namespace SEProject.Services;
