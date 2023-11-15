@@ -7,6 +7,7 @@ namespace SEProject.Controllers
     public class FlashcardController : Controller
     {
         private readonly IFlashcardIOService _flashcardIOService;
+        private Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
         public FlashcardController(IFlashcardIOService flashcardIOService)
         {
@@ -39,6 +40,20 @@ namespace SEProject.Controllers
             {
                 return RedirectToAction("ViewFlashcardPack", "FlashcardPack", new { id = packID });
             }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ToggleFavorite(Guid packID, Guid currentFlashcardID, bool isFavorite)
+        {
+            List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
+
+            Flashcard currentFlashcard = flashcards.FirstOrDefault(f => f.ID == currentFlashcardID)!;
+
+            currentFlashcard.IsFavorite = isFavorite;
+
+            await _flashcardIOService.SaveFlashcard(currentFlashcard, FlashcardIDValidation);
+
+            return new JsonResult(Ok());
         }
     }
 }
