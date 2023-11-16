@@ -3,9 +3,9 @@ using SEProject.Models;
 
 public class FlashcardPackEventArgs : EventArgs
 {
-    public FlashcardPack<Flashcard> FlashcardPack { get; }
+    public FlashcardPack FlashcardPack { get; }
 
-    public FlashcardPackEventArgs(FlashcardPack<Flashcard> flashcardPack)
+    public FlashcardPackEventArgs(FlashcardPack flashcardPack)
     {
         FlashcardPack = flashcardPack;
     }

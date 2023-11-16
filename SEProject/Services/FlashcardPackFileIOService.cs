@@ -19,9 +19,9 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
     // Event for when a flashcard is removed
     public event EventHandler<FlashcardPackEventArgs> FlashcardPackRemoved;
 
-    public async Task<FlashcardPack<Flashcard>>? LoadFlashcardPackAsync(Guid ID)
+    public async Task<FlashcardPack>? LoadFlashcardPackAsync(Guid ID)
     {
-        FlashcardPack<Flashcard>? flashcardPack = await _context.FlashcardPacks
+        FlashcardPack? flashcardPack = await _context.FlashcardPacks
             .Include(pack => pack.Flashcards)
             .FirstOrDefaultAsync(pack => pack.ID == ID);
          if (flashcardPack == null)
@@ -33,16 +33,16 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         return flashcardPack;
     }
 
-    public async Task<List<FlashcardPack<Flashcard>>> LoadFlashcardPacksAsync()
+    public async Task<List<FlashcardPack>> LoadFlashcardPacksAsync()
     {
-        List<FlashcardPack<Flashcard>> flashcardPacks = await _context.FlashcardPacks
+        List<FlashcardPack> flashcardPacks = await _context.FlashcardPacks
         .Include(pack => pack.Flashcards)
         .ToListAsync();
 
         return flashcardPacks;
     }
 
-    public async Task SaveFlashcardPackAsync(FlashcardPack<Flashcard> flashcardPack, Func<FlashcardPack<Flashcard>, bool> validationFunction = null)
+    public async Task SaveFlashcardPackAsync(FlashcardPack flashcardPack, Func<FlashcardPack, bool> validationFunction = null)
     {
         if (validationFunction != null && !validationFunction(flashcardPack))
         {
