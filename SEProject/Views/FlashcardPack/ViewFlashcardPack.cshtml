@@ -24,7 +24,8 @@
 
         <!-- "Add Flashcard" button on the right -->
         <div class="vertical-button-container">
-            <button id="addFlashcardButton" class="reveal-button">Add Flashcard</button>
+            <button id="addFlashcardButton" class="reveal-button"
+                data-pack-id="@Model.ID">Add Flashcard</button>
             <div class="sorting-dropdown">
                 <button class="custom-sorting-button dropdown-toggle" id="sortingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Sort by
@@ -46,41 +47,6 @@
             </form>
         </div>
     </div>
-
-
-
-    @using (Html.BeginForm("AddFlashcardToPack", "FlashcardPack", FormMethod.Post))
-    {
-        <!-- Pop-up form for adding flashcards (hidden by default) -->
-        <div id="addFlashcardForm" class="popup-form" style="display: none;">
-            <h2>Add Flashcard</h2>
-            <form>
-                <!-- Flashcard input fields -->
-                <div class="form-group">
-                    <label for="question">Question:</label>
-                    <input type="text" id="question" name="viewModel.Question" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="answer">Answer:</label>
-                    <input type="text" id="answer" name="viewModel.Answer" class="form-control" required>
-                </div>
-
-                <!-- Difficulty selection dropdown -->
-                <div class="form-group">
-                    <label for="difficultyLevel">Difficulty:</label>
-                    <select id="difficultyLevel" name="viewModel.Difficulty" class="form-control">
-                        <option value="Easy">Easy</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Hard">Hard</option>
-                    </select>
-                </div>
-
-                <!-- Submit button -->
-                <button type="submit" class="btn btn-primary" data-flashcard-id="@Model.ID" name="id" value="@Model.ID">Add</button>
-            </form>
-        </div>
-    }
 
     <div class="flashcard-container">
         @foreach (var flashcard in Model.Flashcards)

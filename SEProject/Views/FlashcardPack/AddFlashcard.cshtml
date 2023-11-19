@@ -1,17 +1,17 @@
-@model SEProject.Models.Flashcard
+﻿@model SEProject.Models.Flashcard
 
 <head>
     <meta charset="utf-8" />
-    <!-- Link to the CSS file -->
-    <link rel="stylesheet" href="~/css/editFlashcard.css">
+    <link rel="stylesheet" href="~/css/addFlashcard.css">
 </head>
 <body>
-    <h2>Edit Flashcard</h2>
+    <h2>Add Flashcard</h2>
+
     <div class="flashcard-container">
         <div class="flashcard-form">
-            <form asp-action="EditFlashcard" method="post">
+            <form asp-action="AddFlashcardToPack" method="post">
                 <input type="hidden" asp-for="ID" />
-    
+                <input type="hidden" asp-for="PackID" />
                 <div class="question">
                     <textarea asp-for="Question" class="question-input"></textarea>
                 </div>
@@ -28,10 +28,13 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-                <button type="button" class="btn btn-primary btn-red" 
-                    onclick="location.href='@Url.Action("ViewFlashcardPack", "FlashcardPack", new { id = Model.PackID })';">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add Flashcard </button>
+                <button type="button" class="btn btn-primary btn-red"
+                        onclick="location.href='@Url.Action("ViewFlashcardPack", "FlashcardPack", new { id = Model.PackID })';">
+                    Cancel
+                </button>
             </form>
         </div>
     </div>
+
 </body>
