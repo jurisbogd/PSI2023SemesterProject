@@ -5,12 +5,12 @@ using SEProject.Exceptions;
 
 namespace SEProject.Services;
 
-public class FlashcardPackFileIOService : IFlashcardPackDataHandler
+public class FlashcardPackIOService : IFlashcardPackDataHandler
 {
     public event EventHandler<FlashcardPackEventArgs>? FlashcardPackChanged;
 
     private DatabaseContext _context;
-    public FlashcardPackFileIOService(DatabaseContext context)
+    public FlashcardPackIOService(DatabaseContext context)
     {
         this._context = context;
     }
