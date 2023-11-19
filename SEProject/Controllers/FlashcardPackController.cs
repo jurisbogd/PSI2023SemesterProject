@@ -3,6 +3,7 @@ using SEProject.Models;
 using SEProject.Services;
 using SEProject.EventArguments;
 using SEProject.EventServices;
+using SEProject.Exceptions;
 
 namespace SEProject.Controllers
 {
@@ -161,7 +162,18 @@ namespace SEProject.Controllers
             var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
 
             _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
-            await _flashcardIOService.RemoveFlashcard(flashcardToRemove!);
+
+            try
+            {
+                await _flashcardIOService.RemoveFlashcard(flashcardToRemove!);
+            }catch (FlashcardNotFoundException fnfe)
+            {
+                var logEntry = new LogEntry(
+                        message: $"An error occurred while removing Flashcard with ID {flashcardID}: {fnfe.Message}",
+                        level: LogLevel.Error);
+                _logger.Log(logEntry);
+                return BadRequest($"Flashcard with ID {flashcardID} not found.");
+            }
 
             // Redirect to the view that displays the pack of flashcards
             return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
