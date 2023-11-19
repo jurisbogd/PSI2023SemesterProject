@@ -149,7 +149,17 @@ namespace SEProject.Controllers
             // Subscribing to event
             _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
 
-            await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
+            try
+            {
+                await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
+            }catch (FlashcardPackNotFoundException fpnfe)
+            {
+                var logEntry = new LogEntry(
+                        message: $"An error occurred while removing FlashcardPack with ID {flashcardPackID}: {fpnfe.Message}",
+                        level: LogLevel.Error);
+                _logger.Log(logEntry);
+                return BadRequest($"FlashcardPack with ID {flashcardPackID} not found.");
+            }
 
             return RedirectToAction("CreateSampleFlashcardPack");
         }
