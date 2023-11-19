@@ -1,0 +1,93 @@
+﻿
+.question-input {
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    font-size: 22px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border: none;
+    outline: none;
+    transition: color 0.3s; /* Add the transition property */
+    resize: none;
+}
+
+.question-input:hover,
+.question-input:focus {
+    color: #007BFF; /* Set the text color for hover and focus states */
+}
+
+
+.answer-input {
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    font-size: 22px;
+    margin-bottom: 30px;
+    border: none;
+    outline: none;
+    transition: color 0.3s; /* Add the transition property */
+    resize: none;
+}
+
+.answer-input:hover,
+.answer-input:focus {
+    color: #007BFF; /* Set the text color for hover and focus states */
+}
+
+.difficulty-input {
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    font-size: 22px;
+    margin-bottom: 80px;
+    border: none;
+    outline: none;
+    transition: color 0.3s; /* Add the transition property */
+}
+
+.difficulty-input:hover,
+.difficulty-input:focus {
+    color: #007BFF; /* Set the text color for hover and focus states */
+}
+
+h2 {
+    margin-top: 20px; /* Adjust the value as needed */
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.flashcard-container {
+    height: 70vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flashcard-form {
+    border: 3px solid #ccc;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    word-wrap: break-word;
+    white-space: normal;
+    height: 100%;
+}
+
+.btn.btn-primary {
+    font-weight: bold;
+}
+
+.btn.btn-primary.btn-red {
+    font-weight: bold;
+    background-color: red;
+}
+
+.btn.btn-primary.btn-red:hover {
+    background-color: darkred; 
+}
