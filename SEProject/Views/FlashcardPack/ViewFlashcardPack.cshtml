@@ -39,9 +39,10 @@
                     </form>
                 </div>
             </div>
+            <div id="flashcard-count" data-flashcard-count="@Model.Flashcards.Count"></div>
             <form method="post" action="@Url.Action("PresentFlashcard", "Flashcard")">
                 <input type="hidden" name="packID" value="@Model.ID"/>
-                <button id="presentFlashcardButton" class="reveal-button">Present</button>
+                <button id="presentFlashcardButton" class="reveal-button" disabled>Present</button>
             </form>
         </div>
     </div>
@@ -106,5 +107,6 @@
     <script src="~/js/addFlashcardButton.js"></script>
     <script src="~/js/removeFlashcardButton.js"></script>
     <script src="~/js/editFlashcardInPack.js"></script>
+    <script src="~/js/presentButton.js"></script>
 </body>
 </html>
