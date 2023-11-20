@@ -100,8 +100,9 @@ h2 {
 }
 
 .switch {
-    position: relative;
-    display: inline-block;
+    position: absolute;
+    top: 69.3%;
+    left: 24%;
     width: 60px;
     height: 34px;
 }
@@ -148,4 +149,16 @@ input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
+}
+
+.favorite-toggle i {
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    position: fixed;
+    top: 65.9%;
+    left: 42%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #ffd700;
 }
