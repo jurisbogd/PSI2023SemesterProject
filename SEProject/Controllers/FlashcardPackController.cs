@@ -98,30 +98,37 @@ namespace SEProject.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult AddFlashcard(Guid packID)
+        {
+
+            var newFlashcard = new Flashcard
+            {
+                PackID = packID,
+                ID = Guid.NewGuid(),
+                Question = "Question",
+                Answer = "Answer",
+                Difficulty = 0
+            };
+            return View(newFlashcard);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> AddFlashcardToPack(Flashcard viewModel, Guid id)
+        public async Task<IActionResult> AddFlashcardToPack(Flashcard flashcard)
         {
+            var packID = flashcard.PackID;
+
             try
             {
                 var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-                var flashcardPack = flashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
+                var flashcardPack = flashcardPacks.FirstOrDefault(fpack => fpack.ID == packID);
 
                 if (ModelState.IsValid)
                 {
                     // Create a new Flashcard object from the form data
-                    var newFlashcard = new Flashcard
-                    {
-                        PackID = id,
-                        ID = Guid.NewGuid(),
-                        Question = viewModel.Question,
-                        Answer = viewModel.Answer,
-                        Difficulty = viewModel.Difficulty
-                    };
-
                     _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                     // Save the new flashcard (this will trigger the event)
-                    await _flashcardIOService.SaveFlashcard(newFlashcard, FlashcardIDValidation);
+                    await _flashcardIOService.SaveFlashcard(flashcard, FlashcardIDValidation);
 
                     // Redirect to the view that displays the pack of flashcards
                     return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack!.ID });
@@ -134,7 +141,7 @@ namespace SEProject.Controllers
             {
                 // Handle the exception and log an error message with the exception details
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
+                        message: $"An error occurred while loading FlashcardPack with ID {packID}: {ex.Message}",
                         level: LogLevel.Error);
                 _logger.Log(logEntry);
 
