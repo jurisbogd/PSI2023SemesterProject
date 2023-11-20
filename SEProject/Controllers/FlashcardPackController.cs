@@ -230,6 +230,7 @@ namespace SEProject.Controllers
                 flashcardToEdit.Question = editedFlashcard.Question;
                 flashcardToEdit.Answer = editedFlashcard.Answer;
                 flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
+                flashcardToEdit.IsFavorite = editedFlashcard.IsFavorite;
 
                 _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                 // Save the new flashcard (this will trigger the event)
