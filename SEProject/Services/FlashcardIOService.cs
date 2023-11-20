@@ -68,6 +68,20 @@ public class FlashcardIOService : IFlashcardIOService
         OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Deleted"));
     }
 
+    public async Task RemoveFlashcard(Guid id) {
+        var flashcard = await _context.Flashcards
+            .FirstOrDefaultAsync(card => card.ID == id);
+
+        if (flashcard == null) {
+            throw new FlashcardNotFoundException($"Flashcard with ID {id} not found.)");
+        }
+        else {
+            _context.Remove(flashcard);
+            await _context.SaveChangesAsync();
+            OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Deleted"));
+        }
+    }
+
     public virtual void OnFlashcardChanged(FlashcardEventArgs e)
     {
         if(FlashcardChanged != null)
