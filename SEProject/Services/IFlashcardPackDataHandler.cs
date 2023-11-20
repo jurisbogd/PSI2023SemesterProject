@@ -7,8 +7,8 @@ public interface IFlashcardPackDataHandler
 {
     event EventHandler<FlashcardPackEventArgs>? FlashcardPackChanged;
     void OnFlashcardPackChanged(FlashcardPackEventArgs e);
-    Task<FlashcardPack<Flashcard>>? LoadFlashcardPackAsync(Guid ID);
-    Task<List<FlashcardPack<Flashcard>>> LoadFlashcardPacksAsync();
-    Task SaveFlashcardPackAsync(FlashcardPack<Flashcard> flashcardPack, Func<FlashcardPack<Flashcard>, bool> validationFunction = null);
+    Task<FlashcardPack>? LoadFlashcardPackAsync(Guid ID);
+    Task<List<FlashcardPack>> LoadFlashcardPacksAsync();
+    Task SaveFlashcardPackAsync(FlashcardPack flashcardPack, Func<FlashcardPack, bool> validationFunction = null);
     Task RemoveFlashcardPackAsync(Guid ID);
 }

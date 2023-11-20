@@ -14,7 +14,7 @@ namespace SEProject.Controllers
         private readonly ILoggingHandler _logger;
         private readonly IFlashcardPackEventService _flashcardPackEventService;
         private readonly IFlashcardEventService _flashcardEventService;
-        Func<FlashcardPack<Flashcard>, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
+        Func<FlashcardPack, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
         Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
         public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, 
@@ -71,7 +71,7 @@ namespace SEProject.Controllers
         {
             try
             {
-                var newFlashcardPack = new FlashcardPack<Flashcard>
+                var newFlashcardPack = new FlashcardPack
                 (
                     name: name,
                     id: Guid.NewGuid(),
