@@ -213,3 +213,38 @@ Information
 Flashcard pack with ID 1b1d160a-e64d-4a36-9de3-aec918a49d97 was removed
 OS: Unix, Version: 14.0.0
 
+19/11/2023 14:53:28
+Error
+An error occurred while loading FlashcardPack with name : Cannot open server 'flashcard-db' requested by the login. Client with IP address '88.118.3.184' is not allowed to access the server.  To enable access, use the Azure Management Portal or run sp_set_firewall_rule on the master database to create a firewall rule for this IP address or address range.  It may take up to five minutes for this change to take effect.
+OS: Unix, Version: 14.0.0
+
+19/11/2023 14:55:21
+Information
+FlashcardPack: ID - 258329ef-d7bc-40ea-ba93-983b145ab4fc, name - testpack2 was updated. Deleted
+OS: Unix, Version: 14.0.0
+
+19/11/2023 14:55:22
+Information
+FlashcardPack: ID - a4381fe9-69d9-465e-bac1-52d1d432682d, name - TESTER PACK was updated. Deleted
+OS: Unix, Version: 14.0.0
+
+19/11/2023 14:55:24
+Information
+FlashcardPack: ID - 3b972fc5-b747-4323-8dca-70dbb7a28dcb, name - new test pack was updated. Deleted
+OS: Unix, Version: 14.0.0
+
+19/11/2023 14:55:29
+Information
+Flashcard: ID - e0637a30-102a-40a5-a404-5b4d9b36976b, question - What is today's date? was updated. Saved
+OS: Unix, Version: 14.0.0
+
+19/11/2023 14:55:31
+Information
+Flashcard: ID - 1f7482a2-3ecc-49a7-836f-972f24f7347a, question - What is the color of an apple? was updated. Saved
+OS: Unix, Version: 14.0.0
+
+19/11/2023 14:55:38
+Information
+Flashcard: ID - 27623307-1847-4ece-a150-20421341b9bf, question - What is the capital of Lithuania? was updated. Saved
+OS: Unix, Version: 14.0.0
+

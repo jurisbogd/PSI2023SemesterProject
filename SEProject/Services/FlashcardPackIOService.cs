@@ -1,23 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SEProject.Models;
-using SEProject.Events;
+using SEProject.EventArguments;
+using SEProject.Exceptions;
 
 namespace SEProject.Services;
 
-public class FlashcardPackFileIOService : IFlashcardPackDataHandler
+public class FlashcardPackIOService : IFlashcardPackDataHandler
 {
+    public event EventHandler<FlashcardPackEventArgs>? FlashcardPackChanged;
 
     private DatabaseContext _context;
-    public FlashcardPackFileIOService(DatabaseContext context)
+    public FlashcardPackIOService(DatabaseContext context)
     {
         this._context = context;
     }
-
-    // Event for when a flashcard is saved or updated
-    public event EventHandler<FlashcardPackEventArgs> FlashcardPackSavedOrUpdated;
-
-    // Event for when a flashcard is removed
-    public event EventHandler<FlashcardPackEventArgs> FlashcardPackRemoved;
 
     public async Task<FlashcardPack>? LoadFlashcardPackAsync(Guid ID)
     {
@@ -60,11 +56,9 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         {
             existingPack.Name = flashcardPack.Name;
         }
-
-        // Notify subscribers that the flashcard pack was saved or updated
-        OnFlashcardPackSavedOrUpdated(new FlashcardPackEventArgs(flashcardPack));
         
         await _context.SaveChangesAsync();
+        OnFlashcardPackChanged(new FlashcardPackEventArgs(flashcardPack, "Saved"));
     }
 
     public async Task RemoveFlashcardPackAsync(Guid ID)
@@ -73,22 +67,24 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         .Include(pack => pack.Flashcards)
         .FirstOrDefaultAsync(pack => pack.ID == ID);
 
+        if (packToDelete == null)
+        {
+            // Handle the case where the flashcardPack is null
+            throw new FlashcardPackNotFoundException($"FlashcardPack with ID {ID} not found");
+        }
+
         _context.FlashcardPacks.Remove(packToDelete!);
         _context.Flashcards.RemoveRange(packToDelete.Flashcards!);
 
-        // Notify subscribers that the flashcard pack was removed
-        OnFlashcardPackRemoved(new FlashcardPackEventArgs(packToDelete));
-
         await _context.SaveChangesAsync();
+        OnFlashcardPackChanged(new FlashcardPackEventArgs(packToDelete, "Deleted"));
     }
 
-    public virtual void OnFlashcardPackSavedOrUpdated(FlashcardPackEventArgs e)
+    public virtual void OnFlashcardPackChanged(FlashcardPackEventArgs e)
     {
-        FlashcardPackSavedOrUpdated?.Invoke(this, e);
-    }
-
-    public virtual void OnFlashcardPackRemoved(FlashcardPackEventArgs e)
-    {
-        FlashcardPackRemoved?.Invoke(this, e);
+        if(FlashcardPackChanged != null)
+        {
+            FlashcardPackChanged(this, e);
+        }
     }
 }
