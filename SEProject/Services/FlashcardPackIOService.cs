@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SEProject.Models;
 using SEProject.EventArguments;
+using SEProject.Exceptions;
 
 namespace SEProject.Services;
 
-public class FlashcardPackFileIOService : IFlashcardPackDataHandler
+public class FlashcardPackIOService : IFlashcardPackDataHandler
 {
     public event EventHandler<FlashcardPackEventArgs>? FlashcardPackChanged;
 
     private DatabaseContext _context;
-    public FlashcardPackFileIOService(DatabaseContext context)
+    public FlashcardPackIOService(DatabaseContext context)
     {
         this._context = context;
     }
@@ -65,6 +66,12 @@ public class FlashcardPackFileIOService : IFlashcardPackDataHandler
         var packToDelete = await _context.FlashcardPacks
         .Include(pack => pack.Flashcards)
         .FirstOrDefaultAsync(pack => pack.ID == ID);
+
+        if (packToDelete == null)
+        {
+            // Handle the case where the flashcardPack is null
+            throw new FlashcardPackNotFoundException($"FlashcardPack with ID {ID} not found");
+        }
 
         _context.FlashcardPacks.Remove(packToDelete!);
         _context.Flashcards.RemoveRange(packToDelete.Flashcards!);

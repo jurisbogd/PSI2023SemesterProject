@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SEProject.Models;
 using SEProject.EventArguments;
+using SEProject.Exceptions;
 
 #pragma warning disable 8981 // Disable warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)
 namespace SEProject.Services;
@@ -55,6 +56,11 @@ public class FlashcardIOService : IFlashcardIOService
     {
         var flashcardToRemove = await _context.Flashcards
             .FirstOrDefaultAsync(card => card.ID == flashcard.ID);
+
+        if (flashcardToRemove == null)
+        {
+            throw new FlashcardNotFoundException($"Flashcard with ID {flashcard.ID} not found.)");
+        }
         
         _context.Remove(flashcardToRemove!);
         await _context.SaveChangesAsync();
