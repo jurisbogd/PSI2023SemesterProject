@@ -1,0 +1,17 @@
+﻿.input {
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 0; 
+    margin-bottom: 30px;
+    border: none;
+    outline: none;
+    transition: color 0.3s;
+    resize: none;
+    text-align: left;
+}
+
+.editable {
+    color: #007BFF
+}
