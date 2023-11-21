@@ -248,3 +248,13 @@ Information
 Flashcard: ID - 27623307-1847-4ece-a150-20421341b9bf, question - What is the capital of Lithuania? was updated. Saved
 OS: Unix, Version: 14.0.0
 
+21/11/2023 17:37:18
+Information
+FlashcardPack: ID - d94b4de0-4c96-42a6-86aa-819006b4a9fb, name - NewPack??? was updated. Saved
+OS: Unix, Version: 14.0.0
+
+21/11/2023 17:37:20
+Information
+FlashcardPack: ID - d94b4de0-4c96-42a6-86aa-819006b4a9fb, name - NewPack was updated. Saved
+OS: Unix, Version: 14.0.0
+

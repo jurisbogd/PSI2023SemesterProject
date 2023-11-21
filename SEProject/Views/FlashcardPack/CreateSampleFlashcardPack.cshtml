@@ -37,9 +37,7 @@
         {
             <div class="flashcardPack">
 
-                <textarea class="input" id="pack-@flashcardPack.ID" readonly style="resize: none; text-align: left;">
-                    @flashcardPack.Name
-                 </textarea>
+                <textarea class="input" id="pack-@flashcardPack.ID" readonly style="resize: none; text-align: left;">@flashcardPack.Name</textarea>
 
                 @using (Html.BeginForm("RemoveFlashcardPack", "FlashcardPack", FormMethod.Post))
                 {
