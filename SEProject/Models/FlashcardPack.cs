@@ -1,30 +1,27 @@
 ﻿namespace SEProject.Models
 {
-    public class FlashcardPack<T>
+    public class FlashcardPack
     {
         public string? Name { get; set; }
         public Guid ID { get; set; }
-        public List<T> Flashcards { get; set; }
+        public List<Flashcard> Flashcards { get; set; }
 
-        public FlashcardPack()
-        {
+        public FlashcardPack() {}
 
-        }
-
-        public FlashcardPack(string name, Guid id, List<T> flashcards)
+        public FlashcardPack(string name, Guid id, List<Flashcard> flashcards)
         {
             Name = name;
             ID = id;
             Flashcards = flashcards;
         }
 
-        public FlashcardPack<T> CloneWithNewFlashcards(List<T> newFlashcards)
+        public FlashcardPack CloneWithNewFlashcards(List<Flashcard> newFlashcards)
         {
-            return new FlashcardPack<T>
+            return new FlashcardPack
             (
-                Name = this.Name, 
-                ID = this.ID, 
-                Flashcards = newFlashcards
+                Name, 
+                ID, 
+                newFlashcards
             );
         }
     }

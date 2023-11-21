@@ -5,7 +5,7 @@ namespace SEProject.Models
     public class DatabaseContext : DbContext
     {
         public DbSet<Flashcard> Flashcards { get; set; }
-        public DbSet<FlashcardPack<Flashcard>> FlashcardPacks { get; set; }
+        public DbSet<FlashcardPack> FlashcardPacks { get; set; }
 
         public DatabaseContext(DbContextOptions options) : base(options)
         {
@@ -13,7 +13,7 @@ namespace SEProject.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<FlashcardPack<Flashcard>>()
+            modelBuilder.Entity<FlashcardPack>()
                 .HasMany(pack => pack.Flashcards)
                 .WithOne()
                 .HasForeignKey(flashcard => flashcard.PackID);
