@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SEProject.Models;
 using SEProject.Services;
 
@@ -8,12 +7,6 @@ namespace SEProjectTests;
 public class LoggingServiceTests : IDisposable
 {
     private string? _logFilePath;
-
-    public LoggingServiceTests()
-    {
-        // Set the log file path before each test
-        _logFilePath = Path.Combine(AppContext.BaseDirectory, "testlog.txt");
-    }
 
     [Fact]
     public void Log_AddsEntryToLogEntries()
