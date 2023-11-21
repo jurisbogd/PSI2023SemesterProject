@@ -70,15 +70,24 @@ public class FlashcardIOService : IFlashcardIOService
 
     public async Task RemoveFlashcardFromPack(Guid packID, Guid flashcardID) {
         try {
+            var flashcardPack = await FetchFlashcardPack(packID);
+            var flashcard = await FetchFlashcard(flashcardID);
+            /*
             var flashcardPackTask = FetchFlashcardPack(packID);
             var flashcardTask = FetchFlashcard(flashcardID);
 
             await flashcardPackTask;
             var flashcard = await flashcardTask;
+            */
 
-            if (flashcard.PackID != packID)
+            if (flashcard.PackID == packID)
+            {
+                _context.Remove(flashcard);
+                await _context.SaveChangesAsync();
+            }
+            else {
                 throw new ArgumentException($"Flashcard pack with ID {packID} does not contain flashcard with ID {flashcardID}.");
-            else _context.Remove(flashcard);
+            }
         }
         catch {
             throw;

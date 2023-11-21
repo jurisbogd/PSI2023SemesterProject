@@ -180,33 +180,18 @@ namespace SEProject.Controllers
             }
             catch (FlashcardPackNotFoundException e)
             {
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}.",
-                        level: LogLevel.Error,
-                        exception: e
-                    );
-                _logger.Log(logEntry);
+                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", e, LogLevel.Error);
                 return BadRequest($"Flashcard pack with ID {packID} not found.");
             }
             catch (FlashcardNotFoundException e)
             {
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}.",
-                        level: LogLevel.Error,
-                        exception: e
-                    );
-                _logger.Log(logEntry);
+                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", e, LogLevel.Error);
                 return BadRequest($"Flashcard with ID {flashcardID} not found.");
             }
             catch (ArgumentException e)
             {
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}.",
-                        level: LogLevel.Error,
-                        exception: e
-                    );
-                _logger.Log(logEntry);
-                return BadRequest($"Flashcard with ID {flashcardID} not found.");
+                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", e, LogLevel.Error);
+                return BadRequest($"Flashcard with ID {flashcardID} does not belong to pack with ID {packID}.");
             }
 
             // Redirect to the view that displays the pack of flashcards
