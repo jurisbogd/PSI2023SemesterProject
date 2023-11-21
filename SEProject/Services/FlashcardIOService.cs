@@ -110,7 +110,7 @@ public class FlashcardIOService : IFlashcardIOService
         else return flashcard;
     }
 
-    private async Task<FlashcardPack<Flashcard>> FetchFlashcardPack(Guid id) {
+    private async Task<FlashcardPack> FetchFlashcardPack(Guid id) {
         var pack = await _context.FlashcardPacks.FirstOrDefaultAsync(pack => pack.ID == id);
 
         if (pack == null)
