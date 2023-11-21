@@ -10,5 +10,7 @@ public interface IFlashcardIOService
     Task<List<Flashcard>> LoadFlashcardsAsync(Guid packID);
     Task SaveFlashcard(Flashcard flashcard, Func<Flashcard, bool> validationFunction);
     Task RemoveFlashcardFromPack(Guid packID, Guid flashcardID);
+    public Task<Flashcard> FetchFlashcard(Guid id);
+    public Task<FlashcardPack> FetchFlashcardPack(Guid id);
 }
 
