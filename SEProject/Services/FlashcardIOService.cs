@@ -52,22 +52,6 @@ public class FlashcardIOService : IFlashcardIOService
         OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Saved"));
     }
 
-    public async Task RemoveFlashcard(Flashcard flashcard)
-    {
-        var flashcardToRemove = await _context.Flashcards
-            .FirstOrDefaultAsync(card => card.ID == flashcard.ID);
-
-        if (flashcardToRemove == null)
-        {
-            throw new FlashcardNotFoundException($"Flashcard with ID {flashcard.ID} not found.)");
-        }
-        
-        _context.Remove(flashcardToRemove!);
-        await _context.SaveChangesAsync();
-
-        OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Deleted"));
-    }
-
     public async Task RemoveFlashcardFromPack(Guid packID, Guid flashcardID) {
         try {
             await FetchFlashcardPack(packID);
@@ -77,6 +61,7 @@ public class FlashcardIOService : IFlashcardIOService
             {
                 _context.Remove(flashcard);
                 await _context.SaveChangesAsync();
+                OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Deleted"));
             }
             else {
                 throw new ArgumentException($"Flashcard pack with ID {packID} does not contain flashcard with ID {flashcardID}.");
