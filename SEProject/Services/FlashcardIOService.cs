@@ -70,16 +70,9 @@ public class FlashcardIOService : IFlashcardIOService
 
     public async Task RemoveFlashcardFromPack(Guid packID, Guid flashcardID) {
         try {
-            var flashcardPack = await FetchFlashcardPack(packID);
+            await FetchFlashcardPack(packID);
             var flashcard = await FetchFlashcard(flashcardID);
-            /*
-            var flashcardPackTask = FetchFlashcardPack(packID);
-            var flashcardTask = FetchFlashcard(flashcardID);
-
-            await flashcardPackTask;
-            var flashcard = await flashcardTask;
-            */
-
+            
             if (flashcard.PackID == packID)
             {
                 _context.Remove(flashcard);
@@ -103,19 +96,13 @@ public class FlashcardIOService : IFlashcardIOService
     }
 
     private async Task<Flashcard> FetchFlashcard(Guid id) {
-        var flashcard = await _context.Flashcards.FirstOrDefaultAsync(card => card.ID == id);
-        
-        if (flashcard == null)
-            throw new FlashcardNotFoundException($"Flashcard with ID {id} was not found.");
-        else return flashcard;
+        return await _context.Flashcards.FirstOrDefaultAsync(card => card.ID == id)
+            ?? throw new FlashcardNotFoundException($"Flashcard with ID {id} was not found.");
     }
 
     private async Task<FlashcardPack> FetchFlashcardPack(Guid id) {
-        var pack = await _context.FlashcardPacks.FirstOrDefaultAsync(pack => pack.ID == id);
-
-        if (pack == null)
-            throw new FlashcardPackNotFoundException($"Flashcard pack with ID {id} was not found.");
-        else return pack;
+        return await _context.FlashcardPacks.FirstOrDefaultAsync(pack => pack.ID == id)
+            ?? throw new FlashcardPackNotFoundException($"Flashcard pack with ID {id} was not found.");
     }
 }
 #pragma warning restore 8981 // Restore warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)
