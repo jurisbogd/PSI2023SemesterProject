@@ -174,26 +174,43 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
         {
-            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(packID)!;
-
-            var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
-
-            _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
-
             try
             {
-                await _flashcardIOService.RemoveFlashcard(flashcardToRemove!);
-            }catch (FlashcardNotFoundException fnfe)
+                await _flashcardIOService.RemoveFlashcardFromPack(packID, flashcardID);
+            }
+            catch (FlashcardPackNotFoundException e)
             {
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while removing Flashcard with ID {flashcardID}: {fnfe.Message}",
-                        level: LogLevel.Error);
+                        message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}.",
+                        level: LogLevel.Error,
+                        exception: e
+                    );
+                _logger.Log(logEntry);
+                return BadRequest($"Flashcard pack with ID {packID} not found.");
+            }
+            catch (FlashcardNotFoundException e)
+            {
+                var logEntry = new LogEntry(
+                        message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}.",
+                        level: LogLevel.Error,
+                        exception: e
+                    );
+                _logger.Log(logEntry);
+                return BadRequest($"Flashcard with ID {flashcardID} not found.");
+            }
+            catch (ArgumentException e)
+            {
+                var logEntry = new LogEntry(
+                        message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}.",
+                        level: LogLevel.Error,
+                        exception: e
+                    );
                 _logger.Log(logEntry);
                 return BadRequest($"Flashcard with ID {flashcardID} not found.");
             }
 
             // Redirect to the view that displays the pack of flashcards
-            return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
+            return RedirectToAction("ViewFlashcardPack", new { id = packID });
         }
 
         [HttpGet]

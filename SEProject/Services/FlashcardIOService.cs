@@ -51,7 +51,7 @@ public class FlashcardIOService : IFlashcardIOService
 
         OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Saved"));
     }
-        
+
     public async Task RemoveFlashcard(Flashcard flashcard)
     {
         var flashcardToRemove = await _context.Flashcards
@@ -68,17 +68,20 @@ public class FlashcardIOService : IFlashcardIOService
         OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Deleted"));
     }
 
-    public async Task RemoveFlashcard(Guid id) {
-        var flashcard = await _context.Flashcards
-            .FirstOrDefaultAsync(card => card.ID == id);
+    public async Task RemoveFlashcardFromPack(Guid packID, Guid flashcardID) {
+        try {
+            var flashcardPackTask = FetchFlashcardPack(packID);
+            var flashcardTask = FetchFlashcard(flashcardID);
 
-        if (flashcard == null) {
-            throw new FlashcardNotFoundException($"Flashcard with ID {id} not found.)");
+            await flashcardPackTask;
+            var flashcard = await flashcardTask;
+
+            if (flashcard.PackID != packID)
+                throw new ArgumentException($"Flashcard pack with ID {packID} does not contain flashcard with ID {flashcardID}.");
+            else _context.Remove(flashcard);
         }
-        else {
-            _context.Remove(flashcard);
-            await _context.SaveChangesAsync();
-            OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Deleted"));
+        catch {
+            throw;
         }
     }
 
@@ -88,6 +91,22 @@ public class FlashcardIOService : IFlashcardIOService
         {
             FlashcardChanged(this, e);
         }
+    }
+
+    private async Task<Flashcard> FetchFlashcard(Guid id) {
+        var flashcard = await _context.Flashcards.FirstOrDefaultAsync(card => card.ID == id);
+        
+        if (flashcard == null)
+            throw new FlashcardNotFoundException($"Flashcard with ID {id} was not found.");
+        else return flashcard;
+    }
+
+    private async Task<FlashcardPack<Flashcard>> FetchFlashcardPack(Guid id) {
+        var pack = await _context.FlashcardPacks.FirstOrDefaultAsync(pack => pack.ID == id);
+
+        if (pack == null)
+            throw new FlashcardPackNotFoundException($"Flashcard pack with ID {id} was not found.");
+        else return pack;
     }
 }
 #pragma warning restore 8981 // Restore warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)
