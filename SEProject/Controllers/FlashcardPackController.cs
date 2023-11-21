@@ -47,21 +47,13 @@ namespace SEProject.Controllers
         }
 
 
-        public async Task<IActionResult> ViewFlashcardPack(Guid id)
-        {
-            try
-            {
-                // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-                var flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
-                return View(flashcardPackToView);
+        public async Task<IActionResult> ViewFlashcardPack(Guid id) {
+            try {
+                var pack = await _flashcardIOService.FetchFlashcardPack(id);
+                return View(pack);
             }
-            catch (Exception ex)
-            {
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
-                        level: LogLevel.Error);
-                _logger.Log(logEntry);
+            catch (Exception e) {
+                _logger.Log(message: $"An error occurred while fetching flashcard pack with ID {id}.", exception: e, level: LogLevel.Error);
                 return NotFound();
             }
         }
@@ -172,25 +164,20 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
-        {
-            try
-            {
+        public async Task<IActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID) {
+            try {
                 await _flashcardIOService.RemoveFlashcardFromPack(packID, flashcardID);
             }
-            catch (FlashcardPackNotFoundException e)
-            {
-                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", e, LogLevel.Error);
+            catch (FlashcardPackNotFoundException e) {
+                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", exception: e, level: LogLevel.Error);
                 return BadRequest($"Flashcard pack with ID {packID} not found.");
             }
-            catch (FlashcardNotFoundException e)
-            {
-                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", e, LogLevel.Error);
+            catch (FlashcardNotFoundException e) {
+                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", exception: e, level: LogLevel.Error);
                 return BadRequest($"Flashcard with ID {flashcardID} not found.");
             }
-            catch (ArgumentException e)
-            {
-                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", e, LogLevel.Error);
+            catch (ArgumentException e) {
+                _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", exception: e, level: LogLevel.Error);
                 return BadRequest($"Flashcard with ID {flashcardID} does not belong to pack with ID {packID}.");
             }
 
