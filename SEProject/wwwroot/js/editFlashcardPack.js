@@ -24,6 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
             textarea.classList.remove("editable");
 
             var updatedValue = textarea.value;
+            
+            if (updatedValue === '') {
+                alert('Please enter a name for the flashcard pack.');
+                return;
+            }
 
             updatePackOnServer(updatedValue);
 
