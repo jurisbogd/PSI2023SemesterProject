@@ -36,10 +36,11 @@
                         <span class="slider round"></span>
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button id="submit-button" type="submit" class="btn btn-primary">Save Changes</button>
                 <button type="button" class="btn btn-primary btn-red" 
                     onclick="location.href='@Url.Action("ViewFlashcardPack", "FlashcardPack", new { id = Model.PackID })';">Cancel</button>
             </form>
         </div>
     </div>
+    <script src="~/js/validateForm.js"></script>
 </body>
