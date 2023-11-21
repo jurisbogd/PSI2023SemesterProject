@@ -49,7 +49,7 @@ namespace SEProject.Controllers
 
         public async Task<IActionResult> ViewFlashcardPack(Guid id) {
             try {
-                var pack = await _flashcardIOService.FetchFlashcardPack(id);
+                var pack = await _flashcardPackDataHandler.FetchFlashcardPackIncludingFlashcards(id);
                 return View(pack);
             }
             catch (Exception e) {
