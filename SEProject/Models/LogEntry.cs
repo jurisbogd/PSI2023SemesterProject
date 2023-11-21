@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace SEProject.Services;
+namespace SEProject.Models;
 
 public record LogEntry {
     public DateTime TimeStamp { get; init; }
