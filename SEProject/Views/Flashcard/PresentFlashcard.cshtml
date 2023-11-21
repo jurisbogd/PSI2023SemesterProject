@@ -23,26 +23,27 @@
             <div class="question" id="question">@Model.Question</div>
             <div class="answer" style="display: none;" id="answer">@Model.Answer</div>
         </div>
+        <form id="revealForm">
+            <button id="revealButton" class="reveal-button">Reveal</button>
+        </form>
+
+        <div id="is-favorite" data-isfavorite="@Model.IsFavorite.ToString().ToLower()" />
+        <div id="pack-id" data-pack-id="@Model.PackID.ToString().ToLower()" />
+        <div id="flashcard-id" data-flashcard-id="@Model.ID.ToString().ToLower()" />
+
+        <button id="favorite-button" class="favorite-button">
+            <i id="filled" class="fas fa-star" title="Favorite" style="@(Model.IsFavorite ? "display: inline-block;" : "display: none;")"></i>
+            <i id="non-filled" class="far fa-star" title="Favorite" style="@(Model.IsFavorite ? "display: none;" : "display: inline-block;")"></i>
+        </button>
+
     </div>
-    <form id="revealForm">
-        <button id="revealButton" class="reveal-button">Reveal</button>
-        
-    </form>
+
+
     <form id="NextFlashcardForm" action="PresentNextFlashcard" method="post">
         <input type="hidden" name="packID" value=@Model.PackID />
         <input type="hidden" name="currentFlashcardID" value=@Model.ID />
         <button id="arrowButton" style="display: none;" class="arrow"></button>
     </form>
-
-    <div id="is-favorite" data-isfavorite="@Model.IsFavorite.ToString().ToLower()" />
-    <div id="pack-id" data-pack-id="@Model.PackID.ToString().ToLower()" />
-    <div id="flashcard-id" data-flashcard-id="@Model.ID.ToString().ToLower()" />
-
-    <button id="favorite-button" class="favorite-button">
-        <i id="filled" class="fas fa-star" title="Favorite" style="@(Model.IsFavorite ? "display: inline-block;" : "display: none;")"></i>
-        <i id="non-filled" class="far fa-star" title="Favorite" style="@(Model.IsFavorite ? "display: none;" : "display: inline-block;")"></i>
-    </button>
-
 
     <script src="~/js/presentFlashcard.js"></script>
     

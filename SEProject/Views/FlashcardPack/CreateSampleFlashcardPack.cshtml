@@ -9,6 +9,7 @@
 
     <!-- Link to the CSS file -->
     <link rel="stylesheet" href="~/css/flashcardPack.css">
+    <link rel="stylesheet" href="~/css/textArea.css">
 </head>
 <body>
 
@@ -35,43 +36,25 @@
         @foreach (var flashcardPack in Model)
         {
             <div class="flashcardPack">
-                <div class="name">@flashcardPack.Name</div>
+
+                <textarea class="input" id="pack-@flashcardPack.ID" readonly style="resize: none; text-align: left;">@flashcardPack.Name</textarea>
 
                 @using (Html.BeginForm("RemoveFlashcardPack", "FlashcardPack", FormMethod.Post))
                 {
-                    <button class="remove-button" data-flashcardPack-id="@flashcardPack.ID" name="flashcardPackID" value="@flashcardPack.ID">X</button>
+                    <button id="remove-pack-@flashcardPack.ID" class="remove-button" data-flashcardPack-id="@flashcardPack.ID" name="flashcardPackID" value="@flashcardPack.ID">X</button>
                 }
 
-                <!-- "Edit" button to trigger the pop-up window -->
                 <button class="edit-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID">Edit</button>
-                
-                <!-- Create a hidden modal for editing the flashcard pack name -->
-                <div class="modal" id="editModal-@flashcardPack.ID">
-                    @using (Html.BeginForm("EditFlashcardPackName", "FlashcardPack", FormMethod.Post))
-                    {
-                        @Html.Hidden("id", flashcardPack.ID) <!-- Hidden input to identify the flashcard pack -->
-                        
-                        <!-- Input field for the new name -->
-                        <div class="form-group">
-                            <label for="newPackName">New Name:</label>
-                            <input type="text" id="newPackName" name="newName" class="form-control" required>
-                        </div>
-                        
-                        <!-- Submit button to update the name -->
-                        <button type="submit" class="btn btn-primary">Save Name</button>
-                        <button type="button" class="btn btn-primary btn-red" onclick="location.href='@Url.Action("CreateSampleFlashcardPack")';">Cancel</button>
-                    }
-                </div>
+                <button data-flashcardPack-id="@flashcardPack.ID" class="btn btn-primary save-button" style="display: none;">Save</button>
+                <button data-flashcardPack-id="@flashcardPack.ID" class="btn btn-primary btn-red cancel-button" style="display: none;" onclick="location.href='@Url.Action("CreateSampleFlashcardPack")';">Cancel</button>
                 
                 @using (Html.BeginForm("ViewFlashcardPack", "FlashcardPack", FormMethod.Post))
                 {
-                    <button class="view-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID" name="id" value="@flashcardPack.ID">View Flashcard Pack</button>
+                    <button id="view-pack-@flashcardPack.ID" class="view-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID" name="id" value="@flashcardPack.ID">View Flashcard Pack</button>
                 }
             </div>
         }
     </div>
-
-
 
     <script src="~/js/viewFlashcardPackButton.js"></script>
     <script src="~/js/editFlashcardPack.js"></script>
