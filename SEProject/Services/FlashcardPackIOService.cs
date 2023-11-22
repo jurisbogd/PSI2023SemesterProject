@@ -7,7 +7,8 @@ namespace SEProject.Services;
 
 public class FlashcardPackIOService : IFlashcardPackDataHandler
 {
-    public event EventHandler<FlashcardPackEventArgs>? FlashcardPackChanged;
+    public delegate void FlashcardPackChangedEventHandler(object source, FlashcardPackEventArgs args);
+    public event FlashcardPackChangedEventHandler? FlashcardPackChanged;
 
     private DatabaseContext _context;
     public FlashcardPackIOService(DatabaseContext context)
