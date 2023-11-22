@@ -12,7 +12,7 @@ public class FlashcardPackDataService : IFlashcardPackDataService {
     }
 
     public async Task SaveFlashcardPack(FlashcardPack flashcardPack) {
-        if (_context.FlashcardPacks.Any(pack => pack.ID == flashcardPack.ID)) {
+        if (await _context.FlashcardPacks.AnyAsync(pack => pack.ID == flashcardPack.ID)) {
             _context.FlashcardPacks.Update(flashcardPack);
         }
         else {
