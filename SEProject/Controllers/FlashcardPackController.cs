@@ -12,7 +12,6 @@ namespace SEProject.Controllers
         private readonly IFlashcardDataService _flashcardDataService;
         private readonly IFlashcardPackDataService _flashcardPackDataService;
 
-        private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
         private readonly IFlashcardPackEventService _flashcardPackEventService;
         private readonly IFlashcardEventService _flashcardEventService;
@@ -20,15 +19,15 @@ namespace SEProject.Controllers
         Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
         public FlashcardPackController(
-            IFlashcardIOService flashcardIOService, ILoggingHandler logger, 
-            IFlashcardPackEventService flashcardPackEventService, IFlashcardEventService flashcardEventService,
+            ILoggingHandler logger, 
+            IFlashcardPackEventService flashcardPackEventService,
+            IFlashcardEventService flashcardEventService,
             IFlashcardDataService flashcardData,
             IFlashcardPackDataService flashcardPackData
         ) {
             _flashcardDataService = flashcardData;
             _flashcardPackDataService = flashcardPackData;
 
-            _flashcardIOService = flashcardIOService;
             _logger = logger;
             _flashcardPackEventService = flashcardPackEventService;
             _flashcardEventService = flashcardEventService;
