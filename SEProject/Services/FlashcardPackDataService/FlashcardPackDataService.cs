@@ -11,8 +11,13 @@ public class FlashcardPackDataService : IFlashcardPackDataService {
         _context = context;
     }
 
-    public async Task SaveFlashcardPack(FlashcardPack pack) {
-        _context.FlashcardPacks.Update(pack);
+    public async Task SaveFlashcardPack(FlashcardPack flashcardPack) {
+        if (_context.FlashcardPacks.Any(pack => pack.ID == flashcardPack.ID)) {
+            _context.FlashcardPacks.Update(flashcardPack);
+        }
+        else {
+            await _context.FlashcardPacks.AddAsync(flashcardPack);
+        }
         await _context.SaveChangesAsync();
     }
 
