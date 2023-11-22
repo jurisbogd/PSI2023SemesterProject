@@ -7,15 +7,15 @@ namespace SEProjectTests;
 
 public class FlashcardPackIOServiceTests
 {
+    private DbContextOptions<DatabaseContext> options = new DbContextOptionsBuilder<DatabaseContext>()
+        .UseInMemoryDatabase(databaseName: "LoadFlashcardPackAsync_WithValidID_ReturnsFlashcardPack")
+        .Options;
+    
     // This test is covering the LoadFlashcardPackAsync method with a valid ID
     [Fact]
     public async Task LoadFlashcardPackAsync_WithValidID_ReturnsFlashcardPack()
     {
         // Arrange
-        var options = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase(databaseName: "LoadFlashcardPackAsync_WithValidID_ReturnsFlashcardPack")
-            .Options;
-
         using (var context = new DatabaseContext(options))
         {
             var service = new FlashcardPackIOService(context);
@@ -38,10 +38,6 @@ public class FlashcardPackIOServiceTests
     public async Task LoadFlashcardPackAsync_WithInvalidID_ReturnsNull()
     {
         // Arrange
-        var options = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase(databaseName: "LoadFlashcardPackAsync_WithInvalidID_ReturnsNull")
-            .Options;
-
         using (var context = new DatabaseContext(options))
         {
             var service = new FlashcardPackIOService(context);
@@ -61,10 +57,6 @@ public class FlashcardPackIOServiceTests
     public async Task LoadFlashcardPacksAsync_ReturnsFlashcardPacks()
     {
         // Arrange
-        var options = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase(databaseName: "LoadFlashcardPacksAsync_ReturnsFlashcardPacks")
-            .Options;
-
         using (var context = new DatabaseContext(options))
         {
             var service = new FlashcardPackIOService(context);
@@ -90,10 +82,6 @@ public class FlashcardPackIOServiceTests
     public async Task SaveFlashcardPackAsync_WithValidFlashcardPack_SavesFlashcardPack()
     {
         // Arrange
-        var options = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase(databaseName: "SaveFlashcardPackAsync_WithValidFlashcardPack_SavesFlashcardPack")
-            .Options;
-
         using (var context = new DatabaseContext(options))
         {
             var service = new FlashcardPackIOService(context);
@@ -114,10 +102,6 @@ public class FlashcardPackIOServiceTests
     public async Task RemoveFlashcardPackAsync_WithExistingFlashcardPack_RemovesFlashcardPack()
     {
         // Arrange
-        var options = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase(databaseName: "RemoveFlashcardPackAsync_WithExistingFlashcardPack_RemovesFlashcardPack")
-            .Options;
-
         using (var context = new DatabaseContext(options))
         {
             var service = new FlashcardPackIOService(context);
