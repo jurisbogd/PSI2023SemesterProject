@@ -36,22 +36,9 @@ namespace SEProject.Controllers
             _flashcardEventService = flashcardEventService;
         }
 
-        public async Task<IActionResult> CreateSampleFlashcardPack(string name)
-        {
-            try
-            {
-                // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-                return View(allFlashcardPacks);
-            }
-            catch (Exception ex)
-            {
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with name {name}: {ex.Message}",
-                        level: LogLevel.Error);
-                _logger.Log(logEntry);
-                return View();
-            }
+        public async Task<IActionResult> CreateSampleFlashcardPack(string name) {
+            var packs = await _flashcardPackData.FetchSampleFlashcardPacks();
+            return View(packs);
         }
 
 
@@ -188,7 +175,7 @@ namespace SEProject.Controllers
                 //_flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                 // Save the new flashcard (this will trigger the event)
                 await _flashcardData.SaveFlashcard(editedFlashcard);
-                
+
                 // Redirect to the view that displays the flashcards
                 return RedirectToAction("ViewFlashcardPack", new { id = editedFlashcard.PackID });
             }
