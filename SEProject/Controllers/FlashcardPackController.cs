@@ -9,6 +9,9 @@ namespace SEProject.Controllers
 {
     public class FlashcardPackController : Controller
     {
+        private readonly IFlashcardDataService _flashcardData;
+        private readonly IFlashcardPackDataService _flashcardPackData;
+
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
         private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
@@ -19,8 +22,13 @@ namespace SEProject.Controllers
 
         public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, 
             IFlashcardIOService flashcardIOService, ILoggingHandler logger, 
-            IFlashcardPackEventService flashcardPackEventService, IFlashcardEventService flashcardEventService)
-        {
+            IFlashcardPackEventService flashcardPackEventService, IFlashcardEventService flashcardEventService,
+            IFlashcardDataService flashcardData,
+            IFlashcardPackDataService flashcardPackData
+        ) {
+            _flashcardData = flashcardData;
+            _flashcardPackData = flashcardPackData;
+
             _flashcardPackDataHandler = flashcardPackDataHandler;
             _flashcardIOService = flashcardIOService;
             _logger = logger;
