@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SEProject.Exceptions;
 using SEProject.Models;
 
@@ -11,7 +12,12 @@ public class FlashcardDataService : IFlashcardDataService {
     }
     
     public async Task SaveFlashcard(Flashcard flashcard) {
-        _context.Flashcards.Update(flashcard);
+        if (await _context.Flashcards.AnyAsync(pack => pack.ID == flashcard.ID)) {
+            _context.Flashcards.Update(flashcard);
+        }
+        else {
+            await _context.Flashcards.AddAsync(flashcard);
+        }
         await _context.SaveChangesAsync();
     }
 
