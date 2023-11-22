@@ -23,7 +23,7 @@ public class FlashcardPackDataService : IFlashcardPackDataService {
     }
 
     public async Task<FlashcardPack> FetchFlashcardPack(Guid id) {
-        return await _context.FlashcardPacks.Include(pack => pack.Flashcards).SingleAsync(pack => pack.ID == id)
+        return await _context.FlashcardPacks.Include(pack => pack.Flashcards).FirstOrDefaultAsync(pack => pack.ID == id)
             ?? throw new FlashcardPackNotFoundException();
     }
 }
