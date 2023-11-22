@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SEProject.EventArguments;
 using SEProject.Exceptions;
 using SEProject.Models;
 
@@ -6,6 +7,8 @@ namespace SEProject.Services;
 
 public class FlashcardPackDataService : IFlashcardPackDataService {
     private readonly DatabaseContext _context;
+
+    public event EventHandler<FlashcardPackEventArgs>? FlashcardPackChanged;
 
     public FlashcardPackDataService(DatabaseContext context) {
         _context = context;
@@ -19,12 +22,15 @@ public class FlashcardPackDataService : IFlashcardPackDataService {
             await _context.FlashcardPacks.AddAsync(flashcardPack);
         }
         await _context.SaveChangesAsync();
+        OnFlashcardPackChanged(flashcardPack);
     }
 
     public async Task DeleteFlashcardPack(Guid id) {
         var pack = await FetchFlashcardPack(id);
         _context.FlashcardPacks.Remove(pack);
+        _context.Flashcards.RemoveRange(pack.Flashcards);
         await _context.SaveChangesAsync();
+        OnFlashcardPackChanged(pack);
     }
 
     public async Task<FlashcardPack> FetchFlashcardPack(Guid id) {
@@ -35,4 +41,7 @@ public class FlashcardPackDataService : IFlashcardPackDataService {
     public async Task<List<FlashcardPack>> FetchSampleFlashcardPacks() {
         return await _context.FlashcardPacks.ToListAsync();
     }
+
+    protected virtual void OnFlashcardPackChanged(FlashcardPack pack) =>
+        FlashcardPackChanged?.Invoke(this, new FlashcardPackEventArgs(pack));
 }
