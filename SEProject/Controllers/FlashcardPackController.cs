@@ -113,13 +113,13 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveFlashcardPack(Guid ID) {
+        public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID) {
             try {
-                await _flashcardPackDataService.DeleteFlashcardPack(ID);
+                await _flashcardPackDataService.DeleteFlashcardPack(flashcardPackID);
             }
             catch (FlashcardPackNotFoundException e) {
-                _logger.Log(message: $"An error occurred while removing FlashcardPack with ID {ID}.", exception: e, level: LogLevel.Error);
-                return BadRequest($"FlashcardPack with ID {ID} not found.");
+                _logger.Log(message: $"An error occurred while removing FlashcardPack with ID {flashcardPackID}.", exception: e, level: LogLevel.Error);
+                return BadRequest($"FlashcardPack with ID {flashcardPackID} not found.");
             }
 
             return RedirectToAction("CreateSampleFlashcardPack");
