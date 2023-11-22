@@ -67,76 +67,60 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddFlashcardPack(string name)
-        {
-            try
-            {
-                var newFlashcardPack = new FlashcardPack
-                (
+        public async Task<IActionResult> AddFlashcardPack(string name) {
+            try {
+                var newFlashcardPack = new FlashcardPack (
                     name: name,
                     id: Guid.NewGuid(),
                     flashcards: new List<Flashcard>()
                 );
 
-                _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
-
-                // Save the new flashcard (this will trigger the event)
+                //_flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
+                
                 await _flashcardPackData.SaveFlashcardPack(newFlashcardPack);
-
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
-            catch (Exception ex)
-            {
-                // Handle the exception and log an error message with the exception details
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with name {name}: {ex.Message}",
-                        level: LogLevel.Error);
-                _logger.Log(logEntry);
-
-                // You can also handle the exception further or return an error view
-                return View("Error", ex);
+            catch (Exception e) {
+                _logger.Log(message: $"An error occurred while loading FlashcardPack with name {name}.", exception: e, level: LogLevel.Error);
+                return View("Error", e);
             }
         }
 
         [HttpGet]
-        public IActionResult AddFlashcard(Guid packID)
-        {
-
-            var newFlashcard = new Flashcard
-            {
+        public IActionResult AddFlashcard(Guid packID) {
+            var newFlashcard = new Flashcard {
                 PackID = packID,
                 ID = Guid.NewGuid(),
                 Question = "Question",
                 Answer = "Answer",
                 Difficulty = 0
             };
+
             return View(newFlashcard);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddFlashcardToPack(Flashcard flashcard)
-        {
+        public async Task<IActionResult> AddFlashcardToPack(Flashcard flashcard) {
             var packID = flashcard.PackID;
 
             try {
                 var flashcardPack = await _flashcardPackData.FetchFlashcardPack(packID);
 
-                if (ModelState.IsValid)
-                {
-                    // Create a new Flashcard object from the form data
-                    _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
-                    // Save the new flashcard (this will trigger the event)
-                    await _flashcardIOService.SaveFlashcard(flashcard, FlashcardIDValidation);
+                if (ModelState.IsValid) {
+                    //_flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
+                    await _flashcardData.SaveFlashcard(flashcard);
+
+                    _logger.Log($"Added flashcard with ID {flashcard.ID} to pack with ID {flashcard.PackID}");
 
                     // Redirect to the view that displays the pack of flashcards
-                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack!.ID });
+                    return RedirectToAction("ViewFlashcardPack", new { id = flashcard.PackID });
                 }
 
                 // If the model is not valid, return to the form view with validation errors
                 return View(flashcardPack);
             }
             catch (Exception e) {
-                _logger.Log(message: $"An error occurred while loading FlashcardPack with ID {packID}: {e.Message}", exception: e, level: LogLevel.Error);
+                _logger.Log(message: $"An error occurred while loading FlashcardPack with ID {packID}", exception: e, level: LogLevel.Error);
 
                 // You can also handle the exception further or return an error view
                 return View("Error", e);
@@ -144,11 +128,9 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID)
-        {
+        public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID) {
             // Subscribing to event
-            _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
-
+            // _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
             try {
                 await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
             }
@@ -183,7 +165,7 @@ namespace SEProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditFlashcard(Guid flashcardID){
+        public async Task<IActionResult> EditFlashcard(Guid flashcardID) {
             try {
                 var flashcard = await _flashcardData.FetchFlashcard(flashcardID);
                 return View(flashcard);
@@ -195,74 +177,54 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditFlashcard(Flashcard editedFlashcard)
-        {
-            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-            var flashcardToEdit = allFlashcardPacks
-                .SelectMany(p => p.Flashcards)
-                .FirstOrDefault(f => f.ID == editedFlashcard.ID);
+        public async Task<IActionResult> EditFlashcard(Flashcard flashcard) {
+            if (ModelState.IsValid) {
+                var editedFlashcard = await _flashcardData.FetchFlashcard(flashcard.ID);
+                editedFlashcard.Question = flashcard.Question;
+                editedFlashcard.Answer = flashcard.Answer;
+                editedFlashcard.Difficulty = flashcard.Difficulty;
+                editedFlashcard.IsFavorite = flashcard.IsFavorite;
 
-            if (ModelState.IsValid)
-            {
-                flashcardToEdit.Question = editedFlashcard.Question;
-                flashcardToEdit.Answer = editedFlashcard.Answer;
-                flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
-                flashcardToEdit.IsFavorite = editedFlashcard.IsFavorite;
-
-                _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
+                //_flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                 // Save the new flashcard (this will trigger the event)
-                await _flashcardIOService.SaveFlashcard(flashcardToEdit, FlashcardIDValidation);
-
+                await _flashcardData.SaveFlashcard(editedFlashcard);
+                
                 // Redirect to the view that displays the flashcards
-                return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
+                return RedirectToAction("ViewFlashcardPack", new { id = editedFlashcard.PackID });
             }
 
-            // If the model is not valid, return to the form view with validation errors
-            return View(flashcardToEdit);
+            return View(flashcard);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditFlashcardPackName(Guid id, string newName)
-        {
-            try
-            {
-                // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-                // Find the flashcard pack with the specified ID
-                var flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
-                if(newName != null)
-                {
-                    var oldName = flashcardPackToEdit.Name;
-                    // Update the flashcard pack's name
-                    flashcardPackToEdit.Name = newName;
-
-                    _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
-
+        public async Task<IActionResult> EditFlashcardPackName(Guid id, string newName) {
+            try {
+                var pack = await _flashcardPackData.FetchFlashcardPack(id);
+                if(newName != null) {
+                    var oldName = pack.Name;
+                    pack.Name = newName;
+                    // _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
                     // Save the new flashcard (this will trigger the event)
-                    await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit);
+                    await _flashcardPackData.SaveFlashcardPack(pack);
                 }
 
-                // Redirect back to the page that displays the flashcard packs
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 _logger.Log(message: $"An error occurred while loading FlashcardPack with ID {id}.", exception: e, level: LogLevel.Error);
                 return NotFound();
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> SortFlashcards(Guid flashcardPackID, string sortOption)
-        {
+        public async Task<IActionResult> SortFlashcards(Guid flashcardPackID, string sortOption) {
             FlashcardComparer? comparer = null;
             var flashcardPack = await _flashcardPackData.FetchFlashcardPack(flashcardPackID);
             var flashcardsInPack = flashcardPack.Flashcards;
             var sortedFlashcards = new List<Flashcard>();
 
             // Checks what sort of comparison will be done and creates that type of object.
-            switch (sortOption)
-            {
+            switch (sortOption) {
                 case "DateAsc":
                 case "DateDesc":
                     comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
@@ -277,8 +239,7 @@ namespace SEProject.Controllers
             }
 
             // Compares by Ascending or Descending, depending on sortOption ending.
-            if (comparer != null)
-            {
+            if (comparer != null) {
                 if (sortOption.EndsWith("Asc"))
                 {
                     sortedFlashcards = flashcardsInPack.OrderBy(flashcard => flashcard, comparer).ToList();
