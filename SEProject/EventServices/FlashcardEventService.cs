@@ -1,5 +1,5 @@
-using SEProject.Services;
 using SEProject.EventArguments;
+using SEProject.Models;
 
 namespace SEProject.EventServices;
 
@@ -11,6 +11,6 @@ public class FlashcardEventService : IFlashcardEventService {
     }
 
     public void OnFlashcardChanged(object source, FlashcardEventArgs args) {
-        _logger.Log(message: $"Flashcard: ID - {args.Flashcard.ID}, question - {args.Flashcard.Question} was updated. {e.Message}");
+        _logger.Log(message: $"Flashcard: ID - {args.Flashcard.ID}, question - {args.Flashcard.Question} was updated. {args.Message}");
     }
 }
