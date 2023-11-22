@@ -1,4 +1,4 @@
-namespace SEProject.Services;
+namespace SEProject.Models;
 
 public interface ILoggingHandler
 {

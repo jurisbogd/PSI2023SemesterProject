@@ -1,11 +1,12 @@
 ﻿using SEProject.Models;
 using SEProject.EventArguments;
+using static SEProject.Services.FlashcardPackIOService;
 
 namespace SEProject.Services;
 
 public interface IFlashcardPackDataHandler
 {
-    event EventHandler<FlashcardPackEventArgs>? FlashcardPackChanged;
+    event FlashcardPackChangedEventHandler? FlashcardPackChanged;
     void OnFlashcardPackChanged(FlashcardPackEventArgs e);
     public Task<FlashcardPack> FetchFlashcardPack(Guid id);
     Task<FlashcardPack>? LoadFlashcardPackAsync(Guid ID);
