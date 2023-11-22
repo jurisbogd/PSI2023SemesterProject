@@ -10,6 +10,8 @@ public interface IFlashcardIOService
     void OnFlashcardChanged(FlashcardEventArgs e);
     Task<List<Flashcard>> LoadFlashcardsAsync(Guid packID);
     Task SaveFlashcard(Flashcard flashcard, Func<Flashcard, bool> validationFunction);
-    Task RemoveFlashcard(Flashcard flashcard);
+    Task RemoveFlashcardFromPack(Guid packID, Guid flashcardID);
+    public Task<Flashcard> FetchFlashcard(Guid id);
+    public Task<FlashcardPack> FetchFlashcardPack(Guid id);
 }
 

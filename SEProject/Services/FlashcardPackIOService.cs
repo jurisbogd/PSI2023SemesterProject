@@ -16,6 +16,11 @@ public class FlashcardPackIOService : IFlashcardPackDataHandler
         this._context = context;
     }
 
+    public async Task<FlashcardPack> FetchFlashcardPack(Guid id) {
+        return await _context.FlashcardPacks.Include(pack => pack.Flashcards).FirstOrDefaultAsync(pack => pack.ID == id)
+            ?? throw new FlashcardPackNotFoundException($"Flashcard pack with ID {id} was not found.");
+    }
+
     public async Task<FlashcardPack>? LoadFlashcardPackAsync(Guid ID)
     {
         FlashcardPack? flashcardPack = await _context.FlashcardPacks

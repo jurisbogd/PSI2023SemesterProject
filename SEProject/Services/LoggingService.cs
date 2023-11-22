@@ -4,7 +4,7 @@ namespace SEProject.Services;
 
 public class LoggingService : ILoggingHandler
 {
-    private const string _logFilePath = "log.txt";
+    private const string _logPath = "log.txt";
     private readonly List<LogEntry> _logEntries = new();
 
     public void Log(LogEntry entry)
@@ -16,7 +16,7 @@ public class LoggingService : ILoggingHandler
             var os = Environment.OSVersion;
             var parameters = new UserParameters(os.Platform.ToString(), os.Version.ToString());
 
-            using var writer = new StreamWriter(_logFilePath, true);
+            using var writer = new StreamWriter(_logPath, true);
             writer.WriteLine(entry.TimeStamp);
             writer.WriteLine(entry.Level);
             writer.WriteLine(entry.Message);
@@ -27,6 +27,22 @@ public class LoggingService : ILoggingHandler
         {
             Console.WriteLine($"Error while logging: {ex.Message}");
         }
+    }
+
+    public void Log(string message, Exception? exception = null, LogLevel level = LogLevel.Information) {
+        var entry = new LogEntry(message: message, exception: exception, level: level);
+        Log(entry);
+        /*
+        var exceptionMessage = exception == null ? null : $"Exception: {exception}{Environment.NewLine}";
+
+        File.AppendAllText(
+            _logPath,
+            $"Time: {DateTime.Now}" + Environment.NewLine +
+            $"Level: {level}" + Environment.NewLine +
+            $"Message: {message}" + Environment.NewLine +
+            exceptionMessage
+        );
+        */
     }
 
     public List<LogEntry> GetLogs()
