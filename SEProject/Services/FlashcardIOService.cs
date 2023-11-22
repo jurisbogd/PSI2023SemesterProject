@@ -2,12 +2,14 @@
 using SEProject.Models;
 using SEProject.EventArguments;
 using SEProject.Exceptions;
+using Newtonsoft.Json.Bson;
 
 #pragma warning disable 8981 // Disable warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)
 namespace SEProject.Services;
 public class FlashcardIOService : IFlashcardIOService
 {
-    public event EventHandler<FlashcardEventArgs>? FlashcardChanged;
+    public delegate void FlashcardChangedEventHandler(object source, FlashcardEventArgs args);
+    public event FlashcardChangedEventHandler? FlashcardChanged;
     private DatabaseContext _context;
 
     public FlashcardIOService(DatabaseContext context)
