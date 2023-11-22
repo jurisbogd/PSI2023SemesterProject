@@ -9,8 +9,8 @@ namespace SEProject.Controllers
 {
     public class FlashcardPackController : Controller
     {
-        private readonly IFlashcardDataService _flashcardData;
-        private readonly IFlashcardPackDataService _flashcardPackData;
+        private readonly IFlashcardDataService _flashcardDataService;
+        private readonly IFlashcardPackDataService _flashcardPackDataService;
 
         private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
         private readonly IFlashcardIOService _flashcardIOService;
@@ -26,8 +26,8 @@ namespace SEProject.Controllers
             IFlashcardDataService flashcardData,
             IFlashcardPackDataService flashcardPackData
         ) {
-            _flashcardData = flashcardData;
-            _flashcardPackData = flashcardPackData;
+            _flashcardDataService = flashcardData;
+            _flashcardPackDataService = flashcardPackData;
 
             _flashcardPackDataHandler = flashcardPackDataHandler;
             _flashcardIOService = flashcardIOService;
@@ -37,14 +37,14 @@ namespace SEProject.Controllers
         }
 
         public async Task<IActionResult> CreateSampleFlashcardPack(string name) {
-            var packs = await _flashcardPackData.FetchSampleFlashcardPacks();
+            var packs = await _flashcardPackDataService.FetchSampleFlashcardPacks();
             return View(packs);
         }
 
 
         public async Task<IActionResult> ViewFlashcardPack(Guid id) {
             try {
-                var pack = await _flashcardPackData.FetchFlashcardPack(id);
+                var pack = await _flashcardPackDataService.FetchFlashcardPack(id);
                 return View(pack);
             }
             catch (Exception e) {
@@ -62,9 +62,9 @@ namespace SEProject.Controllers
                     flashcards: new List<Flashcard>()
                 );
 
-                //_flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
+                _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
                 
-                await _flashcardPackData.SaveFlashcardPack(newFlashcardPack);
+                await _flashcardPackDataService.SaveFlashcardPack(newFlashcardPack);
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
             catch (Exception e) {
@@ -91,11 +91,11 @@ namespace SEProject.Controllers
             var packID = flashcard.PackID;
 
             try {
-                var flashcardPack = await _flashcardPackData.FetchFlashcardPack(packID);
+                var flashcardPack = await _flashcardPackDataService.FetchFlashcardPack(packID);
 
                 if (ModelState.IsValid) {
                     //_flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
-                    await _flashcardData.SaveFlashcard(flashcard);
+                    await _flashcardDataService.SaveFlashcard(flashcard);
 
                     _logger.Log($"Added flashcard with ID {flashcard.ID} to pack with ID {flashcard.PackID}");
 
@@ -154,7 +154,7 @@ namespace SEProject.Controllers
         [HttpGet]
         public async Task<IActionResult> EditFlashcard(Guid flashcardID) {
             try {
-                var flashcard = await _flashcardData.FetchFlashcard(flashcardID);
+                var flashcard = await _flashcardDataService.FetchFlashcard(flashcardID);
                 return View(flashcard);
             }
             catch (Exception e) {
@@ -166,7 +166,7 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> EditFlashcard(Flashcard flashcard) {
             if (ModelState.IsValid) {
-                var editedFlashcard = await _flashcardData.FetchFlashcard(flashcard.ID);
+                var editedFlashcard = await _flashcardDataService.FetchFlashcard(flashcard.ID);
                 editedFlashcard.Question = flashcard.Question;
                 editedFlashcard.Answer = flashcard.Answer;
                 editedFlashcard.Difficulty = flashcard.Difficulty;
@@ -174,7 +174,7 @@ namespace SEProject.Controllers
 
                 //_flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                 // Save the new flashcard (this will trigger the event)
-                await _flashcardData.SaveFlashcard(editedFlashcard);
+                await _flashcardDataService.SaveFlashcard(editedFlashcard);
 
                 // Redirect to the view that displays the flashcards
                 return RedirectToAction("ViewFlashcardPack", new { id = editedFlashcard.PackID });
@@ -186,13 +186,13 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> EditFlashcardPackName(Guid id, string newName) {
             try {
-                var pack = await _flashcardPackData.FetchFlashcardPack(id);
+                var pack = await _flashcardPackDataService.FetchFlashcardPack(id);
                 if(newName != null) {
                     var oldName = pack.Name;
                     pack.Name = newName;
                     // _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
                     // Save the new flashcard (this will trigger the event)
-                    await _flashcardPackData.SaveFlashcardPack(pack);
+                    await _flashcardPackDataService.SaveFlashcardPack(pack);
                 }
 
                 return RedirectToAction("CreateSampleFlashcardPack");
@@ -206,7 +206,7 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> SortFlashcards(Guid flashcardPackID, string sortOption) {
             FlashcardComparer? comparer = null;
-            var flashcardPack = await _flashcardPackData.FetchFlashcardPack(flashcardPackID);
+            var flashcardPack = await _flashcardPackDataService.FetchFlashcardPack(flashcardPackID);
             var flashcardsInPack = flashcardPack.Flashcards;
             var sortedFlashcards = new List<Flashcard>();
 
