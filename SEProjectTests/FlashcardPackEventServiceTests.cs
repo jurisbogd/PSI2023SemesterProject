@@ -19,7 +19,6 @@ public class FlashcardPackEventServiceTests
         {
             ID = new Guid(),
             Name = "Sample Flashcard Pack",
-            // Set other properties as needed for your test
         };
 
         var eventArgs = new FlashcardPackEventArgs(flashcardPack, "Additional message");
@@ -45,7 +44,6 @@ public class FlashcardPackEventServiceTests
         {
             ID = new Guid(),
             Name = "Sample Flashcard Pack",
-            // Set other properties as needed for your test
         };
 
         var eventArgs = new FlashcardPackEventArgs(flashcardPack);
@@ -70,7 +68,6 @@ public class FlashcardPackEventServiceTests
         {
             ID = new Guid(),
             Name = "Sample Flashcard Pack",
-            // Set other properties as needed for your test
         };
 
         var eventArgs = new FlashcardPackEventArgs(flashcardPack);

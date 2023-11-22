@@ -56,7 +56,6 @@ public class LoggingServiceTests : IDisposable
 
     public void Dispose()
     {
-        // Cleanup: Delete the test log file after tests
         if (File.Exists(_logFilePath))
         {
             File.Delete(_logFilePath);
