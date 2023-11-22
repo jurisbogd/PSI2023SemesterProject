@@ -31,4 +31,8 @@ public class FlashcardPackDataService : IFlashcardPackDataService {
         return await _context.FlashcardPacks.Include(pack => pack.Flashcards).FirstOrDefaultAsync(pack => pack.ID == id)
             ?? throw new FlashcardPackNotFoundException();
     }
+
+    public async Task<List<FlashcardPack>> FetchSampleFlashcardPacks() {
+        return await _context.FlashcardPacks.ToListAsync();
+    }
 }
