@@ -30,6 +30,9 @@ public class LoggingService : ILoggingHandler
     }
 
     public void Log(string message, Exception? exception = null, LogLevel level = LogLevel.Information) {
+        var entry = new LogEntry(message: message, exception: exception, level: level);
+        Log(entry);
+        /*
         var exceptionMessage = exception == null ? null : $"Exception: {exception}{Environment.NewLine}";
 
         File.AppendAllText(
@@ -39,6 +42,7 @@ public class LoggingService : ILoggingHandler
             $"Message: {message}" + Environment.NewLine +
             exceptionMessage
         );
+        */
     }
 
     public List<LogEntry> GetLogs()
