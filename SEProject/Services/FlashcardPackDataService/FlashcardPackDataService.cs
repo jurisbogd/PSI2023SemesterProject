@@ -26,7 +26,8 @@ public class FlashcardPackDataService : IFlashcardPackDataService {
     }
 
     public async Task DeleteFlashcardPack(Guid id) {
-        var pack = await FetchFlashcardPack(id);
+        var pack = await _context.FlashcardPacks.Include(pack => pack.Flashcards).FirstOrDefaultAsync(pack => pack.ID == id)
+            ?? throw new FlashcardPackNotFoundException();
         _context.FlashcardPacks.Remove(pack);
         _context.Flashcards.RemoveRange(pack.Flashcards);
         await _context.SaveChangesAsync();

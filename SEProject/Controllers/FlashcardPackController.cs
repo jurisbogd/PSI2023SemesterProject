@@ -12,7 +12,6 @@ namespace SEProject.Controllers
         private readonly IFlashcardDataService _flashcardDataService;
         private readonly IFlashcardPackDataService _flashcardPackDataService;
 
-        private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
         private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
         private readonly IFlashcardPackEventService _flashcardPackEventService;
@@ -20,7 +19,7 @@ namespace SEProject.Controllers
         Func<FlashcardPack, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
         Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
-        public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, 
+        public FlashcardPackController(
             IFlashcardIOService flashcardIOService, ILoggingHandler logger, 
             IFlashcardPackEventService flashcardPackEventService, IFlashcardEventService flashcardEventService,
             IFlashcardDataService flashcardData,
@@ -29,11 +28,13 @@ namespace SEProject.Controllers
             _flashcardDataService = flashcardData;
             _flashcardPackDataService = flashcardPackData;
 
-            _flashcardPackDataHandler = flashcardPackDataHandler;
             _flashcardIOService = flashcardIOService;
             _logger = logger;
             _flashcardPackEventService = flashcardPackEventService;
             _flashcardEventService = flashcardEventService;
+
+            _flashcardDataService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
+            _flashcardPackDataService.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
         }
 
         public async Task<IActionResult> CreateSampleFlashcardPack(string name) {
@@ -61,8 +62,6 @@ namespace SEProject.Controllers
                     id: Guid.NewGuid(),
                     flashcards: new List<Flashcard>()
                 );
-
-                _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
                 
                 await _flashcardPackDataService.SaveFlashcardPack(newFlashcardPack);
                 return RedirectToAction("CreateSampleFlashcardPack");
@@ -94,7 +93,6 @@ namespace SEProject.Controllers
                 var flashcardPack = await _flashcardPackDataService.FetchFlashcardPack(packID);
 
                 if (ModelState.IsValid) {
-                    //_flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                     await _flashcardDataService.SaveFlashcard(flashcard);
 
                     _logger.Log($"Added flashcard with ID {flashcard.ID} to pack with ID {flashcard.PackID}");
@@ -115,15 +113,13 @@ namespace SEProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID) {
-            // Subscribing to event
-            // _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
+        public async Task<IActionResult> RemoveFlashcardPack(Guid ID) {
             try {
-                await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
+                await _flashcardPackDataService.DeleteFlashcardPack(ID);
             }
             catch (FlashcardPackNotFoundException e) {
-                _logger.Log(message: $"An error occurred while removing FlashcardPack with ID {flashcardPackID}.", exception: e, level: LogLevel.Error);
-                return BadRequest($"FlashcardPack with ID {flashcardPackID} not found.");
+                _logger.Log(message: $"An error occurred while removing FlashcardPack with ID {ID}.", exception: e, level: LogLevel.Error);
+                return BadRequest($"FlashcardPack with ID {ID} not found.");
             }
 
             return RedirectToAction("CreateSampleFlashcardPack");
@@ -132,7 +128,7 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID) {
             try {
-                await _flashcardIOService.RemoveFlashcardFromPack(packID, flashcardID);
+                await _flashcardDataService.DeleteFlashcard(flashcardID);
             }
             catch (FlashcardPackNotFoundException e) {
                 _logger.Log(message: $"An error occurred while removing flashcard with ID {flashcardID} from pack with ID {packID}", exception: e, level: LogLevel.Error);
@@ -172,7 +168,6 @@ namespace SEProject.Controllers
                 editedFlashcard.Difficulty = flashcard.Difficulty;
                 editedFlashcard.IsFavorite = flashcard.IsFavorite;
 
-                //_flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                 // Save the new flashcard (this will trigger the event)
                 await _flashcardDataService.SaveFlashcard(editedFlashcard);
 
@@ -190,7 +185,6 @@ namespace SEProject.Controllers
                 if(newName != null) {
                     var oldName = pack.Name;
                     pack.Name = newName;
-                    // _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
                     // Save the new flashcard (this will trigger the event)
                     await _flashcardPackDataService.SaveFlashcardPack(pack);
                 }
