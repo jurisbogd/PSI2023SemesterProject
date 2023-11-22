@@ -57,7 +57,7 @@ namespace SEProject.Controllers
 
         public async Task<IActionResult> ViewFlashcardPack(Guid id) {
             try {
-                var pack = await _flashcardPackDataHandler.FetchFlashcardPack(id);
+                var pack = await _flashcardPackData.FetchFlashcardPack(id);
                 return View(pack);
             }
             catch (Exception e) {
@@ -81,7 +81,7 @@ namespace SEProject.Controllers
                 _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
 
                 // Save the new flashcard (this will trigger the event)
-                await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack, FlashcardPackIDValidation);
+                await _flashcardPackData.SaveFlashcardPack(newFlashcardPack);
 
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
@@ -118,10 +118,8 @@ namespace SEProject.Controllers
         {
             var packID = flashcard.PackID;
 
-            try
-            {
-                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-                var flashcardPack = flashcardPacks.FirstOrDefault(fpack => fpack.ID == packID);
+            try {
+                var flashcardPack = await _flashcardPackData.FetchFlashcardPack(packID);
 
                 if (ModelState.IsValid)
                 {
@@ -137,16 +135,11 @@ namespace SEProject.Controllers
                 // If the model is not valid, return to the form view with validation errors
                 return View(flashcardPack);
             }
-            catch (Exception ex)
-            {
-                // Handle the exception and log an error message with the exception details
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {packID}: {ex.Message}",
-                        level: LogLevel.Error);
-                _logger.Log(logEntry);
+            catch (Exception e) {
+                _logger.Log(message: $"An error occurred while loading FlashcardPack with ID {packID}: {e.Message}", exception: e, level: LogLevel.Error);
 
                 // You can also handle the exception further or return an error view
-                return View("Error", ex);
+                return View("Error", e);
             }
         }
 
@@ -156,15 +149,11 @@ namespace SEProject.Controllers
             // Subscribing to event
             _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
 
-            try
-            {
+            try {
                 await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
-            }catch (FlashcardPackNotFoundException fpnfe)
-            {
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while removing FlashcardPack with ID {flashcardPackID}: {fpnfe.Message}",
-                        level: LogLevel.Error);
-                _logger.Log(logEntry);
+            }
+            catch (FlashcardPackNotFoundException e) {
+                _logger.Log(message: $"An error occurred while removing FlashcardPack with ID {flashcardPackID}.", exception: e, level: LogLevel.Error);
                 return BadRequest($"FlashcardPack with ID {flashcardPackID} not found.");
             }
 
@@ -194,22 +183,13 @@ namespace SEProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditFlashcard(Guid flashcardID)
-        {
-            try
-            {
-                // Get the list of all flashcard packs
-                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
-                var flashcardPack = flashcardPacks.FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
-                var flashcardToEdit = flashcardPack.Flashcards.First(f => f.ID == flashcardID);
-                return View(flashcardToEdit);
+        public async Task<IActionResult> EditFlashcard(Guid flashcardID){
+            try {
+                var flashcard = await _flashcardData.FetchFlashcard(flashcardID);
+                return View(flashcard);
             }
-            catch (Exception ex)
-            {
-                var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {flashcardID}: {ex.Message}",
-                        level: LogLevel.Error);
-                _logger.Log(logEntry);
+            catch (Exception e) {
+                _logger.Log(message: $"An error occurred while loading FlashcardPack with ID {flashcardID}.", exception: e, level: LogLevel.Error);
                 return NotFound();
             }
         }
@@ -265,12 +245,9 @@ namespace SEProject.Controllers
                 // Redirect back to the page that displays the flashcard packs
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                var logEntryError = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
-                        level: LogLevel.Error);
-                _logger.Log(logEntryError);
+                _logger.Log(message: $"An error occurred while loading FlashcardPack with ID {id}.", exception: e, level: LogLevel.Error);
                 return NotFound();
             }
         }
@@ -279,7 +256,7 @@ namespace SEProject.Controllers
         public async Task<IActionResult> SortFlashcards(Guid flashcardPackID, string sortOption)
         {
             FlashcardComparer? comparer = null;
-            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(flashcardPackID);
+            var flashcardPack = await _flashcardPackData.FetchFlashcardPack(flashcardPackID);
             var flashcardsInPack = flashcardPack.Flashcards;
             var sortedFlashcards = new List<Flashcard>();
 
@@ -312,8 +289,7 @@ namespace SEProject.Controllers
                 }
             }
 
-            var logEntry = new LogEntry(message: $"Flashcards were sorted by sort option {sortOption}");
-            _logger.Log(logEntry);
+            _logger.Log(message: $"Flashcards were sorted by sort option {sortOption}");
 
             var newPack = flashcardPack.CloneWithNewFlashcards(sortedFlashcards);
 
