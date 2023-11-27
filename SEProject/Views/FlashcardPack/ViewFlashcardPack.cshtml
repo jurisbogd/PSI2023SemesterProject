@@ -74,5 +74,11 @@
     <script src="~/js/removeFlashcardButton.js"></script>
     <script src="~/js/editFlashcardInPack.js"></script>
     <script src="~/js/presentButton.js"></script>
+    @if (TempData["AlertMessage"] != null)
+        {
+            <script>
+                alert('@TempData["AlertMessage"]');
+            </script>
+        }
 </body>
 </html>
