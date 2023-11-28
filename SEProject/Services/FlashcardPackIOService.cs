@@ -44,7 +44,7 @@ public class FlashcardPackIOService : IFlashcardPackDataHandler
         if (validationFunction != null && !validationFunction(flashcardPack))
         {
             // Validation failed, do not save the flashcard
-            return;
+            throw new Exception("Validation failed: FlashcardPack is invalid");
         }
         var existingPack = await _context.FlashcardPacks
             .FirstOrDefaultAsync(pack => pack.ID == flashcardPack.ID);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 using SEProject.Models;
 using SEProject.Services;
 using SEProject.EventArguments;
@@ -125,6 +126,11 @@ namespace SEProject.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    if (!Regex.IsMatch(flashcard.Question.TrimEnd(), @"\?$"))
+                    {
+                        TempData["AlertMessage"] = "The flashcard question must end with a question mark.";
+                        return RedirectToAction("ViewFlashcardPack", new { id = flashcard.PackID });
+                    }
                     // Create a new Flashcard object from the form data
                     _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
                     // Save the new flashcard (this will trigger the event)
@@ -227,6 +233,12 @@ namespace SEProject.Controllers
 
             if (ModelState.IsValid)
             {
+                if (!Regex.IsMatch(editedFlashcard.Question.TrimEnd(), @"\?$"))
+                {
+                    TempData["AlertMessage"] = "The flashcard question must end with a question mark.";
+                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
+                }
+                
                 flashcardToEdit.Question = editedFlashcard.Question;
                 flashcardToEdit.Answer = editedFlashcard.Answer;
                 flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
