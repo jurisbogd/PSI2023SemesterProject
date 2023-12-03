@@ -11,9 +11,9 @@ public class User
     public string PasswordHash { get; set; }
     public string Salt { get; set; }
 
-    public User(string pass)
+    public User()
     {
-        SetPassword(pass);
+        
     }
     
     public void SetPassword(string password)
