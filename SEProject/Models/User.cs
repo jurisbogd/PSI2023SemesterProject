@@ -11,6 +11,10 @@ public class User
     public string PasswordHash { get; set; }
     public string Salt { get; set; }
 
+    public User()
+    {
+
+    }
     public User(string username, string email, string password)
     {
         UserID = Guid.NewGuid();
