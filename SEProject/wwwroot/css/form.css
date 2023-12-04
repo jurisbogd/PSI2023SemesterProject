@@ -22,11 +22,11 @@ input {
 }
 
 input[type="submit"] {
-    background-color: #4caf50;
+    background-color: #007bff;
     color: #fff;
     cursor: pointer;
 }
 
 input[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
 }
