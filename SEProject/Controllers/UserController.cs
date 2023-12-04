@@ -13,5 +13,14 @@ namespace SEProject.Controllers
         {
             return View();
         }
+
+        public IActionResult CreateAccount(string username, string email, string password) 
+        {
+            Console.WriteLine("username: " + username);
+            Console.WriteLine("email: " + email);
+            Console.WriteLine("password: " +  password);
+
+            return RedirectToAction("SignUp");
+        }
     }
 }
