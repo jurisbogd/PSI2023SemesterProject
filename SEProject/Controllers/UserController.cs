@@ -22,6 +22,11 @@ namespace SEProject.Controllers
             return View();
         }
 
+        public IActionResult LogIn()
+        {
+            return View();
+        }
+
         public IActionResult CreateAccount(string username, string email, string password) 
         {
             var newUser = _userService.CreateNewUser(username, email, password);
@@ -29,6 +34,14 @@ namespace SEProject.Controllers
             // Lacks functionality to save the newly created user to the DataBase
 
             return RedirectToAction("SignUp");
+        }
+
+        public IActionResult UserLogIn(string email, string password)
+        {
+            Console.WriteLine("Email: " + email);
+            Console.WriteLine("Not Hashed Password: " + password);
+
+            return RedirectToAction("LogIn");
         }
     }
 }
