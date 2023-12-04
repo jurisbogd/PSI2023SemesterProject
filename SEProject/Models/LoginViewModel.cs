@@ -2,6 +2,6 @@
 {
     public class LoginViewModel
     {
-        public string EmailNotFoundErrorMessage { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

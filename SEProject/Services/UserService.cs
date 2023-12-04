@@ -1,5 +1,8 @@
 ﻿using SEProject.Models;
 using SEProject.EventArguments;
+using Microsoft.AspNetCore.Identity;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace SEProject.Services
 {
@@ -49,6 +52,18 @@ namespace SEProject.Services
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
             return user;
+        }
+
+        public bool VerifyPassword(string password, string salt, string hashedPassword)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var combinedBytes = Encoding.UTF8.GetBytes(password + salt);
+                var hashBytes = sha256.ComputeHash(combinedBytes);
+                var enteredPasswordHash = Convert.ToBase64String(hashBytes);
+
+                return hashedPassword == enteredPasswordHash;
+            }
         }
     }
 }

@@ -49,19 +49,6 @@ public class User
             return passwordHash;
         }
     }
-    
-    // Check if the provided password matches the stored hash
-    public bool VerifyPassword(string password, string salt)
-    {
-        using (var sha256 = SHA256.Create())
-        {
-            var combinedBytes = Encoding.UTF8.GetBytes(password + salt);
-            var hashBytes = sha256.ComputeHash(combinedBytes);
-            var enteredPasswordHash = Convert.ToBase64String(hashBytes);
-
-            return PasswordHash == enteredPasswordHash;
-        }
-    }
 
     public void ToString()
     {

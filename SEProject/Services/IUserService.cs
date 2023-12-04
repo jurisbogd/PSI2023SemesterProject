@@ -10,5 +10,6 @@ namespace SEProject.Services
         public Task AddUserToTheDatabaseAsync(User user);
         void OnUserChanged(UserEventArgs e);
         public User FindUserByEmail(string email);
+        public bool VerifyPassword(string password, string salt, string hashedPassword);
     }
 }
