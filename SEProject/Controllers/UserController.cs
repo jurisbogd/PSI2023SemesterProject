@@ -22,10 +22,10 @@ namespace SEProject.Controllers
             return View();
         }
 
-        public IActionResult CreateAccount(string username, string email, string password) 
+        public async Task<IActionResult> CreateAccount(string username, string email, string password) 
         {
             var newUser = _userService.CreateNewUser(username, email, password);
-            _userService.AddUserToTheDatabase(newUser);
+            await _userService.AddUserToTheDatabaseAsync(newUser);
 
             return RedirectToAction("SignUp");
         }

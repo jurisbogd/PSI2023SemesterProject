@@ -18,12 +18,12 @@ namespace SEProject.Services
             return newUser;
         }
 
-        public void AddUserToTheDatabase(User user)
+        public async Task AddUserToTheDatabaseAsync(User user)
         {
             try
             {
                 _context.Users.Add(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 Console.WriteLine("User saved to the database successfully");
             }
