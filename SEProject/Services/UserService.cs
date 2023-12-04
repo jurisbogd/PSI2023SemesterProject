@@ -43,5 +43,12 @@ namespace SEProject.Services
                 UserChanged(this, e);
             }
         }
+
+        public User FindUserByEmail(string email)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+
+            return user;
+        }
     }
 }

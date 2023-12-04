@@ -28,6 +28,11 @@ namespace SEProject.Controllers
             return View();
         }
 
+        public IActionResult LogIn()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> CreateAccount(string username, string email, string password) 
         {
             _userService.UserChanged += _userEventService.OnUserChanged;
@@ -41,6 +46,15 @@ namespace SEProject.Controllers
         {
             Console.WriteLine("Email: " + email);
             Console.WriteLine("Not Hashed Password: " + password);
+
+            if (_userService.FindUserByEmail(email) != null)
+            {
+                Console.WriteLine("found the user!");
+            }
+            else
+            {
+                Console.WriteLine("user not found");
+            }
 
             return RedirectToAction("LogIn");
         }
