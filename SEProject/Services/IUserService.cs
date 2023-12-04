@@ -4,6 +4,6 @@ namespace SEProject.Services
 {
     public interface IUserService
     {
-/*        public void CreateNewUser(string username, string email, string password);*/
+        public User CreateNewUser(string username, string email, string password);
     }
 }

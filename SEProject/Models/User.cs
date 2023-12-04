@@ -58,4 +58,14 @@ public class User
             return PasswordHash == enteredPasswordHash;
         }
     }
+
+    public void ToString()
+    {
+        Console.WriteLine("User ID: " + UserID);
+        Console.WriteLine("Username: " + Username);
+        Console.WriteLine("Email: " + Email);
+        Console.WriteLine("Hashed Password: " + PasswordHash);
+        Console.WriteLine("Generated Salt: " + Salt);
+        Console.WriteLine();
+    }
 }
