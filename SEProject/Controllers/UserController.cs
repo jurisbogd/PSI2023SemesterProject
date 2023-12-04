@@ -47,15 +47,23 @@ namespace SEProject.Controllers
             Console.WriteLine("Email: " + email);
             Console.WriteLine("Not Hashed Password: " + password);
 
-            if (_userService.FindUserByEmail(email) != null)
+            var retrievedUser = _userService.FindUserByEmail(email);
+
+            if (retrievedUser != null)
             {
-                Console.WriteLine("found the user!");
+                retrievedUser.ToString();
             }
             else
             {
-                Console.WriteLine("user not found");
+                var model = new LoginViewModel
+                {
+                    EmailNotFoundErrorMessage = "No user with the given email could be found. Please check the email and try again."
+                };
+
+                return View("LogIn", model);
             }
 
+           
             return RedirectToAction("LogIn");
         }
     }

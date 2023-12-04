@@ -29,5 +29,11 @@
                 <input type="submit" value="Log In" />
             </div>
         </form>
+        @if (Model != null && !string.IsNullOrEmpty(Model.EmailNotFoundErrorMessage))
+        {
+            <div class="error-message">
+                @Model.EmailNotFoundErrorMessage
+            </div>
+        }
     </body>
 </html>
