@@ -24,9 +24,9 @@ namespace SEProject.Controllers
 
         public IActionResult CreateAccount(string username, string email, string password) 
         {
-            Console.WriteLine("username: " + username);
-            Console.WriteLine("email: " + email);
-            Console.WriteLine("password: " +  password);
+            var newUser = _userService.CreateNewUser(username, email, password);
+
+            // Lacks functionality to save the newly created user to the DataBase
 
             return RedirectToAction("SignUp");
         }
