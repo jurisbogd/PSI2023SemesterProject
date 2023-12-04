@@ -6,6 +6,7 @@ namespace SEProject.Models
     {
         public DbSet<Flashcard> Flashcards { get; set; }
         public DbSet<FlashcardPack> FlashcardPacks { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DatabaseContext(DbContextOptions options) : base(options)
         {

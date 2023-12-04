@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SEProject.EventServices;
+using SEProject.Models;
 using SEProject.Services;
 
 namespace SEProject.Controllers
@@ -6,10 +8,14 @@ namespace SEProject.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly ILoggingHandler _logger;
+        private readonly IUserEventService _userEventService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ILoggingHandler logger, IUserEventService userEventService)
         {
             _userService = userService;
+            _logger = logger;
+            _userEventService = userEventService;
         }
 
         public IActionResult Index()
@@ -22,11 +28,11 @@ namespace SEProject.Controllers
             return View();
         }
 
-        public IActionResult CreateAccount(string username, string email, string password) 
+        public async Task<IActionResult> CreateAccount(string username, string email, string password) 
         {
+            _userService.UserChanged += _userEventService.OnUserChanged;
             var newUser = _userService.CreateNewUser(username, email, password);
-
-            // Lacks functionality to save the newly created user to the DataBase
+            await _userService.AddUserToTheDatabaseAsync(newUser);
 
             return RedirectToAction("SignUp");
         }
