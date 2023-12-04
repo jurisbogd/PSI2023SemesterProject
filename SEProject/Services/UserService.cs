@@ -1,10 +1,13 @@
 ﻿using SEProject.Models;
+using SEProject.EventArguments;
 
 namespace SEProject.Services
 {
     public class UserService : IUserService
     {
         private DatabaseContext _context;
+        public delegate void UserChangedEventHandler(object source, UserEventArgs args);
+        public event UserChangedEventHandler? UserChanged;
 
         public UserService(DatabaseContext context)
         {
@@ -26,10 +29,18 @@ namespace SEProject.Services
                 await _context.SaveChangesAsync();
 
                 Console.WriteLine("User saved to the database successfully");
+                OnUserChanged(new UserEventArgs(user, "Created"));
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error creating user: " + ex.Message);
+            }
+        }
+        public virtual void OnUserChanged(UserEventArgs e)
+        {
+            if(UserChanged != null)
+            {
+                UserChanged(this, e);
             }
         }
     }

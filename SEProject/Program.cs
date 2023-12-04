@@ -19,6 +19,7 @@ builder.Services.AddScoped<IFlashcardPackEventService, FlashcardPackEventService
 builder.Services.AddScoped<IFlashcardEventService, FlashcardEventService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserEventService, UserEventService>();
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
