@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Sign-up";
+}
+<h1>@ViewData["Title"]</h1>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sign-up</title>
+
+        <!-- Link to the CSS file -->
+        <link rel="stylesheet" href="~/css/form.css">
+    </head>
+    <body>
+        <form method="post" action="/User/CreateAccount">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required autocomplete="off" />
+            </div>
+
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required autocomplete="off" />
+            </div>
+
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required autocomplete="off" />
+            </div>
+
+            <div>
+                <input type="submit" value="Sign Up" />
+            </div>
+        </form>
+    </body>
+</html>
