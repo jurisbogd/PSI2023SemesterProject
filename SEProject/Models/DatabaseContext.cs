@@ -19,6 +19,5 @@ namespace SEProject.Models
                 .WithOne()
                 .HasForeignKey(flashcard => flashcard.PackID);
         }
-
     }
 }

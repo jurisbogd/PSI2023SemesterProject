@@ -28,6 +28,11 @@ namespace SEProject.Controllers
             return View();
         }
 
+        public IActionResult LogIn()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> CreateAccount(string username, string email, string password) 
         {
             _userService.UserChanged += _userEventService.OnUserChanged;
@@ -35,6 +40,39 @@ namespace SEProject.Controllers
             await _userService.AddUserToTheDatabaseAsync(newUser);
 
             return RedirectToAction("SignUp");
+        }
+
+        public async Task<IActionResult> UserLogIn(string email, string password)
+        {
+            var retrievedUser = await _userService.FindUserByEmailAsync(email);
+
+            if (retrievedUser != null)
+            {
+                if (_userService.VerifyPassword(password, retrievedUser.Salt, retrievedUser.PasswordHash))
+                {
+                    retrievedUser.ToString();
+                }
+                else
+                {
+                    var model = new LoginViewModel
+                    {
+                        ErrorMessage = "The password given is incorrect. Please try again."
+                    };
+
+                    return View("LogIn", model);
+                }
+            }
+            else
+            {
+                var model = new LoginViewModel
+                {
+                    ErrorMessage = "No user with the given email could be found. Please check the email and try again."
+                };
+
+                return View("LogIn", model);
+            }
+
+            return RedirectToAction("LogIn");
         }
     }
 }
