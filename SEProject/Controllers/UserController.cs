@@ -48,6 +48,7 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> UserLogIn(string email, string password)
         {
+            _userService.UserChanged += _userEventService.OnUserChanged;
             var retrievedUser = await _userService.FindUserByEmailAsync(email);
 
             if (retrievedUser != null && _userService.VerifyPassword(password, retrievedUser.Salt, retrievedUser.PasswordHash))
