@@ -42,9 +42,9 @@ namespace SEProject.Controllers
             return RedirectToAction("SignUp");
         }
 
-        public IActionResult UserLogIn(string email, string password)
+        public async Task<IActionResult> UserLogIn(string email, string password)
         {
-            var retrievedUser = _userService.FindUserByEmail(email);
+            var retrievedUser = await _userService.FindUserByEmailAsync(email);
 
             if (retrievedUser != null)
             {

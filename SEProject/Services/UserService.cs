@@ -3,6 +3,7 @@ using SEProject.EventArguments;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace SEProject.Services
 {
@@ -39,17 +40,10 @@ namespace SEProject.Services
                 Console.WriteLine("Error creating user: " + ex.Message);
             }
         }
-        public virtual void OnUserChanged(UserEventArgs e)
-        {
-            if(UserChanged != null)
-            {
-                UserChanged(this, e);
-            }
-        }
 
-        public User FindUserByEmail(string email)
+        public async Task<User> FindUserByEmailAsync(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             return user;
         }
@@ -63,6 +57,13 @@ namespace SEProject.Services
                 var enteredPasswordHash = Convert.ToBase64String(hashBytes);
 
                 return hashedPassword == enteredPasswordHash;
+            }
+        }
+        public virtual void OnUserChanged(UserEventArgs e)
+        {
+            if(UserChanged != null)
+            {
+                UserChanged(this, e);
             }
         }
     }
