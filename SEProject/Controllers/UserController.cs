@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using SEProject.EventServices;
 using SEProject.Models;
 using SEProject.Services;
@@ -42,37 +45,40 @@ namespace SEProject.Controllers
             return RedirectToAction("SignUp");
         }
 
+        [HttpPost]
         public async Task<IActionResult> UserLogIn(string email, string password)
         {
+            _userService.UserChanged += _userEventService.OnUserChanged;
             var retrievedUser = await _userService.FindUserByEmailAsync(email);
 
-            if (retrievedUser != null)
+            if (retrievedUser != null && _userService.VerifyPassword(password, retrievedUser.Salt, retrievedUser.PasswordHash))
             {
-                if (_userService.VerifyPassword(password, retrievedUser.Salt, retrievedUser.PasswordHash))
+                var claims = new List<Claim>
                 {
-                    retrievedUser.ToString();
-                }
-                else
-                {
-                    var model = new LoginViewModel
-                    {
-                        ErrorMessage = "The password given is incorrect. Please try again."
-                    };
-
-                    return View("LogIn", model);
-                }
-            }
-            else
-            {
-                var model = new LoginViewModel
-                {
-                    ErrorMessage = "No user with the given email could be found. Please check the email and try again."
+                    new Claim(ClaimTypes.NameIdentifier, retrievedUser.UserID.ToString())
                 };
 
-                return View("LogIn", model);
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
+
+                return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("LogIn");
+            var model = new LoginViewModel
+            {
+                ErrorMessage = "Invalid email or password. Please try again."
+            };
+
+            return View("LogIn", model);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

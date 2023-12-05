@@ -44,7 +44,7 @@ namespace SEProject.Services
         public async Task<User> FindUserByEmailAsync(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-
+            OnUserChanged(new UserEventArgs(user, "Found"));
             return user;
         }
 
