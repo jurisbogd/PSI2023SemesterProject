@@ -42,7 +42,7 @@ namespace SEProject.Controllers
             var newUser = _userService.CreateNewUser(username, email, password);
             await _userService.AddUserToTheDatabaseAsync(newUser);
 
-            return RedirectToAction("SignUp");
+            return RedirectToAction("LogIn", User);
         }
 
         [HttpPost]

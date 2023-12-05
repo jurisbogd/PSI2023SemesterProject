@@ -11,11 +11,21 @@ public class UserEventService : IUserEventService
     {
         _logger = logger;
     }
-    public void OnUserChanged(object source, UserEventArgs e)
+    public void OnUserChanged(object source, UserEventArgs? e)
     {
-        var logEntry = new LogEntry(
-                    message: $"User: ID - {e.User.UserID}, username - {e.User.Username} was updated. {e.Message}",
-                    level: LogLevel.Information);
+        LogEntry logEntry;
+
+        if (e == null)
+        {
+            logEntry = new LogEntry(message: "UserEventArgs object is null", level: LogLevel.Error);
+        }
+        else
+        {
+            logEntry = new LogEntry(
+                message: $"User: ID - {e.User.UserID}, username - {e.User.Username} was updated. {e.Message}",
+                level: LogLevel.Information);
+        }
+
         _logger.Log(logEntry);
     }
 }

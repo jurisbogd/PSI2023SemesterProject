@@ -19,6 +19,8 @@ namespace SEProject.Models
                 .HasMany(pack => pack.Flashcards)
                 .WithOne()
                 .HasForeignKey(flashcard => flashcard.PackID);
+            
+            modelBuilder.Entity<UserFlashcardPacks>().HasKey(ufp => new { ufp.UserID, ufp.PackID });
         }
     }
 }

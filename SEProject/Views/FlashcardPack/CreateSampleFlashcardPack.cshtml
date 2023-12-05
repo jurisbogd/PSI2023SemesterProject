@@ -32,7 +32,9 @@
         }
     </div>
 
-    <div class="flashcardPack-container">
+<div class="flashcardPack-container">
+    @if (Model != null)
+    {
         @foreach (var flashcardPack in Model)
         {
             <div class="flashcardPack">
@@ -47,14 +49,19 @@
                 <button class="edit-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID">Edit</button>
                 <button data-flashcardPack-id="@flashcardPack.ID" class="btn btn-primary save-button" style="display: none;">Save</button>
                 <button data-flashcardPack-id="@flashcardPack.ID" class="btn btn-primary btn-red cancel-button" style="display: none;" onclick="location.href='@Url.Action("CreateSampleFlashcardPack")';">Cancel</button>
-                
+
                 @using (Html.BeginForm("ViewFlashcardPack", "FlashcardPack", FormMethod.Post))
                 {
                     <button id="view-pack-@flashcardPack.ID" class="view-flashcard-pack-button" data-flashcardPack-id="@flashcardPack.ID" name="id" value="@flashcardPack.ID">View Flashcard Pack</button>
                 }
             </div>
         }
-    </div>
+    }
+    else
+    {
+        <p>No flashcard packs found.</p>
+    }
+</div>
 
     <script src="~/js/viewFlashcardPackButton.js"></script>
     <script src="~/js/editFlashcardPack.js"></script>

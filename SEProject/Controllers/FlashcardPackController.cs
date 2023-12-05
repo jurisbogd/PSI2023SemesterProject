@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 using SEProject.Models;
 using SEProject.Services;
@@ -33,8 +34,10 @@ namespace SEProject.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userId, out Guid parsedUserID);
                 // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
                 return View(allFlashcardPacks);
             }
             catch (Exception ex)
@@ -52,8 +55,10 @@ namespace SEProject.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userId, out Guid parsedUserID);
                 // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
                 var flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
                 return View(flashcardPackToView);
             }
@@ -78,11 +83,12 @@ namespace SEProject.Controllers
                     id: Guid.NewGuid(),
                     flashcards: new List<Flashcard>()
                 );
-
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userId, out Guid parsedUserID);
                 _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
 
                 // Save the new flashcard (this will trigger the event)
-                await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack, FlashcardPackIDValidation);
+                await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack, parsedUserID, FlashcardPackIDValidation);
 
                 return RedirectToAction("CreateSampleFlashcardPack");
             }
@@ -121,7 +127,9 @@ namespace SEProject.Controllers
 
             try
             {
-                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userId, out Guid parsedUserID);
+                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
                 var flashcardPack = flashcardPacks.FirstOrDefault(fpack => fpack.ID == packID);
 
                 if (ModelState.IsValid)
@@ -180,7 +188,9 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
         {
-            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(packID)!;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid.TryParse(userId, out Guid parsedUserID);
+            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(packID, parsedUserID)!;
 
             var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
 
@@ -207,8 +217,10 @@ namespace SEProject.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userId, out Guid parsedUserID);
                 // Get the list of all flashcard packs
-                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
                 var flashcardPack = flashcardPacks.FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
                 var flashcardToEdit = flashcardPack.Flashcards.First(f => f.ID == flashcardID);
                 return View(flashcardToEdit);
@@ -226,7 +238,9 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> EditFlashcard(Flashcard editedFlashcard)
         {
-            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid.TryParse(userId, out Guid parsedUserID);
+            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
             var flashcardToEdit = allFlashcardPacks
                 .SelectMany(p => p.Flashcards)
                 .FirstOrDefault(f => f.ID == editedFlashcard.ID);
@@ -261,8 +275,10 @@ namespace SEProject.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userId, out Guid parsedUserID);
                 // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync();
+                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
                 // Find the flashcard pack with the specified ID
                 var flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
                 if(newName != null)
@@ -274,7 +290,7 @@ namespace SEProject.Controllers
                     _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
 
                     // Save the new flashcard (this will trigger the event)
-                    await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit);
+                    await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit, parsedUserID);
                 }
 
                 // Redirect back to the page that displays the flashcard packs
@@ -293,8 +309,10 @@ namespace SEProject.Controllers
         [HttpPost]
         public async Task<IActionResult> SortFlashcards(Guid flashcardPackID, string sortOption)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid.TryParse(userId, out Guid parsedUserID);
             FlashcardComparer? comparer = null;
-            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(flashcardPackID);
+            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(flashcardPackID, parsedUserID);
             var flashcardsInPack = flashcardPack.Flashcards;
             var sortedFlashcards = new List<Flashcard>();
 
