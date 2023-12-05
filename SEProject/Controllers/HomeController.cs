@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using SEProject.Models;
 
@@ -15,6 +16,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        Console.WriteLine("User ID: " + userId);
         return View();
     }
 

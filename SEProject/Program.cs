@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SEProject.Models;
 using SEProject.EventArguments;
@@ -26,6 +27,13 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer("Server=tcp:flashcard-db.database.windows.net,1433;Initial Catalog=FlashcardDB;Persist Security Info=False;User ID=serveradmin;Password=Lapkritis123+;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Adjust the login path as needed
+        options.LogoutPath = "/Account/Logout"; // Adjust the logout path as needed
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,6 +50,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllerRoute( // not sure if this route does anything
     name: "removeFlashcardRoute",
