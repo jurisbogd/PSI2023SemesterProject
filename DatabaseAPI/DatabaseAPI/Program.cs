@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IFlashcardIOService, FlashcardIOService>();
+builder.Services.AddScoped<IFlashcardPackDataHandler, FlashcardPackIOService>();
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {

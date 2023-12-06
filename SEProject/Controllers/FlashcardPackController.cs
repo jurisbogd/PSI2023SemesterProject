@@ -1,9 +1,10 @@
 ﻿using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using SEProject.Models;
 using SEProject.Services;
-using SEProject.EventArguments;
 using SEProject.EventServices;
 using SEProject.Exceptions;
 
@@ -11,23 +12,13 @@ namespace SEProject.Controllers
 {
     public class FlashcardPackController : Controller
     {
-        private readonly IFlashcardPackDataHandler _flashcardPackDataHandler;
-        private readonly IFlashcardIOService _flashcardIOService;
         private readonly ILoggingHandler _logger;
-        private readonly IFlashcardPackEventService _flashcardPackEventService;
-        private readonly IFlashcardEventService _flashcardEventService;
         Func<FlashcardPack, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
         Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
-        public FlashcardPackController(IFlashcardPackDataHandler flashcardPackDataHandler, 
-            IFlashcardIOService flashcardIOService, ILoggingHandler logger, 
-            IFlashcardPackEventService flashcardPackEventService, IFlashcardEventService flashcardEventService)
+        public FlashcardPackController(ILoggingHandler logger)
         {
-            _flashcardPackDataHandler = flashcardPackDataHandler;
-            _flashcardIOService = flashcardIOService;
             _logger = logger;
-            _flashcardPackEventService = flashcardPackEventService;
-            _flashcardEventService = flashcardEventService;
         }
 
         public async Task<IActionResult> CreateSampleFlashcardPack(string name)
@@ -36,42 +27,79 @@ namespace SEProject.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Guid.TryParse(userId, out Guid parsedUserID);
-                // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
-                return View(allFlashcardPacks);
+
+                using (var httpClient = new HttpClient())
+                {
+                    var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/GetFlashcardPacks?userId={parsedUserID}";
+
+                    var response = await httpClient.GetAsync(apiEndpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            var flashcardPacks = JsonConvert.DeserializeObject<List<FlashcardPack>>(responseContent);
+                            
+                            return View(flashcardPacks);
+                        }
+                    }
+                    var logEntry = new LogEntry(
+                        message: $"An error occurred while loading FlashcardPacks for user {parsedUserID}: {response.ReasonPhrase}",
+                        level: LogLevel.Error);
+                    _logger.Log(logEntry);
+                    return View();
+                }
             }
             catch (Exception ex)
             {
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with name {name}: {ex.Message}",
-                        level: LogLevel.Error);
+                    message: $"An error occurred while loading FlashcardPacks for user {name}: {ex.Message}",
+                    level: LogLevel.Error);
                 _logger.Log(logEntry);
                 return View();
             }
         }
-
-
+        
         public async Task<IActionResult> ViewFlashcardPack(Guid id)
         {
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Guid.TryParse(userId, out Guid parsedUserID);
-                // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
-                var flashcardPackToView = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id);
-                return View(flashcardPackToView);
+
+                using (var httpClient = new HttpClient())
+                {
+                    var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/GetFlashcardPack?packID={id}&userId={parsedUserID}";
+
+                    var response = await httpClient.GetAsync(apiEndpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            var flashcardPackToView = JsonConvert.DeserializeObject<FlashcardPack>(responseContent);
+
+                            return View(flashcardPackToView);
+                        }
+                    }
+                }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
-                        level: LogLevel.Error);
+                    message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
+                    level: LogLevel.Error);
                 _logger.Log(logEntry);
+
                 return NotFound();
             }
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> AddFlashcardPack(string name)
         {
@@ -83,28 +111,38 @@ namespace SEProject.Controllers
                     id: Guid.NewGuid(),
                     flashcards: new List<Flashcard>()
                 );
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                Guid.TryParse(userId, out Guid parsedUserID);
-                _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
+                var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userID, out Guid parsedUserID);
 
-                // Save the new flashcard (this will trigger the event)
-                await _flashcardPackDataHandler.SaveFlashcardPackAsync(newFlashcardPack, parsedUserID, FlashcardPackIDValidation);
+                using (var httpClient = new HttpClient())
+                {
+                    var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/AddFlashcardPack?userID={parsedUserID}";
+                    
+                    var response = await httpClient.PostAsync(apiEndpoint, new StringContent(JsonConvert.SerializeObject(newFlashcardPack), Encoding.UTF8, "application/json"));
+                    
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
 
-                return RedirectToAction("CreateSampleFlashcardPack");
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            return RedirectToAction("CreateSampleFlashcardPack");
+                        }
+                    }
+                }
+                return NotFound();
             }
             catch (Exception ex)
             {
-                // Handle the exception and log an error message with the exception details
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with name {name}: {ex.Message}",
-                        level: LogLevel.Error);
+                    message: $"An error occurred while loading FlashcardPack with name {name}: {ex.Message}",
+                    level: LogLevel.Error);
                 _logger.Log(logEntry);
 
-                // You can also handle the exception further or return an error view
-                return View("Error", ex);
+                return NotFound();
             }
         }
-
+        
         [HttpGet]
         public IActionResult AddFlashcard(Guid packID)
         {
@@ -119,7 +157,7 @@ namespace SEProject.Controllers
             };
             return View(newFlashcard);
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> AddFlashcardToPack(Flashcard flashcard)
         {
@@ -129,8 +167,6 @@ namespace SEProject.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Guid.TryParse(userId, out Guid parsedUserID);
-                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
-                var flashcardPack = flashcardPacks.FirstOrDefault(fpack => fpack.ID == packID);
 
                 if (ModelState.IsValid)
                 {
@@ -139,23 +175,44 @@ namespace SEProject.Controllers
                         TempData["AlertMessage"] = "The flashcard question must end with a question mark.";
                         return RedirectToAction("ViewFlashcardPack", new { id = flashcard.PackID });
                     }
-                    // Create a new Flashcard object from the form data
-                    _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
-                    // Save the new flashcard (this will trigger the event)
-                    await _flashcardIOService.SaveFlashcard(flashcard, FlashcardIDValidation);
 
-                    // Redirect to the view that displays the pack of flashcards
-                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack!.ID });
+                    // Assuming your API is hosted at http://your-api-url
+                    var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/AddFlashcardToPack?userID={parsedUserID}";
+
+                    using (var httpClient = new HttpClient())
+                    {
+                        // Serialize the flashcard object to JSON
+                        var flashcardJson = JsonConvert.SerializeObject(flashcard);
+
+                        // Create a StringContent with the JSON data
+                        var content = new StringContent(flashcardJson, Encoding.UTF8, "application/json");
+
+                        // Make a POST request to the API endpoint
+                        var response = await httpClient.PostAsync(apiEndpoint, content);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            // Redirect to the view that displays the pack of flashcards
+                            return RedirectToAction("ViewFlashcardPack", new { id = flashcard.PackID });
+                        }
+                        else
+                        {
+                            // Handle the case where the API request is not successful
+                            // You can log the response content or handle errors as needed
+                            var errorResponse = await response.Content.ReadAsStringAsync();
+                            return View("Error", errorResponse);
+                        }
+                    }
                 }
 
                 // If the model is not valid, return to the form view with validation errors
-                return View(flashcardPack);
+                return RedirectToAction("ViewFlashcardPack", new { id = flashcard.PackID });
             }
             catch (Exception ex)
             {
                 // Handle the exception and log an error message with the exception details
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {packID}: {ex.Message}",
+                        message: $"An error occurred while adding a flashcard to FlashcardPack with ID {packID}: {ex.Message}",
                         level: LogLevel.Error);
                 _logger.Log(logEntry);
 
@@ -163,113 +220,133 @@ namespace SEProject.Controllers
                 return View("Error", ex);
             }
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> RemoveFlashcardPack(Guid flashcardPackID)
         {
-            // Subscribing to event
-            _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
-
             try
             {
-                await _flashcardPackDataHandler.RemoveFlashcardPackAsync(flashcardPackID);
-            }catch (FlashcardPackNotFoundException fpnfe)
+                using (var httpClient = new HttpClient())
+                {
+                    var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/RemoveFlashcardPack?packID={flashcardPackID}";
+                    Console.WriteLine($"apiEndpoint: {apiEndpoint}");
+                    var response = await httpClient.DeleteAsync(apiEndpoint);
+                    Console.WriteLine($"response: {response}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+        
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            return RedirectToAction("CreateSampleFlashcardPack");
+                        }
+                    }
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
             {
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while removing FlashcardPack with ID {flashcardPackID}: {fpnfe.Message}",
-                        level: LogLevel.Error);
+                    message: $"An error occurred while removing FlashcardPack with ID {flashcardPackID}: {ex.Message}",
+                    level: LogLevel.Error);
                 _logger.Log(logEntry);
-                return BadRequest($"FlashcardPack with ID {flashcardPackID} not found.");
+        
+                return NotFound();
             }
-
-            return RedirectToAction("CreateSampleFlashcardPack");
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             Guid.TryParse(userId, out Guid parsedUserID);
-            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(packID, parsedUserID)!;
+            
+            var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/RemoveFlashcardFromPack?flashcardID={flashcardID}&packID={packID}&userID={parsedUserID}";
 
-            var flashcardToRemove = flashcardPack.Flashcards.FirstOrDefault(flashcard => flashcard.ID == flashcardID);
-
-            _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
-
-            try
+            using (var httpClient = new HttpClient())
             {
-                await _flashcardIOService.RemoveFlashcard(flashcardToRemove!);
-            }catch (FlashcardNotFoundException fnfe)
-            {
+                var response = await httpClient.PostAsync(apiEndpoint, null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("ViewFlashcardPack", new { id = packID });
+                }
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while removing Flashcard with ID {flashcardID}: {fnfe.Message}",
-                        level: LogLevel.Error);
+                    message: $"An error occurred while removing Flashcard with ID {flashcardID}. Status code: {response.StatusCode}",
+                    level: LogLevel.Error);
                 _logger.Log(logEntry);
-                return BadRequest($"Flashcard with ID {flashcardID} not found.");
+
+                return BadRequest($"Failed to remove Flashcard with ID {flashcardID}");
             }
-
-            // Redirect to the view that displays the pack of flashcards
-            return RedirectToAction("ViewFlashcardPack", new { id = flashcardPack.ID });
         }
-
+        
         [HttpGet]
         public async Task<IActionResult> EditFlashcard(Guid flashcardID)
         {
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                Guid.TryParse(userId, out Guid parsedUserID);
-                // Get the list of all flashcard packs
-                var flashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
-                var flashcardPack = flashcardPacks.FirstOrDefault(p => p.Flashcards.Any(f => f.ID == flashcardID));
-                var flashcardToEdit = flashcardPack.Flashcards.First(f => f.ID == flashcardID);
-                return View(flashcardToEdit);
+                var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userID, out Guid parsedUserID);
+                var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/GetFlashcard?flashcardID={flashcardID}&userID={parsedUserID}";
+
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.GetAsync(apiEndpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrEmpty(responseContent))
+                        {
+                            var flashcardToEdit = JsonConvert.DeserializeObject<Flashcard>(responseContent);
+
+                            return View(flashcardToEdit);
+                        }
+                    }
+                    return NotFound();
+                }
             }
             catch (Exception ex)
             {
                 var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {flashcardID}: {ex.Message}",
-                        level: LogLevel.Error);
+                    message: $"An error occurred while loading Flashcard with ID {flashcardID}: {ex.Message}",
+                    level: LogLevel.Error);
                 _logger.Log(logEntry);
+
+                // Handle error scenarios
                 return NotFound();
             }
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> EditFlashcard(Flashcard editedFlashcard)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Guid.TryParse(userId, out Guid parsedUserID);
-            var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
-            var flashcardToEdit = allFlashcardPacks
-                .SelectMany(p => p.Flashcards)
-                .FirstOrDefault(f => f.ID == editedFlashcard.ID);
-
-            if (ModelState.IsValid)
+            using (var httpClient = new HttpClient())
             {
-                if (!Regex.IsMatch(editedFlashcard.Question.TrimEnd(), @"\?$"))
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Guid.TryParse(userId, out Guid parsedUserID);
+
+                var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/EditFlashcard?userID={parsedUserID}";
+
+                // Serialize the editedFlashcard object to JSON
+                var jsonContent = new StringContent(JsonConvert.SerializeObject(editedFlashcard), Encoding.UTF8, "application/json");
+                var response = await httpClient.PostAsync(apiEndpoint, jsonContent);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    TempData["AlertMessage"] = "The flashcard question must end with a question mark.";
-                    return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
+                    // Read the response content to get the PackID
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var packIdObject = JsonConvert.DeserializeAnonymousType(responseContent, new { PackID = Guid.Empty });
+
+                    // Redirect to the view that displays the flashcards with the extracted PackID
+                    return RedirectToAction("ViewFlashcardPack", new { id = packIdObject.PackID });
                 }
                 
-                flashcardToEdit.Question = editedFlashcard.Question;
-                flashcardToEdit.Answer = editedFlashcard.Answer;
-                flashcardToEdit.Difficulty = editedFlashcard.Difficulty;
-                flashcardToEdit.IsFavorite = editedFlashcard.IsFavorite;
-
-                _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
-                // Save the new flashcard (this will trigger the event)
-                await _flashcardIOService.SaveFlashcard(flashcardToEdit, FlashcardIDValidation);
-
-                // Redirect to the view that displays the flashcards
-                return RedirectToAction("ViewFlashcardPack", new { id = flashcardToEdit.PackID });
+                return RedirectToAction("CreateSampleFlashcardPack");
             }
-
-            // If the model is not valid, return to the form view with validation errors
-            return View(flashcardToEdit);
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> EditFlashcardPackName(Guid id, string newName)
         {
@@ -277,82 +354,38 @@ namespace SEProject.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Guid.TryParse(userId, out Guid parsedUserID);
-                // Get the list of all flashcard packs
-                var allFlashcardPacks = await _flashcardPackDataHandler.LoadFlashcardPacksAsync(parsedUserID);
-                // Find the flashcard pack with the specified ID
-                var flashcardPackToEdit = allFlashcardPacks.FirstOrDefault(fpack => fpack.ID == id)!;
-                if(newName != null)
+
+                using (var httpClient = new HttpClient())
                 {
-                    var oldName = flashcardPackToEdit.Name;
-                    // Update the flashcard pack's name
-                    flashcardPackToEdit.Name = newName;
+                    
+                    var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/EditFlashcardPackName?id={id}&newName={newName}&userId={parsedUserID}";
 
-                    _flashcardPackDataHandler.FlashcardPackChanged += _flashcardPackEventService.OnFlashcardPackChanged;
+                    var response = await httpClient.PostAsync(apiEndpoint, null);
 
-                    // Save the new flashcard (this will trigger the event)
-                    await _flashcardPackDataHandler.SaveFlashcardPackAsync(flashcardPackToEdit, parsedUserID);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("CreateSampleFlashcardPack");
+                    }
+                    else
+                    {
+                        var logEntryError = new LogEntry(
+                            message: $"An error occurred while editing FlashcardPack with ID {id}. Status code: {response.StatusCode}",
+                            level: LogLevel.Error);
+                        _logger.Log(logEntryError);
+                        
+                        return View("Error");
+                    }
                 }
-
-                // Redirect back to the page that displays the flashcard packs
-                return RedirectToAction("CreateSampleFlashcardPack");
             }
             catch (Exception ex)
             {
                 var logEntryError = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPack with ID {id}: {ex.Message}",
-                        level: LogLevel.Error);
+                    message: $"An error occurred while editing FlashcardPack with ID {id}: {ex.Message}",
+                    level: LogLevel.Error);
                 _logger.Log(logEntryError);
                 return NotFound();
             }
         }
-
-        [HttpPost]
-        public async Task<IActionResult> SortFlashcards(Guid flashcardPackID, string sortOption)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Guid.TryParse(userId, out Guid parsedUserID);
-            FlashcardComparer? comparer = null;
-            var flashcardPack = await _flashcardPackDataHandler.LoadFlashcardPackAsync(flashcardPackID, parsedUserID);
-            var flashcardsInPack = flashcardPack.Flashcards;
-            var sortedFlashcards = new List<Flashcard>();
-
-            // Checks what sort of comparison will be done and creates that type of object.
-            switch (sortOption)
-            {
-                case "DateAsc":
-                case "DateDesc":
-                    comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.CreationDate);
-                    break;
-                case "DifficultyAsc":
-                case "DifficultyDesc":
-                    comparer = new FlashcardComparer(FlashcardComparer.ComparisonType.DifficultyLevel);
-                    break;
-                default:
-                    sortedFlashcards = flashcardsInPack;
-                    break;
-            }
-
-            // Compares by Ascending or Descending, depending on sortOption ending.
-            if (comparer != null)
-            {
-                if (sortOption.EndsWith("Asc"))
-                {
-                    sortedFlashcards = flashcardsInPack.OrderBy(flashcard => flashcard, comparer).ToList();
-                }
-                else if (sortOption.EndsWith("Desc"))
-                {
-                    sortedFlashcards = flashcardsInPack.OrderByDescending(flashcard => flashcard, comparer).ToList();
-                }
-            }
-
-            var logEntry = new LogEntry(message: $"Flashcards were sorted by sort option {sortOption}");
-            _logger.Log(logEntry);
-
-            var newPack = flashcardPack.CloneWithNewFlashcards(sortedFlashcards);
-
-            return View("ViewFlashcardPack", newPack);
-        }
-
         [HttpPost]
         public IActionResult Present(Guid packID)
         {
