@@ -19,11 +19,14 @@ namespace SEProject.Middleware
 
                 //https://localhost:7081/FlashcardPack/CreateSampleFlashcardPack
 
+                Console.WriteLine($"Path: {context.Request.Path}");
+                Console.WriteLine($"IsAuthenticated: {context.User.Identity.IsAuthenticated}");
+
+
                 if (context.Request.Path == "/FlashcardPack/CreateSampleFlashcardPack" && !context.User.Identity.IsAuthenticated)
                 {
                     // Redirect to the login page or return unauthorized response
-                    context.Response.Redirect("/User/LogIn"); // Update the path to your login page
-                    return;
+                    context.Response.Redirect("/User/LogIn");
                 }
 
                 await _next.Invoke(context);
@@ -31,7 +34,7 @@ namespace SEProject.Middleware
             catch (Exception ex)
             {
                 Console.WriteLine($"Exception in AuthenticationMiddleware: {ex}");
-                throw; // Re-throw the exception to ensure it's not swallowed
+                throw;
             }
         }
     }
