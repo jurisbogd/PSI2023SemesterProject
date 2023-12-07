@@ -1,20 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SEProject.Models;
-using SEProject.EventArguments;
-using SEProject.Exceptions;
-using Newtonsoft.Json.Bson;
+using DatabaseAPI.Models;
+using DatabaseAPI.Exceptions;
 
 #pragma warning disable 8981 // Disable warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)
-namespace SEProject.Services;
+namespace DatabaseAPI.Services;
 public class FlashcardIOService : IFlashcardIOService
 {
-    public delegate void FlashcardChangedEventHandler(object source, FlashcardEventArgs args);
-    public event FlashcardChangedEventHandler? FlashcardChanged;
     private DatabaseContext _context;
 
     public FlashcardIOService(DatabaseContext context)
     {
-        this._context = context;
+        _context = context;
     }
 
     public async Task<List<Flashcard>> LoadFlashcardsAsync(Guid packID)
@@ -50,8 +46,6 @@ public class FlashcardIOService : IFlashcardIOService
             }
         }
         await _context.SaveChangesAsync();
-
-        OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Saved"));
     }
         
     public async Task RemoveFlashcard(Flashcard flashcard)
@@ -66,16 +60,6 @@ public class FlashcardIOService : IFlashcardIOService
         
         _context.Remove(flashcardToRemove!);
         await _context.SaveChangesAsync();
-
-        OnFlashcardChanged(new FlashcardEventArgs(flashcard, "Deleted"));
-    }
-
-    public virtual void OnFlashcardChanged(FlashcardEventArgs e)
-    {
-        if(FlashcardChanged != null)
-        {
-            FlashcardChanged(this, e);
-        }
     }
 }
 #pragma warning restore 8981 // Restore warning CS8981 (The type name 'initial' only contains lower-cased ascii characters. Such names may become reserved for the language.)

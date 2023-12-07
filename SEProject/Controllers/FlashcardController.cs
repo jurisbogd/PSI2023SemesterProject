@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SEProject.Models;
 using SEProject.Services;
 using SEProject.EventArguments;
@@ -8,57 +9,81 @@ namespace SEProject.Controllers
 {
     public class FlashcardController : Controller
     {
-        private readonly IFlashcardIOService _flashcardIOService;
-        private readonly IFlashcardEventService _flashcardEventService;
         private Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
-
-        public FlashcardController(IFlashcardIOService flashcardIOService, IFlashcardEventService flashcardEventService)
-        {
-            _flashcardIOService = flashcardIOService;
-            _flashcardEventService = flashcardEventService;
-        }
-
+        
         [HttpPost]
         public async Task<ActionResult> PresentFlashcard(Guid packID)
         {
-            List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
+            using (var httpClient = new HttpClient())
+            {
+                var apiEndpoint = $"http://localhost:5123/api/Flashcard/GetFlashcards?packID={packID}";
 
-            return View("PresentFlashcard", flashcards.First());
+                var response = await httpClient.GetAsync(apiEndpoint);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(responseContent);
+
+                    if (!string.IsNullOrEmpty(responseContent))
+                    {
+                        // Deserialize the JSON array into a List<Flashcard>
+                        var flashcards = JsonConvert.DeserializeObject<List<Flashcard>>(responseContent);
+
+                        if (flashcards != null && flashcards.Any())
+                        {
+                            return View("PresentFlashcard", flashcards.First());
+                        }
+                    }
+                }
+                
+                return View("Error");
+            }
         }
-
+        
         [HttpPost]
         public async Task<ActionResult> PresentNextFlashcard(Guid packID, Guid currentFlashcardID)
         {
-            List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
-
-            Flashcard currentFlashcard = flashcards.FirstOrDefault(f => f.ID == currentFlashcardID)!;
-
-            int currentFlashcardIndex = flashcards.IndexOf(currentFlashcard);
-
-            if(currentFlashcardIndex >= 0 && currentFlashcardIndex < flashcards.Count() - 1)
+            using (var httpClient = new HttpClient())
             {
-                return View("PresentFlashcard", flashcards[currentFlashcardIndex + 1]);
-            }
-            // Return to flashcardPacks page if there are no more flashcards to present
-            else
-            {
-                return RedirectToAction("ViewFlashcardPack", "FlashcardPack", new { id = packID });
+                var apiEndpoint = $"http://localhost:5123/api/Flashcard/GetNextFlashcard?packID={packID}&currentFlashcardID={currentFlashcardID}";
+        
+                var response = await httpClient.GetAsync(apiEndpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+        
+                    if (!string.IsNullOrEmpty(responseContent))
+                    {
+                        // Deserialize the JSON response into a Flashcard
+                        var nextFlashcard = JsonConvert.DeserializeObject<Flashcard>(responseContent);
+        
+                        return View("PresentFlashcard", nextFlashcard);
+                    }
+                    return RedirectToAction("ViewFlashcardPack", "FlashcardPack", new { id = packID });
+                }
+                return View("Error");
             }
         }
-
+        
         [HttpPost]
         public async Task<JsonResult> ToggleFavorite(Guid packID, Guid currentFlashcardID, bool isFavorite)
         {
-            List<Flashcard> flashcards = await _flashcardIOService.LoadFlashcardsAsync(packID);
+            using (var httpClient = new HttpClient())
+            {
+                // Assuming your API is hosted at http://localhost:5123
+                var apiEndpoint = $"http://localhost:5123/api/Flashcard/ToggleFavorite?packID={packID}&flashcardID={currentFlashcardID}&isFavorite={isFavorite}";
 
-            Flashcard currentFlashcard = flashcards.FirstOrDefault(f => f.ID == currentFlashcardID)!;
+                var response = await httpClient.PostAsync(apiEndpoint, null);
 
-            currentFlashcard.IsFavorite = isFavorite;
-
-            _flashcardIOService.FlashcardChanged += _flashcardEventService.OnFlashcardChanged;
-            await _flashcardIOService.SaveFlashcard(currentFlashcard, FlashcardIDValidation);
-
-            return new JsonResult(Ok());
+                if (response.IsSuccessStatusCode)
+                {
+                    // If the API returns a success status code, you can handle it accordingly
+                    return new JsonResult("Success");
+                }
+                return new JsonResult("Error");
+            }
         }
     }
 }

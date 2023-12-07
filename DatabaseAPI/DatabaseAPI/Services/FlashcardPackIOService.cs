@@ -1,15 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SEProject.Models;
-using SEProject.EventArguments;
-using SEProject.Exceptions;
+using DatabaseAPI.Models;
+using DatabaseAPI.Exceptions;
 
-namespace SEProject.Services;
+namespace DatabaseAPI.Services;
 
 public class FlashcardPackIOService : IFlashcardPackDataHandler
 {
-    public delegate void FlashcardPackChangedEventHandler(object source, FlashcardPackEventArgs args);
-    public event FlashcardPackChangedEventHandler? FlashcardPackChanged;
-
     private DatabaseContext _context;
     public FlashcardPackIOService(DatabaseContext context)
     {
@@ -86,7 +82,6 @@ public class FlashcardPackIOService : IFlashcardPackDataHandler
         }
 
         await _context.SaveChangesAsync();
-        OnFlashcardPackChanged(new FlashcardPackEventArgs(flashcardPack, "Saved"));
     }
 
     public async Task RemoveFlashcardPackAsync(Guid ID)
@@ -114,15 +109,5 @@ public class FlashcardPackIOService : IFlashcardPackDataHandler
         _context.Flashcards.RemoveRange(packToDelete.Flashcards!);
 
         await _context.SaveChangesAsync();
-        OnFlashcardPackChanged(new FlashcardPackEventArgs(packToDelete, "Deleted"));
-    }
-
-
-    public virtual void OnFlashcardPackChanged(FlashcardPackEventArgs e)
-    {
-        if(FlashcardPackChanged != null)
-        {
-            FlashcardPackChanged(this, e);
-        }
     }
 }

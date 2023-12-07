@@ -26,20 +26,6 @@
         <div class="vertical-button-container">
             <button id="addFlashcardButton" class="reveal-button"
                 data-pack-id="@Model.ID">Add Flashcard</button>
-            <div class="sorting-dropdown">
-                <button class="custom-sorting-button dropdown-toggle" id="sortingDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sort by
-                </button>
-                <div class="dropdown-menu" aria-labelledby="sortingDropdown">
-                    <form method="post" action="@Url.Action("SortFlashcards", "FlashcardPack")">
-                        @Html.Hidden("flashcardPackID", Model.ID)
-                        <button type="submit" name="sortOption" value="DateAsc" class="dropdown-item">Date Ascending</button>
-                        <button type="submit" name="sortOption" value="DateDesc" class="dropdown-item">Date Descending</button>
-                        <button type="submit" name="sortOption" value="DifficultyAsc" class="dropdown-item">Difficulty Ascending</button>
-                        <button type="submit" name="sortOption" value="DifficultyDesc" class="dropdown-item">Difficulty Descending</button>
-                    </form>
-                </div>
-            </div>
             <div id="flashcard-count" data-flashcard-count="@Model.Flashcards.Count"></div>
             <form method="post" action="@Url.Action("PresentFlashcard", "Flashcard")">
                 <input type="hidden" name="packID" value="@Model.ID"/>

@@ -1,13 +1,9 @@
-﻿using SEProject.Models;
-using SEProject.EventArguments;
-using static SEProject.Services.FlashcardPackIOService;
+﻿using DatabaseAPI.Models;
 
-namespace SEProject.Services;
+namespace DatabaseAPI.Services;
 
 public interface IFlashcardPackDataHandler
 {
-    event FlashcardPackChangedEventHandler? FlashcardPackChanged;
-    void OnFlashcardPackChanged(FlashcardPackEventArgs e);
     Task<FlashcardPack>? LoadFlashcardPackAsync(Guid ID, Guid userID);
     Task<List<FlashcardPack>> LoadFlashcardPacksAsync(Guid userID);
     Task SaveFlashcardPackAsync(FlashcardPack flashcardPack, Guid userID, Func<FlashcardPack, bool> validationFunction = null);
