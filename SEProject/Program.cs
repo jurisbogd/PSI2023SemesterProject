@@ -6,6 +6,7 @@ using SEProject.EventArguments;
 using SEProject.EventServices;
 
 using SEProject.Services;
+using SEProject.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseAuthentication();
+
+app.UseMiddleware<LoginAuthenticationMiddleware>();
 
 app.MapControllerRoute( // not sure if this route does anything
     name: "removeFlashcardRoute",
