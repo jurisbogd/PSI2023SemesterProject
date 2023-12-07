@@ -1,17 +1,13 @@
-﻿using SEProject.Models;
-using SEProject.EventArguments;
-using Microsoft.AspNetCore.Identity;
+﻿using DatabaseAPI.Models;
 using System.Text;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 
-namespace SEProject.Services
+namespace DatabaseAPI.Services
 {
     public class UserService : IUserService
     {
         private DatabaseContext _context;
-        public delegate void UserChangedEventHandler(object source, UserEventArgs args);
-        public event UserChangedEventHandler? UserChanged;
 
         public UserService(DatabaseContext context)
         {
@@ -33,7 +29,6 @@ namespace SEProject.Services
                 await _context.SaveChangesAsync();
 
                 Console.WriteLine("User saved to the database successfully");
-                OnUserChanged(new UserEventArgs(user, "Created"));
             }
             catch (Exception ex)
             {
@@ -44,10 +39,6 @@ namespace SEProject.Services
         public async Task<User> FindUserByEmailAsync(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user != null)
-            {
-                OnUserChanged(new UserEventArgs(user, "Found"));
-            }
             return user;
         }
 
@@ -60,13 +51,6 @@ namespace SEProject.Services
                 var enteredPasswordHash = Convert.ToBase64String(hashBytes);
 
                 return hashedPassword == enteredPasswordHash;
-            }
-        }
-        public virtual void OnUserChanged(UserEventArgs e)
-        {
-            if(UserChanged != null)
-            {
-                UserChanged(this, e);
             }
         }
     }

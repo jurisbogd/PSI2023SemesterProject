@@ -1,14 +1,11 @@
-﻿using SEProject.Models;
-using SEProject.EventArguments;
+﻿using DatabaseAPI.Models;
 
-namespace SEProject.Services
+namespace DatabaseAPI.Services
 {
     public interface IUserService
     {
-        event UserService.UserChangedEventHandler? UserChanged;
         public User CreateNewUser(string username, string email, string password);
         public Task AddUserToTheDatabaseAsync(User user);
-        void OnUserChanged(UserEventArgs e);
         public Task<User> FindUserByEmailAsync(string email);
         public bool VerifyPassword(string password, string salt, string hashedPassword);
     }
