@@ -6,6 +6,7 @@ using SEProject.EventArguments;
 using SEProject.EventServices;
 
 using SEProject.Services;
+using SEProject.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseMiddleware<LoginAuthenticationMiddleware>();
 
 app.UseAuthorization();
 
