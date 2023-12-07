@@ -34,13 +34,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseMiddleware<LoginAuthenticationMiddleware>();
-
 app.UseRouting();
 
 app.UseAuthorization();
 
 app.UseAuthentication();
+
+app.UseMiddleware<LoginAuthenticationMiddleware>();
 
 app.MapControllerRoute( // not sure if this route does anything
     name: "removeFlashcardRoute",
