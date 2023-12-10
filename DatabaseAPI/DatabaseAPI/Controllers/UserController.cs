@@ -39,15 +39,3 @@ public class UserController : ControllerBase
         return BadRequest("Invalid email or password. Please try again.");
     }
 }
-public class CreateUserModel
-{ 
-    public string username { get; set; }
-    public string email { get; set; }
-    public string password { get; set; }
-}
-
-public class LoginRequestModel
-{
-    public string Email { get; set; }
-    public string Password { get; set; }
-}

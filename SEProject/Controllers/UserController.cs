@@ -53,7 +53,12 @@ namespace SEProject.Controllers
                     return RedirectToAction("LogIn", "User");
                 }
 
-                return View("Error");
+                var model = new LoginViewModel
+                {
+                    ErrorMessage = "Sorry the email is already in use."
+                };
+
+                return View("SignUp", model);
             }
         }
 

@@ -34,5 +34,11 @@
                 <input type="submit" value="Sign Up" />
             </div>
         </form>
+    @if (Model != null && !string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error-message">
+            @Model.ErrorMessage
+        </div>
+    }
     </body>
 </html>
