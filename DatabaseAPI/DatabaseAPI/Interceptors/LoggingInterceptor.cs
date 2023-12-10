@@ -24,7 +24,7 @@ namespace DatabaseAPI.Interceptors
                 if (existingUser != null)
                 {
                     Console.WriteLine($"Email {model.email} already exists in the database. Action aborted.");
-                    //context.Result = new BadRequestObjectResult("Email already exists");
+                    context.Result = new BadRequestObjectResult("Sorry, the email is already in use");
                     return;
                 }
             }
