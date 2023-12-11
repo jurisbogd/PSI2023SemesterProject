@@ -7,58 +7,45 @@ using SEProject.Models;
 using SEProject.Services;
 using SEProject.EventServices;
 using SEProject.Exceptions;
+using System.Net.Http;
+using System.Text.Json;
+using System.Collections.Generic;
 
 namespace SEProject.Controllers
 {
     public class FlashcardPackController : Controller
     {
         private readonly ILoggingHandler _logger;
+        private readonly IHttpClientFactory _httpClientFactory;
         Func<FlashcardPack, bool> FlashcardPackIDValidation = flashcardPack => flashcardPack.ID != Guid.Empty;
         Func<Flashcard, bool> FlashcardIDValidation = flashcard => flashcard.ID != Guid.Empty;
 
-        public FlashcardPackController(ILoggingHandler logger)
+        public FlashcardPackController(ILoggingHandler logger, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<IActionResult> CreateSampleFlashcardPack(string name)
         {
-            try
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                Guid.TryParse(userId, out Guid parsedUserID);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid.TryParse(userId, out Guid parsedUserID);
 
-                using (var httpClient = new HttpClient())
-                {
-                    var apiEndpoint = $"http://localhost:5123/api/FlashcardPack/GetFlashcardPacks?userId={parsedUserID}";
+            using var httpClient = _httpClientFactory.CreateClient();
 
-                    var response = await httpClient.GetAsync(apiEndpoint);
+            try {
+                var flashcardPacks = await httpClient.GetFromJsonAsync<List<FlashcardPack>>(
+                    $"http://localhost:5123/api/FlashcardPack/GetFlashcardPacks?userId={parsedUserID}",
+                    new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-
-                        if (!string.IsNullOrEmpty(responseContent))
-                        {
-                            var flashcardPacks = JsonConvert.DeserializeObject<List<FlashcardPack>>(responseContent);
-                            
-                            return View(flashcardPacks);
-                        }
-                    }
-                    var logEntry = new LogEntry(
-                        message: $"An error occurred while loading FlashcardPacks for user {parsedUserID}: {response.ReasonPhrase}",
-                        level: LogLevel.Error);
-                    _logger.Log(logEntry);
-                    return View();
-                }
+                return View(flashcardPacks);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 var logEntry = new LogEntry(
                     message: $"An error occurred while loading FlashcardPacks for user {name}: {ex.Message}",
                     level: LogLevel.Error);
                 _logger.Log(logEntry);
-                return View();
+                return View(ex);
             }
         }
         
