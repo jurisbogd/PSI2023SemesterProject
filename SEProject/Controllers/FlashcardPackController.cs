@@ -29,13 +29,11 @@ namespace SEProject.Controllers
         public async Task<IActionResult> CreateSampleFlashcardPack(string name)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Guid.TryParse(userId, out Guid parsedUserID);
-
             using var httpClient = _httpClientFactory.CreateClient();
 
             try {
                 var flashcardPacks = await httpClient.GetFromJsonAsync<List<FlashcardPack>>(
-                    $"http://localhost:5123/api/FlashcardPack/GetFlashcardPacks?userId={parsedUserID}",
+                    $"http://localhost:5123/api/FlashcardPack/GetFlashcardPacks?userId={userId}",
                     new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
                 return View(flashcardPacks);
