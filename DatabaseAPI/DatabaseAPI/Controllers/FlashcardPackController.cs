@@ -123,7 +123,7 @@ public class FlashcardPackController : ControllerBase
         }
     }
     
-    [HttpPost]
+    [HttpDelete]
     [Route("RemoveFlashcardFromPack")]
     public async Task<ActionResult> RemoveFlashcardFromPack(Guid flashcardID, Guid packID, Guid userID)
     { 
