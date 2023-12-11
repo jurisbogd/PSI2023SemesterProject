@@ -11,6 +11,7 @@
     <div class="flashcard-container">
         <div class="flashcard-form">
             <form asp-action="EditFlashcard" method="post">
+                <input type="hidden" asp-for="PackID" />
                 <input type="hidden" asp-for="ID" />
     
                 <div class="question">
