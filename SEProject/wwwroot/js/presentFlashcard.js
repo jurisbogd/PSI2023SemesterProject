@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
     var answer = document.getElementById("answer");
     var filledStar = document.getElementById('filled');
     var nonFilledStar = document.getElementById('non-filled');
-    var arrowButton = document.getElementById("arrowButton");
+    var correctAnswerButton = document.getElementById("correctAnswerButton");
+    var incorrectAnswerButton = document.getElementById("incorrectAnswerButton");
+
 
     var flashcardPropertyIsFavorite = document.getElementById("is-favorite");
     var flashcardPropertyPackID = document.getElementById("pack-id");
@@ -16,7 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(isFavorite);
 
     answer.style.display = "none";
-    arrowButton.style.display = "none";
+    correctAnswerButton.style.display = "none";
+    incorrectAnswerButton.style.display = "none";
     filledStar.style.display = isFavorite ? '' : 'none';
     nonFilledStar.style.display = isFavorite ? 'none' : '';
 
@@ -25,7 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         answer.style.display = (answer.style.display === "none") ? "block" : "none";
         revealButton.style.display = (revealButton.style.display == "none") ? "block" : "none";
-        arrowButton.style.display = (arrowButton.style.display == "none") ? "block" : "none";
+        correctAnswerButton.style.display = (correctAnswerButton.style.display == "none") ? "block" : "none";
+        incorrectAnswerButton.style.display = (incorrectAnswerButton.style.display == "none") ? "block" : "none";
     });
 
     document.getElementById('favorite-button').addEventListener('click', function () {
@@ -35,7 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
         nonFilledStar.style.display = isFavorite ? 'none' : '';
     });
 
-    arrowButton.addEventListener('click', function () {
+    correctAnswerButton.addEventListener('click', function () {
+        updateFavoriteOnServer(isFavorite);
+    });
+    incorrectAnswerButton.addEventListener('click', function () {
         updateFavoriteOnServer(isFavorite);
     });
 

@@ -38,11 +38,16 @@
 
     </div>
 
-
-    <form id="NextFlashcardForm" action="PresentNextFlashcard" method="post">
+    <form id="CorrectAnswerForm" action="PresentNextFlashcard" method="post">
         <input type="hidden" name="packID" value=@Model.PackID />
         <input type="hidden" name="currentFlashcardID" value=@Model.ID />
-        <button id="arrowButton" style="display: none;" class="arrow"></button>
+        <button id="correctAnswerButton" style="display: none;" class="correctAnswer">Correct</button>
+    </form>
+
+    <form id="IncorrectAnswerForm" action="PresentNextFlashcard" method="post">
+        <input type="hidden" name="packID" value=@Model.PackID />
+        <input type="hidden" name="currentFlashcardID" value=@Model.ID />
+        <button id="incorrectAnswerButton" style="display: none;" class="incorrectAnswer">Incorrect</button>
     </form>
 
     <script src="~/js/presentFlashcard.js"></script>
