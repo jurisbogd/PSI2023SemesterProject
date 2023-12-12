@@ -1,62 +1,36 @@
-
-
-using Microsoft.EntityFrameworkCore;
 using DatabaseAPI.Models;
+using Microsoft.EntityFrameworkCore;
 using DatabaseAPI.Services;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace APITests;
 
-[TestClass]
 public class FlashcardPackServiceTests
 {
-    private DbContextOptions<DatabaseContext> _options = new DbContextOptionsBuilder<DatabaseContext>()
-    .UseInMemoryDatabase(databaseName: "LoadFlashcardPackAsync_WithValidID_ReturnsFlashcardPack")
-    .Options;
-
-    [TestMethod]
-    public async Task LoadFlashcardPackAsync_WithValidID_ReturnsFlashcardPack()
+    [Fact]
+    public async Task Test1()
     {
-        using (var context = new DatabaseContext(_options))
+        var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
+            .UseInMemoryDatabase(databaseName: "Test1");
+        var options = optionsBuilder.Options;
+
+        using (var context = new DatabaseContext(options))
         {
             var flashcardPackService = new FlashcardPackIOService(context);
-            var flashcardPack = new FlashcardPack { ID = Guid.NewGuid(), Name = "Integration Test Pack" };
-            var user = new User { UserID = Guid.NewGuid(), Email = "test_user"};
+            var flashcardPack = new FlashcardPack { ID = Guid.NewGuid(), Name = "Test pack" };
+            var user = new User { UserID = Guid.NewGuid() };
+            var userPack = new UserFlashcardPacks(user.UserID, flashcardPack.ID);
 
-            // Act
-            await flashcardPackService.SaveFlashcardPackAsync(flashcardPack, user.UserID);
-            var loadedPack = await flashcardPackService.LoadFlashcardPackAsync(flashcardPack.ID, user.UserID);
+            context.FlashcardPacks.Add(flashcardPack);
+            context.Users.Add(user);
+            context.UserFlashcardPacks.Add(userPack);
+            context.SaveChanges();
 
-            // Assert
-            Assert.IsNotNull(loadedPack);
-            Assert.AreEqual(flashcardPack.Name, loadedPack.Name);
+            var result = await flashcardPackService.LoadFlashcardPackAsync(flashcardPack.ID, user.UserID);
+
+            Assert.NotNull(result);
+            Assert.Equal(flashcardPack, result);
         }
+
+
     }
-
-
-
-/*    [Fact]
-    public async Task LoadFlashcardPacksAsync_ReturnsListOfFlashcardPacks()
-    {
-        // Arrange
-        using (var context = new DatabaseContext(_options))
-        {
-            var service = new FlashcardPackIOService(context);
-            var flashcardPack1 = new FlashcardPack { ID = Guid.NewGuid(), Name = "Integration Test Pack 1" };
-            var flashcardPack2 = new FlashcardPack { ID = Guid.NewGuid(), Name = "Integration Test Pack 2" };
-
-            // Act
-            await service.SaveFlashcardPackAsync(flashcardPack1);
-            await service.SaveFlashcardPackAsync(flashcardPack2);
-            var loadedPacks = await service.LoadFlashcardPacksAsync();
-
-            // Assert
-            Assert.NotNull(loadedPacks);
-            Assert.Equal(2, loadedPacks.Count);
-            Assert.Contains(loadedPacks, pack => pack.ID == flashcardPack1.ID);
-            Assert.Contains(loadedPacks, pack => pack.ID == flashcardPack2.ID);
-        }
-    }*/
 }
-
