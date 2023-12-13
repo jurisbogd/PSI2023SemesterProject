@@ -60,22 +60,4 @@ public class FlashcardPackControllerTests : IClassFixture<WebApplicationFactory<
         Assert.Equal(200, (int)response.StatusCode);
         Assert.Equal("Flashcard pack added successfully", responseContent);
     }
-
-/*    [Fact]
-    public async Task RemoveFlashcardPack_ReturnsOkResult()
-    {
-        var flashcardPackId = Guid.Parse("F804A806-6D4F-45E0-BDA2-6FE5190D7F60");
-
-        var requestUrl = $"/api/FlashcardPack/RemoveFlashcardPack?packID={flashcardPackId}";
-
-        var response = await _client.DeleteAsync(requestUrl);
-
-        var responseContent = await response.Content.ReadAsStringAsync();
-
-        response.EnsureSuccessStatusCode();
-
-        Assert.Equal(200, (int)response.StatusCode);
-        Assert.Equal("Flashcard pack removed successfully", responseContent);
-    }*/
-
 }
