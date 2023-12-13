@@ -52,6 +52,7 @@ public class FlashcardPackController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Exception Stack Trace: {ex}");
             return StatusCode(500, "An error occurred while processing your request.");
         }
     }

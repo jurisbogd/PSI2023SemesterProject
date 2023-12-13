@@ -9,4 +9,10 @@ public class UserFlashcardPacks
     {
         
     }
+
+    public UserFlashcardPacks(Guid userID, Guid packID)
+    {
+        this.UserID = userID;
+        this.PackID = packID;
+    }
 }
