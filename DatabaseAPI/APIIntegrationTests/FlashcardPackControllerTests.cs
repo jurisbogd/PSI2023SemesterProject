@@ -19,28 +19,63 @@ public class FlashcardPackControllerTests : IClassFixture<WebApplicationFactory<
 
 
     [Fact]
-    public async Task GetFlashcardPackForUser_ReturnsOkResult()
+    public async Task GetFlashcardPackForUser_ReturnsOkResultAndFlashcardPack()
     {
-        var userID = Guid.NewGuid();
+        var userID = Guid.Parse("90A77343-593B-4538-B2E8-035DDB0006B5");
+        var flashcardPackID = Guid.Parse("BE90F741-A06F-4D57-8E43-EF24EB29E091");
 
+        var requestUrl = $"/api/FlashcardPack/GetFlashcardPack?packID={flashcardPackID}&userId={userID}";
+
+        var response = await _client.GetAsync(requestUrl);
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var flashcardPack = JsonConvert.DeserializeObject<FlashcardPack>(responseContent);
+
+        response.EnsureSuccessStatusCode();
+
+        Assert.Equal(200, (int)response.StatusCode);
+        Assert.Equal(flashcardPackID, flashcardPack.ID);
+    }
+
+    [Fact]
+    public async Task AddFlashcardPack_ReturnsOkResult()
+    {
+        var userID = Guid.Parse("90A77343-593B-4538-B2E8-035DDB0006B5");
         var flashcardPack = new FlashcardPack
         {
             ID = Guid.NewGuid(),
-            Name = "Test pack",
+            Name = "Test Pack",
             Flashcards = new List<Flashcard>()
         };
 
+        var requestUrl = $"/api/FlashcardPack/AddFlashcardPack?userId={userID}";
         var jsonContent = new StringContent(JsonConvert.SerializeObject(flashcardPack), Encoding.UTF8, "application/json");
-        var requestUri = $"/api/FlashcardPack/GetFlashcardPack?packID={flashcardPack.ID}&userId={userID}";
 
-        var response = await _client.PostAsync(requestUri, jsonContent);
+        var response = await _client.PostAsync(requestUrl, jsonContent);
 
-        response.EnsureSuccessStatusCode();
-
-        response.EnsureSuccessStatusCode();
         var responseContent = await response.Content.ReadAsStringAsync();
 
-        Assert.Equal(flashcardPack.ID.ToString(), responseContent);
+        response.EnsureSuccessStatusCode();
+
+        Assert.Equal(200, (int)response.StatusCode);
+        Assert.Equal("Flashcard pack added successfully", responseContent);
     }
+
+/*    [Fact]
+    public async Task RemoveFlashcardPack_ReturnsOkResult()
+    {
+        var flashcardPackId = Guid.Parse("F804A806-6D4F-45E0-BDA2-6FE5190D7F60");
+
+        var requestUrl = $"/api/FlashcardPack/RemoveFlashcardPack?packID={flashcardPackId}";
+
+        var response = await _client.DeleteAsync(requestUrl);
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        response.EnsureSuccessStatusCode();
+
+        Assert.Equal(200, (int)response.StatusCode);
+        Assert.Equal("Flashcard pack removed successfully", responseContent);
+    }*/
 
 }
